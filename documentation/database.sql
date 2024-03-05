@@ -3,9 +3,7 @@
 --
 
 -- --------------------------------------------------------
-CREATE Database glo7009;
 
-USE glo7009;
 --
 -- Dumping data for table `users`
 --
