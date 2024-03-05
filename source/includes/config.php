@@ -5,6 +5,6 @@ $config = array(
     --------------------------------- */
     "dbname" => "glo7009",
     "dbuser" => "root",
-    "dbpassword" => "root",
+    "dbpassword" => "",
     "dbhost" => "localhost"
 );
