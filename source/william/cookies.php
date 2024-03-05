@@ -5,6 +5,17 @@
 require("model.php");
 
 /*****************************************************
- *                      COOKIES                      *
+ *               COOKIES AUTHENTICATION              *
  *****************************************************/
 // CODE
+?>
+
+<html lang="fr">
+    <head>
+        <meta charset="utf-8" />
+        <title>Authentification par cookies</title>
+    </head>
+    <body>
+        <h1>Authentification par cookies</h1>
+    </body>
+</html>
