@@ -1,8 +1,8 @@
 <?php
 /*****************************************************
- *                       MODEL                       *
+ *                     BOOTSTRAP                     *
  *****************************************************/
-require("model.php");
+require("../includes/bootstrap.php");
 
 /*****************************************************
  *                  UPLOAD EXECUTION                 *
@@ -10,6 +10,7 @@ require("model.php");
 // CODE
 ?>
 
+<!DOCTYPE html>
 <html lang="fr">
     <head>
         <meta charset="utf-8" />
