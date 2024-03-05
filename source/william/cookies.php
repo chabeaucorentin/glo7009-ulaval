@@ -10,14 +10,14 @@ require("model.php");
  *****************************************************/
 // CODE
 ?>
-    <?php if (isset($_COOKIE["userIdentity"]) && is_logged_in($_COOKIE["userIdentity"])): ?>
+    <?php if (isset($_COOKIE["userToken"]) && is_logged_in($_COOKIE["userToken"])): ?>
         <form method="post" action="./logoutCookieProcess.php">
             <button type="submit" name="disconnect" value="disconnect"> Se déconnecter </button>
         </form>
         <br>
         <div><span>L'usager est connecté.</span></div>
     <?php else: ?>
-        <?php setcookie("userIdentity", '',time()-1000, '/'); ?>
+        <?php setcookie("userToken", '',time()-1000, '/'); ?>
         <form method="post" action="./loginCookieProcess.php">
         <label for='loginUser'> Usager: </label>
         <input type='text' name='loginUser' id='loginUser' />
@@ -30,7 +30,7 @@ require("model.php");
         <br />
         <button type='submit' name="connect" value="connect"> Se connecter </button>
         </form>
-        <?php if( isset($_GET["connectError"])): ?>
+        <?php if(isset($_GET["connectError"])): ?>
             <br />
             <div><span style="color: red;"><?php echo $_GET["connectError"]; ?></span></div>
             <?php endif; ?>
