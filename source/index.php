@@ -25,7 +25,7 @@ require("includes/bootstrap.php");
         <section>
             <h2>William Malenfant</h2>
             <ul>
-                <li><a href="william/session.php">Session</a></li>
+                <li><a href="william/cookiesVuln.php">Cookies Vulnérables</a></li>
                 <li><a href="william/cookies.php">Cookies</a></li>
             </ul>
         </section>
