@@ -1,0 +1,367 @@
+/*
+    style.css
+
+    Project : Session project
+    Course : GLO-7009 - Software security
+    Team : Team 2
+    Session : Winter 2024
+    University : Laval University
+    Version : 1.0
+*/
+
+*, *::after, *::before {
+    box-sizing: border-box;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    width: 100%;
+    font-family: Roboto, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    overflow-x: hidden;
+    color: #000;
+    background-color: #F4F4F4;
+}
+
+@media print {
+    body {
+        background-color: #FFF;
+    }
+}
+
+.topbar {
+    position: fixed;
+    height: 75px;
+    width: 100vw;
+    padding-top: 8px;
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-shadow: 0 1px 0 rgba(0,0,0,.07);
+    box-shadow: 0 1px 0 rgba(0,0,0,.07);
+    font-size: 20px;
+    background-color: #FFF;
+}
+
+.topbar::before, .topbar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    height: 8px;
+    width: 100%;
+    display: block;
+}
+
+.topbar::before {
+    left: 0;
+    width: 100%;
+    background-color: #E30513;
+}
+
+.topbar::after {
+    right: 0;
+    width: 20%;
+    background-color: #FFC103;
+}
+
+.topbar .left {
+    width: 270px;
+    padding: 0 20px;
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    justify-content: space-between;
+    -webkit-box-shadow: 1px 0 0 rgba(0,0,0,.07);
+    box-shadow: 1px 0 0 rgba(0,0,0,.07);
+    color: #000;
+    background-color: #FFF;
+}
+
+.topbar .left .logo {
+    height: 45px;
+    margin-top: 4px;
+}
+
+.topbar .left .separator {
+    height: 29px;
+    width: 1px;
+    background-color: #000;
+}
+
+.topbar .right {
+    width: calc(100vw - 270px);
+    padding: 0 20px;
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+}
+
+@media print {
+    .topbar {
+        position: relative;
+        padding-top: 0;
+        -webkit-box-shadow: 0 1px 0 #000;
+        box-shadow: 0 1px 0 #000;
+    }
+
+    .topbar::before, .topbar::after {
+        content: none;
+    }
+
+    .topbar .left {
+        -webkit-box-shadow: 1px 0 0 #000;
+        box-shadow: 1px 0 0 #000;
+    }
+
+    .topbar .left .separator {
+        -webkit-print-color-adjust: exact;
+        color-adjust: exact;
+    }
+}
+
+.sidebar {
+    position: fixed;
+    top: 76px;
+    left: 0;
+    bottom: 0;
+    height: calc(100vh - 76px);
+    width: 270px;
+    display: -webkit-box;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    white-space: nowrap;
+    -webkit-box-shadow: 1px 0 0 rgba(0,0,0,.07);
+    box-shadow: 1px 0 0 rgba(0,0,0,.07);
+    background-color: #FFF;
+}
+
+.sidebar .navigation {
+    margin-bottom: 20px;
+}
+
+.sidebar .navigation .category {
+    position: relative;
+    padding: 20px 20px 15px;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    color: #696969;
+}
+
+.sidebar .navigation .category::after {
+    content: '';
+    position: absolute;
+    top: calc(50% + 3px);
+    width: 100%;
+    margin-left: 10px;
+    border-top: 1px dashed #696969;
+}
+
+.sidebar .navigation .item a {
+    position: relative;
+    padding: 15px 20px;
+    display: block;
+    white-space: nowrap;
+    color: #000;
+}
+
+.sidebar .navigation .item a::after {
+    content: '';
+    position: absolute;
+    top: calc(50% - 5px);
+    right: 20px;
+    height: 11px;
+    width: 6px;
+    background-image: url("../images/arrow.svg");
+    background-size: 6px;
+    background-repeat: no-repeat;
+}
+
+.sidebar .navigation .item a:hover {
+    background-color: #E7E7E7;
+}
+
+.sidebar .navigation .item a.active {
+    font-weight: bold;
+    background-color: #D9D9D9;
+}
+
+@media print {
+    .sidebar {
+        display: none;
+    }
+}
+
+.container {
+    position: fixed;
+    top: 76px;
+    left: 271px;
+    height: calc(100vh - 141px);
+    width: calc(100vw - 271px);
+    padding: 20px;
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    flex-direction: column;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.container .vulnerability {
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    flex-direction: column;
+}
+
+.container .vulnerability .navigation {
+    margin-bottom: 20px;
+    display: -webkit-box;
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid #E3E3E3;
+}
+
+.container .vulnerability .navigation li {
+    position: relative;
+    width: 25%;
+}
+
+.container .vulnerability .navigation li:not(:last-child) {
+    border-right: 1px solid #E3E3E3;
+}
+
+.container .vulnerability .navigation li:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: calc(50% - 30px);
+    right: -30px;
+    height: 60px;
+    width: 60px;
+    pointer-events: none;
+    border-radius: 50%;
+    border: 1px solid #E3E3E3;
+    background-image: url("../images/arrow.svg");
+    background-position: 22px;
+    background-size: 16px;
+    background-repeat: no-repeat;
+    background-color: #FFF;
+    z-index: 995;
+}
+
+.container .vulnerability .navigation li a {
+    position: relative;
+    padding: 40px 20px;
+    display: block;
+    font-size: 18px;
+    text-align: center;
+    white-space: nowrap;
+    color: #000;
+    background-color: #FFF;
+}
+
+.container .vulnerability .navigation li a:hover {
+    background-color: #E7E7E7;
+}
+
+.container .vulnerability .navigation li a.active {
+    font-weight: bold;
+    background-color: #D9D9D9;
+}
+
+.container article {
+    padding: 20px;
+    border: 1px solid #E3E3E3;
+    background-color: #FFF;
+}
+
+.container .vulnerability article {
+    height: calc(100vh - 310px);
+    -webkit-box-flex: 1;
+    flex: 1 0 auto;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+@media print {
+    .container {
+        position: relative;
+        top: 1px;
+        left: 0;
+        height: auto;
+        width: 100vw;
+        overflow: visible;
+    }
+
+    .container article {
+        border-color: #000;
+    }
+
+    .container .vulnerability {
+        display: block;
+    }
+
+    .container .vulnerability .navigation {
+        border-color: #000;
+    }
+
+    .container .vulnerability .navigation li:not(:last-child) {
+        border-color: #000;
+    }
+
+    .container .vulnerability .navigation li:not(:last-child)::after {
+        top: calc(50% - 25px);
+        right: -25px;
+        height: 50px;
+        width: 50px;
+        -webkit-print-color-adjust: exact;
+        color-adjust: exact;
+        border-color: #000;
+        background-position: 18px;
+        background-size: 14px;
+    }
+
+    .container .vulnerability .navigation li a.active {
+        -webkit-print-color-adjust: exact;
+        color-adjust: exact;
+        background-color: #E7E7E7;
+    }
+
+    .container .vulnerability article {
+        height: auto;
+    }
+}
+
+footer {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    width: calc(100vw - 271px);
+    padding: 20px;
+    -webkit-box-shadow: 0 -1px 0 rgba(0,0,0,.07);
+    box-shadow: 0 -1px 0 rgba(0,0,0,.07);
+    background-color: #FFF;
+}
+
+@media print {
+    footer {
+        position: relative;
+        width: auto;
+        -webkit-box-shadow: 0 -1px 0 #000;
+        box-shadow: 0 -1px 0 #000;
+    }
+}
+
+article .error {
+    color: #E30513;
+}
