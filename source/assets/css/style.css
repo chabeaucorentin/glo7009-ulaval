@@ -475,8 +475,8 @@ button:focus {
     margin-bottom: 20px;
 }
 
-.container .vulnerability article:not(:has(> .table)):not(:has(> .split > section)) section:not(:last-child),
-.container .vulnerability article > .split div section:not(:last-child) {
+.container .vulnerability article:not(:has(> .table)):not(:has(> .split > *)) section:not(:last-child),
+.container .vulnerability article > .split div section:not(.row):not(:last-child) {
     padding-bottom: 0;
 }
 
