@@ -33,6 +33,100 @@ body {
     }
 }
 
+h1, h2, h3 {
+    margin-bottom: 15px;
+}
+
+h1 {
+    font-size: 28px;
+}
+
+h2 {
+    font-size: 24px;
+}
+
+h3 {
+    font-size: 20px;
+}
+
+strong {
+    font-weight: bold;
+}
+
+em {
+    font-style: italic;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #E3E3E3;
+}
+
+button {
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 3px;
+    border: none;
+    background-color: #D9D9D9;
+}
+
+button:hover {
+    background-color: #E3E3E3;
+}
+
+button:focus {
+    background-color: #C7C7C7;
+}
+
+@media print {
+    hr {
+        border-color: #000;
+    }
+
+    button {
+        border: 1px solid #000;
+    }
+}
+
+.dropify-wrapper {
+    padding: 6px 12px;
+    font-size: 16px;
+    border-radius: 3px;
+    border-color: #E3E3E3;
+    color: #959595;
+}
+
+.dropify-wrapper:has(> .invalid) {
+    border-color: #E30513;
+}
+
+.dropify-wrapper .file-icon,
+.dropify-wrapper .dropify-preview .dropify-render i {
+    color: #959595 !important;
+}
+
+.dropify-wrapper .dropify-clear {
+    padding: 2px 12px;
+    font-size: 16px;
+    font-weight: normal;
+    text-transform: none;
+}
+
+.dropify-wrapper .dropify-preview .dropify-render .dropify-extension {
+    font-size: 14px;
+}
+
+.dropify-wrapper .dropify-preview .dropify-infos .dropify-infos-inner p.dropify-infos-message {
+    font-size: 16px;
+}
+
+@media print {
+    .dropify-wrapper {
+        border: 1px solid #000;
+    }
+}
+
 .topbar {
     position: fixed;
     height: 75px;
@@ -40,9 +134,8 @@ body {
     padding-top: 8px;
     display: -webkit-box;
     display: flex;
-    -webkit-box-shadow: 0 1px 0 rgba(0,0,0,.07);
-    box-shadow: 0 1px 0 rgba(0,0,0,.07);
     font-size: 20px;
+    border-bottom: 1px solid #E3E3E3;
     background-color: #FFF;
 }
 
@@ -75,8 +168,7 @@ body {
     -webkit-box-align: center;
     align-items: center;
     justify-content: space-between;
-    -webkit-box-shadow: 1px 0 0 rgba(0,0,0,.07);
-    box-shadow: 1px 0 0 rgba(0,0,0,.07);
+    border-right: 1px solid #E3E3E3;
     color: #000;
     background-color: #FFF;
 }
@@ -105,8 +197,7 @@ body {
     .topbar {
         position: relative;
         padding-top: 0;
-        -webkit-box-shadow: 0 1px 0 #000;
-        box-shadow: 0 1px 0 #000;
+        border-color: #000;
     }
 
     .topbar::before, .topbar::after {
@@ -114,8 +205,7 @@ body {
     }
 
     .topbar .left {
-        -webkit-box-shadow: 1px 0 0 #000;
-        box-shadow: 1px 0 0 #000;
+        border-color: #000;
     }
 
     .topbar .left .separator {
@@ -126,7 +216,7 @@ body {
 
 .sidebar {
     position: fixed;
-    top: 76px;
+    top: 75px;
     left: 0;
     bottom: 0;
     height: calc(100vh - 76px);
@@ -137,8 +227,7 @@ body {
     overflow-x: hidden;
     overflow-y: scroll;
     white-space: nowrap;
-    -webkit-box-shadow: 1px 0 0 rgba(0,0,0,.07);
-    box-shadow: 1px 0 0 rgba(0,0,0,.07);
+    border-right: 1px solid #E3E3E3;
     background-color: #FFF;
 }
 
@@ -202,18 +291,97 @@ body {
 
 .container {
     position: fixed;
-    top: 76px;
-    left: 271px;
-    height: calc(100vh - 141px);
-    width: calc(100vw - 271px);
+    top: 75px;
+    left: 270px;
+    height: calc(100vh - 140px);
+    width: calc(100vw - 270px);
     padding: 20px;
     display: -webkit-box;
     display: flex;
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
     flex-direction: column;
+}
+
+.container:not(:has(> .vulnerability)) {
     overflow-x: hidden;
     overflow-y: scroll;
+}
+
+.container a {
+    font-weight: bold;
+    color: #E30513;
+}
+
+.container a:hover {
+    color: #E30513;
+}
+
+.container .error {
+    color: #E30513;
+}
+
+.container article section p:not(:last-child) {
+    margin-bottom: 10px;
+}
+
+.container article pre[class*="language-"],
+.container article code[class*="language-"] {
+    font-size: 16px;
+}
+
+.container article pre[class*="language-"] {
+    margin: 0;
+}
+
+.container article pre[class*="language-"]:not(:last-child) {
+    margin-bottom: 10px;
+}
+
+.container article :not(pre) > code[class*="language-"],
+.container article pre[class*="language-"] {
+    border: 1px solid #E3E3E3;
+    background-color: #F4F4F4;
+}
+
+.container article .list li {
+    position: relative;
+    padding-left: 30px;
+}
+
+.container article .list li::before {
+    content: '';
+    position: absolute;
+    top: 7px;
+    left: 13px;
+    height: 11px;
+    width: 6px;
+    display: inline-block;
+    background-image: url("../images/arrow.svg");
+    background-size: 6px;
+    background-repeat: no-repeat;
+}
+
+.container .welcome section:not(:last-child) {
+    margin-bottom: 20px;
+}
+
+.container .welcome .vulnerability .navigation {
+    margin-bottom: 0;
+}
+
+.container .welcome .vulnerability .navigation li a:hover {
+    background-color: #FFF;
+}
+
+.container .welcome .vulnerability .navigation li a p {
+    font-size: 16px;
+    text-align: center;
+}
+
+.container .welcome .vulnerability .navigation li a p strong {
+    margin-bottom: 15px;
+    font-size: 18px;
 }
 
 .container .vulnerability {
@@ -228,7 +396,6 @@ body {
     margin-bottom: 20px;
     display: -webkit-box;
     display: flex;
-    justify-content: space-between;
     border: 1px solid #E3E3E3;
 }
 
@@ -261,11 +428,17 @@ body {
 
 .container .vulnerability .navigation li a {
     position: relative;
-    padding: 40px 20px;
-    display: block;
+    height: 100%;
+    padding: 40px 30px;
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    flex-direction: column;
+    justify-content: center;
     font-size: 18px;
+    font-weight: normal;
     text-align: center;
-    white-space: nowrap;
     color: #000;
     background-color: #FFF;
 }
@@ -279,18 +452,150 @@ body {
     background-color: #D9D9D9;
 }
 
-.container article {
-    padding: 20px;
+.container article.error,
+.container .vulnerability article {
     border: 1px solid #E3E3E3;
     background-color: #FFF;
 }
 
 .container .vulnerability article {
-    height: calc(100vh - 310px);
-    -webkit-box-flex: 1;
-    flex: 1 0 auto;
+    height: calc(100vh - 309px);
+}
+
+.container article.error,
+.container .vulnerability article section {
+    padding: 20px;
+}
+
+.container .vulnerability article section section {
+    padding: 0;
+}
+
+.container .vulnerability article section section:not(:last-child) {
+    margin-bottom: 20px;
+}
+
+.container .vulnerability article:not(:has(> .table)):not(:has(> .split > section)) section:not(:last-child),
+.container .vulnerability article > .split div section:not(:last-child) {
+    padding-bottom: 0;
+}
+
+.container .vulnerability article .split {
+    display: -webkit-box;
+    display: flex;
+}
+
+.container .vulnerability article .split > * {
+    width: 50%;
+}
+
+.container .vulnerability article .split > *:first-child {
+    border-right: 1px solid #E3E3E3;
+}
+
+.container .vulnerability article > .split,
+.container .vulnerability article > .split > * {
+    height: 100%;
+}
+
+.container .vulnerability article:not(:has(> .split)),
+.container .vulnerability article > .split > * {
     overflow-x: hidden;
     overflow-y: scroll;
+}
+
+.container .vulnerability article > .split > form:has(> footer) {
+    overflow-y: hidden;
+}
+
+.container .vulnerability article .table > .row:not(:last-child) {
+    border-bottom: 1px solid #E3E3E3;
+}
+
+.container .vulnerability article .table > .row section:not(:last-child) {
+    padding-bottom: 0;
+}
+
+.container .vulnerability article .table > .row.split > section {
+    padding-bottom: 20px;
+}
+
+.container .vulnerability article form:not(:has(> footer)) {
+    padding: 20px;
+}
+
+.container .vulnerability article form:has(> footer) {
+    height: 100%;
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    flex-direction: column;
+}
+
+.container .vulnerability article form:has(> footer) > div {
+    height: calc(100% - 61px);
+    padding: 20px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.container .vulnerability article form .form-group:not(:last-child) {
+    margin-bottom: 15px;
+}
+
+.container .vulnerability article form .form-group label {
+    margin-bottom: 5px;
+    display: inline-block;
+}
+
+.container .vulnerability article form .form-group .form-control {
+    height: 38px;
+    width: 100%;
+    padding: 6px 12px;
+    display: block;
+    font-size: 16px;
+    outline: none;
+    border-radius: 3px;
+    border: 2px solid #E3E3E3;
+}
+
+.container .vulnerability article form .form-group .form-control::placeholder {
+    opacity: 1;
+    color: #959595;
+}
+
+.container .vulnerability article form .form-group .form-control:-ms-input-placeholder {
+    opacity: 1;
+    color: #959595;
+}
+
+.container .vulnerability article form .form-group .alert {
+    padding: 6px 12px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    border-radius: 3px;
+    color: #E30513;
+    background-color: #F8D7DA;
+}
+
+.container .vulnerability article form .form-group .form-control.invalid {
+    border-color: #E30513;
+}
+
+.container .vulnerability article form .form-group textarea.form-control {
+    height: 200px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    resize: none;
+}
+
+.container .vulnerability article form footer {
+    position: relative;
+    width: 100%;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    text-align: right;
 }
 
 @media print {
@@ -299,12 +604,21 @@ body {
         top: 1px;
         left: 0;
         height: auto;
-        width: 100vw;
+        width: auto;
+    }
+
+    .container:not(:has(> .vulnerability)) {
         overflow: visible;
     }
 
-    .container article {
+    .container article :not(pre) > code[class*="language-"],
+    .container article pre[class*="language-"] {
         border-color: #000;
+    }
+
+    .container article .list li::before {
+        -webkit-print-color-adjust: exact;
+        color-adjust: exact;
     }
 
     .container .vulnerability {
@@ -331,14 +645,69 @@ body {
         background-size: 14px;
     }
 
+    .container .vulnerability .navigation li a {
+        padding-left: 25px;
+        padding-right: 25px;
+    }
+
     .container .vulnerability .navigation li a.active {
         -webkit-print-color-adjust: exact;
         color-adjust: exact;
         background-color: #E7E7E7;
     }
 
+    .container article.error,
+    .container .vulnerability article {
+        border-color: #000;
+    }
+
     .container .vulnerability article {
         height: auto;
+    }
+
+    .container .vulnerability article .split > *:first-child {
+        border-color: #000;
+    }
+
+    .container .vulnerability article > .split,
+    .container .vulnerability article > .split > * {
+        height: auto;
+    }
+
+    .container .vulnerability article:not(:has(> .split)),
+    .container .vulnerability article > .split > *,
+    .container .vulnerability article > .split > form:has(> footer) {
+        overflow: visible;
+    }
+
+    .container .vulnerability article .table > .row:not(:last-child) {
+        border-color: #000;
+    }
+
+    .container .vulnerability article form:has(> footer) {
+        height: auto;
+        display: block;
+    }
+
+    .container .vulnerability article form:has(> footer) > div {
+        height: auto;
+        overflow: visible;
+    }
+
+    .container .vulnerability article form .form-group .form-control {
+        border: 1px solid #000;
+    }
+
+    .container .vulnerability article form .form-group .alert {
+        border: 1px solid #E30513;
+    }
+
+    .container .vulnerability article form .form-group .form-control.invalid {
+        border-color: #000;
+    }
+
+    .container .vulnerability article form .form-group textarea.form-control {
+        height: auto !important;
     }
 }
 
@@ -346,10 +715,9 @@ footer {
     position: fixed;
     right: 0;
     bottom: 0;
-    width: calc(100vw - 271px);
+    width: calc(100vw - 270px);
     padding: 20px;
-    -webkit-box-shadow: 0 -1px 0 rgba(0,0,0,.07);
-    box-shadow: 0 -1px 0 rgba(0,0,0,.07);
+    border-top: 1px solid #E3E3E3;
     background-color: #FFF;
 }
 
@@ -357,11 +725,6 @@ footer {
     footer {
         position: relative;
         width: auto;
-        -webkit-box-shadow: 0 -1px 0 #000;
-        box-shadow: 0 -1px 0 #000;
+        border-color: #000;
     }
-}
-
-article .error {
-    color: #E30513;
 }

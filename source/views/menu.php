@@ -1,6 +1,6 @@
 <?php
 /*****************************************************
- * sidebar.php                                       *
+ * menu.php                                          *
  *                                                   *
  * Project : Session project                         *
  * Course : GLO-7009 - Software security             *
@@ -22,7 +22,6 @@ function render_menu()
 {
     global $config, $menu;
 
-    $actual_file = basename(__FILE__);
     $navigation = '<ul class="navigation">';
     foreach ($menu as $name) {
         $navigation .= '<li class="category">'.$name["name"].'</li>';
@@ -35,6 +34,27 @@ function render_menu()
                 </a>
             </li>';
         }
+    }
+    $navigation .= '</ul>';
+
+    return $navigation;
+}
+
+function render_vulnerabilities()
+{
+    global $config, $menu;
+
+    $navigation = '<ul class="list">';
+    foreach ($menu as $name) {
+        $navigation .= '<li><strong>'.$name["full_name"].'</strong><br />'.$name["category"].'<ul>';
+        foreach ($name['files'] as $file) {
+            $navigation .= '<li>
+                <a href="'.$config["site_link"]."/".$name["folder"]."/".$file["name"].'">
+                    '.$file["title"].'
+                </a>
+            </li>';
+        }
+        $navigation .= '</ul></li>';
     }
     $navigation .= '</ul>';
 

@@ -13,7 +13,7 @@
 /*****************************************************
  *                       MENU                        *
  *****************************************************/
-require($config["site_path"]."/views/sidebar.php");
+require($config["site_path"]."/views/menu.php");
 
 /*****************************************************
  *                   DEFAULT PAGE                    *
@@ -43,12 +43,19 @@ function render_page($title, $content) {
         <!-- TITLE -->
         <title>'.$title.'</title>
 
+        <!-- PRISM CSS -->
+        <link rel="stylesheet" href="'.$config["site_link"].'/assets/vendor/prismjs/prism.min.css" />
+
+        <!-- DROPIFY CSS -->
+        <link rel="stylesheet" href="'.$config["site_link"].'/assets/vendor/dropify/css/dropify.min.css" />
+
         <!-- STYLE CSS -->
         <link rel="stylesheet" href="'.$config["site_link"].'/assets/css/reset.css" />
         <link rel="stylesheet" href="'.$config["site_link"].'/assets/css/fonts.css" />
         <link rel="stylesheet" href="'.$config["site_link"].'/assets/css/style.css" />
     </head>
     <body>
+        <!-- HEADER -->
         <header class="topbar">
             <a class="left" href="'.$config["site_link"].'/">
                 <img class="logo" src="'.$config["site_link"].'/assets/images/logo.svg" alt="Université Laval" />
@@ -59,17 +66,39 @@ function render_page($title, $content) {
                 <p>'.$title.'</p>
             </div>
         </header>
+        <!-- END HEADER -->
+
+        <!-- SIDEBAR -->
         <aside class="sidebar">
             <nav>
                 '.render_menu().'
             </nav>
         </aside>
+        <!-- END SIDEBAR -->
+
+        <!-- MAIN CONTAINER -->
         <main class="container">
             '.$content.'
         </main>
+        <!-- END MAIN CONTAINER -->
+
+        <!-- FOOTER -->
         <footer>
             <p>GLO-7009 - Projet de session (Équipe 2)</p>
         </footer>
+        <!-- END FOOTER -->
+
+        <!-- PRISM JS -->
+        <script src="'.$config["site_link"].'/assets/vendor/prismjs/prism.min.js"></script>
+
+        <!-- JQUERY JS -->
+        <script src="'.$config["site_link"].'/assets/vendor/jquery/jquery.min.js"></script>
+
+        <!-- DROPIFY JS -->
+        <script src="'.$config["site_link"].'/assets/vendor/dropify/js/dropify.min.js"></script>
+
+        <!-- SCRIPT JS -->
+        <script src="'.$config["site_link"].'/assets/js/script.js"></script>
     </body>
 </html>';
 }
@@ -78,8 +107,8 @@ function render_page($title, $content) {
  *                   MESSAGE PAGE                    *
  *****************************************************/
 function render_error($title, $message) {
-    $content = '<article>
-                    <p class="error">'.$message.'</p>
+    $content = '<article class="error">
+                    <p>'.$message.'</p>
                 </article>';
 
     return render_page($title, $content);
@@ -111,21 +140,29 @@ function render_malicious($title, $presentation, $demonstration, $exploit, $fix)
                     <nav>
                         <ul class="navigation">
                             <li>
-                                <a'.(($view == "presentation") ? ' class="active"' : '').' href="?view=presentation">Présentation</a>
+                                <a'.(($view == "presentation") ? ' class="active"' : '').' href="?view=presentation">
+                                    Présentation
+                                </a>
                             </li>
                             <li>
-                                <a'.(($view == "demonstration") ? ' class="active"' : '').' href="?view=demonstration">Démonstration</a>
+                                <a'.(($view == "demonstration") ? ' class="active"' : '').' href="?view=demonstration">
+                                    Démonstration
+                                </a>
                             </li>
                             <li>
-                                <a'.(($view == "exploit") ? ' class="active"' : '').' href="?view=exploit">Exploitation</a>
+                                <a'.(($view == "exploit") ? ' class="active"' : '').' href="?view=exploit">
+                                    Exploitation
+                                </a>
                             </li>
                             <li>
-                                <a'.(($view == "fix") ? ' class="active"' : '').' href="?view=fix">Correction</a>
+                                <a'.(($view == "fix") ? ' class="active"' : '').' href="?view=fix">
+                                    Correction
+                                </a>
                             </li>
                         </ul>
                     </nav>
                     <article>
-                        ' .$article.'
+                        '.$article.'
                     </article>
                 </div>';
 

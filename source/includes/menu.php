@@ -19,6 +19,8 @@ $menu = array(
      *****************************************************/
     array(
         "name" => "Corentin C.",
+        "full_name" => "Corentin Chabeau",
+        "category" => "Vulnérabilités d'exécution de code arbitraire",
         "folder" => "corentinc",
         "files" => array(
             array(
@@ -37,6 +39,8 @@ $menu = array(
      *****************************************************/
     array(
         "name" => "Corentin L.",
+        "full_name" => "Corentin Labelle",
+        "category" => "Vulnérabilités d'injection de code",
         "folder" => "corentinl",
         "files" => array(
             array(
@@ -55,12 +59,10 @@ $menu = array(
      *****************************************************/
     array(
         "name" => "William",
+        "full_name" => "William Malenfant",
+        "category" => "Vulnérabilités dans les mécanismes d'authentification",
         "folder" => "william",
         "files" => array(
-            array(
-                "name" => "session.php",
-                "title" => "Authentification par session"
-            ),
             array(
                 "name" => "cookies.php",
                 "title" => "Authentification par cookies"
