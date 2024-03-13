@@ -1,5 +1,16 @@
 <?php
 /*****************************************************
+ * include.php                                       *
+ *                                                   *
+ * Project : Session project                         *
+ * Course : GLO-7009 - Software security             *
+ * Team : Team 2                                     *
+ * Session : Winter 2024                             *
+ * University : Laval University                     *
+ * Version : 1.0                                     *
+ *****************************************************/
+
+/*****************************************************
  *                     BOOTSTRAP                     *
  *****************************************************/
 require("../includes/bootstrap.php");
