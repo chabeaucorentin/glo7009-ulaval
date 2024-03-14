@@ -17,14 +17,14 @@ $config = array(
     /*****************************************************
      *                      WEBSITE                      *
      *****************************************************/
-    "site_link" => "http://localhost/source",   # No / at the end
-    "site_path" => "D:/XAMPP/htdocs/source",      # No / at the end
+    "site_link" => "http://localhost",   # No / at the end
+    "site_path" => "ABSOLUTE PATH",      # No / at the end
 
     /*****************************************************
      *                      DATABASE                     *
      *****************************************************/
     "db_name" => "glo7009",
     "db_user" => "root",
-    "db_password" => "",
+    "db_password" => "root",
     "db_host" => "localhost"
 );
