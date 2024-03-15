@@ -68,11 +68,8 @@ $presentation = '<div class="table">
             <li><strong><a href="https://www.cve.news/cve-2023-5723/"> Firefox Vulnerability - Unrestricted Cookies Hijack via Insecure `document.cookie` Usage (CVE-2023-5723))</a></strong><br />
                 Une attaque de vol de cookies est possible sur toutes les versions de Firefox v.119 et précédents, car l\'appel à la fonction javascript `document.cookie` peut permettre à un attaquant d\'avoir temporairement accès aux cookies stockés dans le navigateur et d\'avoir accès à l\'exécution d\'un script sur un site web.
                 Un exemple tel que cité par le site est :<br /> 
-                <pre class="line-numbers" data-line="2">
-                <code class="language-js">
-                // Exploit code snippet
-                document.cookie = "insecure_cookie=test%00value";
-                </code></pre><br /> 
+                <pre class="line-numbers" data-line="2"><code class="language-js">// Exploit code snippet
+document.cookie = "insecure_cookie=test%00value";</code></pre><br />
                 Donc le code permet avec le code hexadécimal du NULL (%00) de pouvoir exécuter du code et d\'avoir un comportement possiblement non désiré du navigateur.                
                 Cela permet donc de l\'exploitation de code XSS, d\'une brèche de confidentialité et d\'atteinte à l\'intégrité des données des utilisateurs.
             </li>
@@ -98,9 +95,8 @@ $demonstration = '<div class="split">
                 <input id="password" class="form-control'.((isset($error)) ? ' invalid' : '').'" name="password" type="password" />
             </div>
             <div class="form-group">
-                <label for="persistent">Se souvenir de moi :</label>
-                '.((isset($error)) ? '<div class="alert">'.$error.'</div>' : '').'
-                <input id="persistent" class="form-control'.((isset($error)) ? ' invalid' : '').'" name="persistent" type="checkbox" />
+                <input id="persistent" class="form-check'.((isset($error)) ? ' invalid' : '').'" name="persistent" type="checkbox" />
+                <label for="persistent">Se souvenir de moi</label>
             </div>
             ').'
         </div>
