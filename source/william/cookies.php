@@ -175,7 +175,7 @@ $fix = '<div>
             <li><strong>Modifier la base de données</strong><br />
                 On peut ajouter des champs de localisation, des informations de l\'agent utilisateur du navigateur, etc.
                 On peut ajouter ce bout de code, par exemple: 
-                <pre class="line-numbers" data-lines="4"><code class="language-sql">
+                <pre class="line-numbers"><code class="language-mysql">
                     ALTER TABLE `tokens` 
                         ADD `token_user_localization` VARCHAR(255) NOT NULL AFTER `token_user_id`, 
                         ADD `token_user_ip` VARCHAR(255) NOT NULL AFTER `token_user_localization`, 
