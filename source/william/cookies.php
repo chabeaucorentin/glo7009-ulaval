@@ -32,20 +32,22 @@ $presentation = '<div class="table">
         </section>
         <section>
             <h2>Impact potentiel</h2>
-            <p>Confidentialité, intégrité</p>
+            <p>Confidentialité et intégrité</p>
         </section>
     </div>
     <section class="row">
         <h2>Description</h2>
         <p>Cette vulnérabilité permet à l\'attaquant de contourner l\'authentification de l\'utilisateur légitime en subtilisant les cookies de connexions de ce dernier. 
-        Pour que l\'attaque fonctionne, le pirate doit simuler la page de connexion du site web cible et envoi à l\utilisateur ciblé un courriel demandant à se dernier de se connecter à son compte pour ne pas perdre son accès. 
-        Les effets potentiels de cette vulnérabilité sont une atteinte à la crédibilité de l\'entreprise visée, une perte de confiance des utilisateurs envers les clients potentiels, si le site web est un réseau social.
+        Pour que l\'attaque fonctionne, le pirate doit avoir accès au navigateur de la victime.
+        Une fois qu\'il a accès au navigateur, il pourra récupérer les cookies à partir de la console de développement ou à la commande `document.cookie`. 
+        Les effets potentiels sont une perte de confiance et une perte de crédibilité envers le site web ou la personne.
         </p>
     </section>
     <section class="row">
         <h2>Objectifs</h2>
          <ul class="list">
             <li> Obtenir de l\'information sur des utilisateurs du site web.</li>
+            <li> Discriminer la personne victime. </li>
             <li> Acquérir des données dans le but de discriminer l\'entreprise qui détient le site web.</li>
         </ul>
     </section>
@@ -53,7 +55,7 @@ $presentation = '<div class="table">
         <h2>Causes</h2>
         <ul class="list">
             <li> La provenance du token n\'est pas vérifiée.</li>
-            <li> La création du token n\'est pas suffisament sécurisée.</li>
+            <li> La création du token n\'est pas suffisamment sécurisée.</li>
         </ul>
     </section>
     <section class="row">
@@ -62,19 +64,9 @@ $presentation = '<div class="table">
             <li><strong><a href="https://nvd.nist.gov/vuln/detail/CVE-2021-44151#match-9099598">Reprise Software (CVE-2021-44151)</a></strong><br />
                 Une attaque de vol de cookies de session est survenue sur l\'hébergeur de licence <a href="https://reprisesoftware.com">Reprise Software</a>. Cette entreprise n\'utilise que des cookies de sessions qui ont une courte longueur.
                  L\'attaqunt pouvait donc survenir à passer et obtenir le cookie par attaque de force brute. Cette attaque par force brute pouvait survenir, car les cookies de session n\'avait que 4 caractères hexadécimales pour Windows ou 8 pour les sessions Linux.
-                 De plus l\'attaquant peut déterminer facilement récupérer le token en accédant à l\'un des formulaires du site et récupérer le nom du cookie avec la réponse envoyée. Ensuite, l\'attaquant requête la même page en changeant la valeur par une valeur aléatoire.
-                 Si la valeur du cookie touche une valeur qui existe dans la base de données au niveau de la table des usagers connectés et que la comparaison est valide entre la valeur reçue et celle de la table, il y a un retour avec une page autorisée à s\'afficher. 
             </li>
             <li><strong><a href="https://www.cve.news/cve-2023-5723/"> Firefox Vulnerability - Unrestricted Cookies Hijack via Insecure `document.cookie` Usage (CVE-2023-5723))</a></strong><br />
                 Une attaque de vol de cookies est possible sur toutes les versions de Firefox v.119 et précédents, car l\'appel à la fonction javascript `document.cookie` peut permettre à un attaquant d\'avoir temporairement accès aux cookies stockés dans le navigateur et d\'avoir accès à l\'exécution d\'un script sur un site web.
-                Un exemple tel que cité par le site est :<br /> 
-                <pre class="line-numbers" data-line="2">
-                <code class="language-js">
-                // Exploit code snippet
-                document.cookie = "insecure_cookie=test%00value";
-                </code></pre><br /> 
-                Donc le code permet avec le code hexadécimal du NULL (%00) de pouvoir exécuter du code et d\'avoir un comportement possiblement non désiré du navigateur.                
-                Cela permet donc de l\'exploitation de code XSS, d\'une brèche de confidentialité et d\'atteinte à l\'intégrité des données des utilisateurs.
             </li>
         </ul>
     </section>
