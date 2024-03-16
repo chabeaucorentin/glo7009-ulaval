@@ -540,6 +540,10 @@ button:focus {
     overflow-y: scroll;
 }
 
+.container .vulnerability article form .form-group {
+    position: relative;
+}
+
 .container .vulnerability article form .form-group:not(:last-child) {
     margin-bottom: 15px;
 }
@@ -588,6 +592,23 @@ button:focus {
     padding-top: 10px;
     padding-bottom: 10px;
     resize: none;
+}
+
+.container .vulnerability article form .form-group .form-check {
+    position: absolute;
+    left: -5px;
+    height: 18px;
+    display: block;
+    font-size: 16px;
+    outline: none;
+    border-radius: 3px;
+    border: 2px solid #E3E3E3;
+}
+
+.container .vulnerability article form .form-group .form-check + label {
+    position: relative;
+    left: 20px;
+    margin-bottom: 0;
 }
 
 .container .vulnerability article form footer {

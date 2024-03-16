@@ -90,9 +90,8 @@ $demonstration = '<div class="split">
                 <input id="password" class="form-control'.((isset($error)) ? ' invalid' : '').'" name="password" type="password" />
             </div>
             <div class="form-group">
-                <label for="persistent">Se souvenir de moi :</label>
-                '.((isset($error)) ? '<div class="alert">'.$error.'</div>' : '').'
-                <input id="persistent" class="form-control'.((isset($error)) ? ' invalid' : '').'" name="persistent" type="checkbox" />
+                <input id="persistent" class="form-check'.((isset($error)) ? ' invalid' : '').'" name="persistent" type="checkbox" />
+                <label for="persistent">Se souvenir de moi</label>
             </div>
             ').'
         </div>
