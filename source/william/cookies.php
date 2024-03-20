@@ -121,6 +121,9 @@ $exploit = '<div>
             <li><strong>Avoir un formulaire de connexion</strong><br />
                 Il est nécessaire d\'avoir un formulaire de connexion pour déclencher la requête de connexion d\'un utilisateur pour pouvoir exploiter la récupération de cookies qui seront créés lors de la connexion.
             </li>
+            <li><strong>Avoir une extension de navigateur <br /> OU <br /> avoir un programme mouchard qui écoute et récupère les témoins</strong>
+                Il est aussi nécessaire qu\'il y ait une extension active ou un programme qui puisse récupérer les cookies en temps réels et qui les envoient au pirate.
+            </li>
         </ul>
     </section>
     <section>
@@ -130,7 +133,7 @@ $exploit = '<div>
                 L\'attaquant envoie une demande de connexion à un utilisateur quelconque. Cet utilisateur a été au préalable investigué par l\'attaquant pour permettre de l\'amadouer ou de le faire sentir dans l\'urgence de cliquer sur le lien pour permettre, admettons, de retrouver les accès à son compte, mais en se faisant, se retrouve à se connecter et à fournir le cookie généré à l\'attaquant.
             </li>
             <li><strong>Exploitation de la récupération d\'un cookie par une extension de navigateur vulnérable</strong><br />
-                L\'attaquant crée une extension de navigateur et l\'envoie à plusieurs utilisateurs du site web en vantant les principes de facilité de navigation sur le site web par exemple. Cette extension n\'améliore en rien la navigation du site, mais récupère les cookies du site et les retransmet à l\'attaquant.
+                L\'attaquant crée une extension de navigateur et l\'envoie à plusieurs utilisateurs du site web.
             </li>
         </ul>
         <p>Toutes ces méthodes d\'exploitations mènent ensuite à l\'injection dans un navigateur de l\'attaquant le nom du cookie et une valeur associée et cela permet de se connecter sans avoir les identifiants à un utilisateur dans le site web.</p>
@@ -139,26 +142,34 @@ $exploit = '<div>
         <h2>Exécution de l\'attaque</h2>
         <ul class="list">
             <li><strong>Création du courriel</strong><br />
-                [Brève description du contexte]
+                Le courriel est créé par l\'attaquant selon l\'un des principes mentionnés dans les méthodes d\'attaques.
             </li>
-            <li><strong>[Étape 2](Ex : Télécharger le fichier malveillant)</strong><br />
-                [Brève description du contexte]
+            <li><strong>Attendre</strong><br />
+                L\'attaquant attends que la victime télécharge et installe l\'extension, s\'il y a lieu. Il attends aussi la connexion de l\'utilisateur sur le site web pour recevoir les témoins des jetons de connexion sur son ordinateur. 
             </li>
-            <li><strong>[Étape 3](Ex : Activer le script)</strong><br />
-                [Brève description du contexte]
+            <li><strong>Connexion de l\'attaquant</strong><br />
+                Une fois que l\'attaquant a reçu les témoins, il peut débuter la connexion au site. Il filtre d\'abord les témoins pour ne garder que les jetons reliés au site web. Ensuite, par attaque de force brute, l\'attaquant essaie les différentes combinaisons possibles pour se connecter. Si le site indique que l\'utilisateur est connecté, alors l\'attaque s\'est déroulée avec succès. 
             </li>
         </ul>
     </section>
     <section>
         <h2>Analyse du code vulnérable</h2>
-        <p>[Description du code]</p>
-        <pre class="line-numbers" data-line="2"><code class="language-php">function addition($a, $b) {
-    $result = $a + $b; // Pas de vérification des valeurs
-    return $result;
-}
-
-echo addition(1 + 2); // 3</code></pre>
-        <p>[Description de la/les ligne(s) qui introdui(sen)t la/les vulnérabilité(s)]</p>
+        <p>Le code vulnérable ci-dessous est la requête de vérification de la connexion d\'un utilisateur</p>
+        <pre class="line-numbers" data-line="5"><code class="language-php">
+        function is_logged_in($token) {
+            global $db;
+        
+            $req = "SELECT token_code FROM tokens WHERE token_code = ?";
+            $stmt = mysqli_prepare($db, $req);
+            mysqli_stmt_bind_param($stmt, "s", $token);
+            mysqli_stmt_execute($stmt);
+            mysqli_stmt_store_result($stmt);
+            $nb = mysqli_stmt_num_rows($stmt);
+            mysqli_stmt_close($stmt);
+        
+            return $nb > 0;
+        }</code></pre>
+        <p>on peut remarquer que cette ligne n\'ajoute pas la vérification de la provenance de l\'utilisateur.</p>
     </section>
 </div>';
 
@@ -174,13 +185,11 @@ $fix = '<div>
             </li>
             <li><strong>Modifier la base de données</strong><br />
                 On peut ajouter des champs de localisation, des informations de l\'agent utilisateur du navigateur, etc.
-                On peut ajouter ce bout de code, par exemple: 
-                <pre class="line-numbers"><code class="language-mysql">
-                    ALTER TABLE `tokens` 
-                        ADD `token_user_localization` VARCHAR(255) NOT NULL AFTER `token_user_id`, 
-                        ADD `token_user_ip` VARCHAR(255) NOT NULL AFTER `token_user_localization`, 
-                        ADD `token_navigator_user_agent` VARCHAR(255) NOT NULL AFTER `token_user_ip`; 
-                </code></pre>
+                <br />
+                De plus, en installant les composants  <a href="https://dev.maxmind.com/geoip/geoip2/geolite2/">GeoIP2 </a> et
+                <a href="https://github.com/maxmind/GeoIP2-php/releases">la dernière sortie de geoip2.phar</a> dans les fichiers sources du serveur PHP.
+                <br />
+                On peut ajouter ce bout de code, voir la section sur la correction de la correction de code vulnérable plus bas.               
             </li>
             <li><strong>Longueur des cookies</strong><br />
                 On peut allonger la longugeur des cookies à une longueur suffisante pour éviter les attaques par force brute.
@@ -192,41 +201,79 @@ $fix = '<div>
     </section>
     <section>
         <h2>Outils de détection</h2>
-        <!-- Supprimer ce paragraphe -->
-        <p><em>[Description des outils de détection]</em></p>
-        <!-- FIN Supprimer ce paragraphe -->
         <ul class="list">
-            <li><strong>[Outil 1](Ex : Nikto)</strong><br />
-                [Brève description de la mesure]
+            <li><strong>Nikto</strong><br />
+                Pour Nikto, aucune détection du vol de témoins possible, elles ne sont pas détecté.
             </li>
-            <li><strong>[Outil 2](Ex : ZAP)</strong><br />
-                [Brève description de la mesure]
+            <li><strong>ZAP</strong><br />
+            Pour ZAP, la détection ne considère pas la détection du vol de témoin, mais détecte uniquement qu\'il y a une connexion.
             </li>
-            <li><strong>[Outil 3](Ex : Skipfish)</strong><br />
-                [Brève description de la mesure]
+            <li><strong>Skipfish</strong><br />
+            Pour Skipfish, la détection ne considère pas la détection du vol de témoin, mais détecte uniquement qu\'il y a une connexion.
             </li>
         </ul>
     </section>
     <section>
         <h2>Correction du code vulnérable</h2>
-        <p>[Description du code]</p>
-        <pre class="line-numbers" data-line="2,5-7"><code class="language-php">function addition($a, $b) {
-    if (is_int($a) && is_int($b)) { // Vérification que $a et $b sont des entiers
-        $result = $a + $b;
-        return $result;
-    else {
-        return "Les 2 paramètres doivent être des entiers !";
-    }
-}
+        <p>Correction de la fonction is_logged_in et ajout de la fonction de recherche de la localisation de l\'utilisateur</p>
+        <pre class="line-numbers"><code class="language-mysql">
+        ALTER TABLE `tokens` 
+            ADD `token_user_localization` VARCHAR(255) NOT NULL AFTER `token_user_id`, 
+            ADD `token_user_ip` VARCHAR(255) NOT NULL AFTER `token_user_localization`, 
+            ADD `token_navigator_user_agent` VARCHAR(255) NOT NULL AFTER `token_user_ip`; 
+    </code></pre><br />
+    Ensuite, on modifie la requête de vérification de la connexion en ajoutant les champs ajoutés à la base de données: <br />
+    <pre class="line-numbers" data-line="1-13,16-23,25-28"><code class="language-php">
+        require_once("geoip2.phar");
+        use GeoIp2\Database\Reader;
+        function clientIpAddress(){
+            if(!empty($_SERVER[\'HTTP_CLIENT_IP\'])){
+            $address = $_SERVER[\'HTTP_CLIENT_IP\'];
+            }elseif(!empty($_SERVER[\'HTTP_X_FORWARDED_FOR\'])){
+            $ address = $_SERVER[\'HTTP_X_FORWARDED_FOR\'];
+            }else{
+            $ address = $_SERVER[\'REMOTE_ADDR\'];
+            }
+            return $address;
+        };
+        function is_logged_in($token) {
+            global $db;
+            $reader = new Reader(\'/path/to/GeoLite2-Country.mmdb\');
+            $client_ip = clientIpAddress();
+            $client_record = $reader->country($client_ip);
+            $req = "SELECT token_code " .
+                    "FROM tokens WHERE token_code = ? " .
+                    "AND token_user_localization = ? " .
+                    "AND token_user_ip = ? " .
+                    "AND token_navigator_user_agent = ?;";
+            $stmt = mysqli_prepare($db, $req);
+            mysqli_stmt_bind_param($stmt, "s", $token);
+            mysqli_stmt_bind_param($stmt, "s","[".$client_record->location->latitude.",".$client_record->location->longitude."]");
+            mysqli_stmt_bind_param($stmt, "s", $client_ip);
+            mysqli_stmt_bind_param($stmt, "s", $_SERVER[\'HTTP_USER_AGENT\']);
+            mysqli_stmt_execute($stmt);
+            mysqli_stmt_store_result($stmt);
+            $nb = mysqli_stmt_num_rows($stmt);
+            mysqli_stmt_close($stmt);
 
-echo addition(1 + 2); // 3</code></pre>
-        <p>[Description de la/les ligne(s) modifiée(s)]</p>
+            return $nb > 0;
+        }
+    </code></pre><br />
+        <p>Les lignes 1 à 3, servent à l\'appel de la librairie de géolocalisation de l\'utilisateur. <br/>
+        Les lignes 4 à 13 servent à la fonction de récupération de l\'adresse IP de l\'utilisateur, même si ce dernier est derrière un proxy. <br />
+        Les lignes 16 à 18 permettent d\'initier la librairie de géolocalisation et de récupérer l\'adresse IP de l\'utilisateur dans une variable <br />
+        Les lignes 19 à 23 sont la nouvelle version de la requête de vérification de connexion de l\'utilisation <br />
+        Les lignes 25 à 28 sont les lignes de populations des variables de la requête. <br />
+        La ligne 26 permet de récupérer la géolocalisation. <br />
+        La ligne 28 permet de récupérer l\'agent utilisateur du navigateur de l\'utilisateur.
+        </p>
     </section>
     <section>
         <h2>Documentation et ressources</h2>
         <ul class="list">
-            <li><a href="#" target="_blank">[Nom de la ressource 1]</a></li>
-            <li><a href="#" target="_blank">[Nom de la ressource 2]</a></li>
+            <li><a href="https://developer.mozilla.org/fr/docs/Glossary/User_agent" target="_blank">Mozilla Developer Network [Agent utilisateur]</a></li>
+            <li><a href="https://elsefix.com/fr/what-is-a-pass-the-cookie-attack-how-to-stay-logged-in-to-websites-safely.html" target="_blank">Elsefix [Qu\'est-ce qu\'une attaque Pass-the-Cookies]</a></li>
+            <li><a href="https://whatmyuseragent.com/" target="_blank">What\'s My User Agent?</a></li>
         </ul>
     </section>
 </div>';
