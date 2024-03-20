@@ -219,7 +219,7 @@ button:focus {
     top: 75px;
     left: 0;
     bottom: 0;
-    height: calc(100vh - 76px);
+    height: calc(100dvh - 76px);
     width: 270px;
     display: -webkit-box;
     display: flex;
@@ -293,7 +293,7 @@ button:focus {
     position: fixed;
     top: 75px;
     left: 270px;
-    height: calc(100vh - 140px);
+    height: calc(100dvh - 140px);
     width: calc(100vw - 270px);
     padding: 20px;
     display: -webkit-box;
@@ -459,7 +459,7 @@ button:focus {
 }
 
 .container .vulnerability article {
-    height: calc(100vh - 309px);
+    height: calc(100dvh - 309px);
 }
 
 .container article.error,
