@@ -37,25 +37,24 @@ $presentation = '<div class="table">
     </div>
     <section class="row">
         <h2>Description</h2>
-        <p>Cette vulnérabilité permet à l\'attaquant de contourner l\'authentification de l\'utilisateur légitime en subtilisant les cookies de connexions de ce dernier. 
-        Pour que l\'attaque fonctionne, le pirate doit avoir accès au navigateur de la victime.
-        Une fois qu\'il a accès au navigateur, il pourra récupérer les cookies à partir de la console de développement ou à la commande `document.cookie`. 
-        Les effets potentiels sont une perte de confiance et une perte de crédibilité envers le site web ou la personne.
+        <p>La subtilisation des témoins (cookies) est une vulnérabilité permettant à l\'usurpateur de récupérer les témoins, cette attaque est aussi nommée Pass-the-cookie. 
+            Une fois que les témoins sont récupérés par cet usurpateur, il pourra effectuer des opérations sur le site web, 
+            tout en se faisant passer pour l\'utilisateur légitime. 
         </p>
     </section>
     <section class="row">
         <h2>Objectifs</h2>
          <ul class="list">
-            <li> Obtenir de l\'information sur des utilisateurs du site web.</li>
-            <li> Discriminer la personne victime. </li>
-            <li> Acquérir des données dans le but de discriminer l\'entreprise qui détient le site web.</li>
+            <li>Obtenir de l\'information sur des utilisateurs légitimes</li>
+            <li>Effectuer des actes répréhensibles sur ses utilisateurs</li>
+            <li>Acquérir de l\'information dans le but de discriminer les propriétaires du site.</li>
         </ul>
     </section>
     <section class="row">
         <h2>Causes</h2>
         <ul class="list">
-            <li> La provenance du token n\'est pas vérifiée.</li>
-            <li> La création du token n\'est pas suffisamment sécurisée.</li>
+            <li> La provenance du jeton n\'est pas vérifiée.</li>
+            <li> La création du témoin n\'est pas suffisamment sécurisée.</li>
         </ul>
     </section>
     <section class="row">
@@ -63,7 +62,7 @@ $presentation = '<div class="table">
         <ul class="list">
             <li><strong><a href="https://nvd.nist.gov/vuln/detail/CVE-2021-44151#match-9099598">Reprise Software (CVE-2021-44151)</a></strong><br />
                 Une attaque de vol de cookies de session est survenue sur l\'hébergeur de licence <a href="https://reprisesoftware.com">Reprise Software</a>. Cette entreprise n\'utilise que des cookies de sessions qui ont une courte longueur.
-                 L\'attaqunt pouvait donc survenir à passer et obtenir le cookie par attaque de force brute. Cette attaque par force brute pouvait survenir, car les cookies de session n\'avait que 4 caractères hexadécimales pour Windows ou 8 pour les sessions Linux.
+                 L\'attaquant pouvait donc survenir à passer et obtenir le cookie par attaque de force brute. Cette attaque par force brute pouvait survenir, car les cookies de session n\'avait que 4 caractères hexadécimales pour Windows ou 8 pour les sessions Linux.
             </li>
             <li><strong><a href="https://www.cve.news/cve-2023-5723/"> Firefox Vulnerability - Unrestricted Cookies Hijack via Insecure `document.cookie` Usage (CVE-2023-5723))</a></strong><br />
                 Une attaque de vol de cookies est possible sur toutes les versions de Firefox v.119 et précédents, car l\'appel à la fonction javascript `document.cookie` peut permettre à un attaquant d\'avoir temporairement accès aux cookies stockés dans le navigateur et d\'avoir accès à l\'exécution d\'un script sur un site web.
@@ -75,7 +74,7 @@ $presentation = '<div class="table">
 $demonstration = '<div class="split">
     <form method="POST">
         <div>
-            <h2>Scénario</h2>
+            <h2>Scénario 1</h2>
             '.((isset($_COOKIE["userToken"]) && is_logged_in($_COOKIE["userToken"])) ? '
             <p style="color: green;">L\'usager est connecté</p>
             ' : '
@@ -103,57 +102,56 @@ $demonstration = '<div class="split">
             ').'
         </footer>
     </form>
-    <section>
+    <!--<section>
         <h2>Résultat</h2>
         <p>[Contenu]</p>
-    </section>
+    </section>-->
 </div>';
 
 $exploit = '<div>
     <section>
         <h2>Conditions préalables pour l\'exploitation</h2>
         <ul class="list">
-            <li><strong>Une base de données ne détenant pas assez d\'informations sur la provenance des utilsateurs<br />
-                OU<br />
-                n\'étant pas assez aléatoire sur la création du token (longueur pas assez longue lors de la création)</strong><br />
-                Lors de la création de la base de données, on crée la table des utilisateurs connectés en ne fournissant que le minimum fonctionnel. Autrement dit, on ajoute que l\'identificateur de l\'utilisateur et son token. En plus, la longueur du token peut être trop faible et on ne la fait pas assez longue.
-            </li>
-            <li><strong>Avoir un formulaire de connexion</strong><br />
-                Il est nécessaire d\'avoir un formulaire de connexion pour déclencher la requête de connexion d\'un utilisateur pour pouvoir exploiter la récupération de cookies qui seront créés lors de la connexion.
-            </li>
-            <li><strong>Avoir une extension de navigateur <br /> OU <br /> avoir un programme mouchard qui écoute et récupère les témoins</strong>
-                Il est aussi nécessaire qu\'il y ait une extension active ou un programme qui puisse récupérer les cookies en temps réels et qui les envoient au pirate.
-            </li>
+            <li>Pour être capable de subtiliser des témoins de connexions, on doit connaître le site que l\'on désire attaquer.</li>
         </ul>
     </section>
     <section>
         <h2>Méthodes d\'exploitation</h2>
         <ul class="list">
-            <li><strong>Envoi d\'un courriel demandant à un utilisateur de se connecter</strong><br />
-                L\'attaquant envoie une demande de connexion à un utilisateur quelconque. Cet utilisateur a été au préalable investigué par l\'attaquant pour permettre de l\'amadouer ou de le faire sentir dans l\'urgence de cliquer sur le lien pour permettre, admettons, de retrouver les accès à son compte, mais en se faisant, se retrouve à se connecter et à fournir le cookie généré à l\'attaquant.
-            </li>
-            <li><strong>Exploitation de la récupération d\'un cookie par une extension de navigateur vulnérable</strong><br />
-                L\'attaquant crée une extension de navigateur et l\'envoie à plusieurs utilisateurs du site web.
+            <li><strong>Création d\'une extension vulnérable</strong><br />
+            L\'attaquant doit créer une extension de navigateur vulnérable à l\'usurpation des témoins de connexions.</li>
+            <li><strong>Retrouver un équipement informatique détenant des informations non détruites</strong><br />
+            L\'attaquant peut retrouver un ordinateur ou un téléphone de l\'utilisateur du site. </li>
+            <li><strong>Option « Se souvenir de moi » </strong><br />
+            L\'utilisateur doit aussi avoir cliquer, si disponible, l\'option « se souvenir de moi », qui permet de conserver un témoin de l\'état de connexion au service du site web, autrement, selon le site web, ce dernier pourrait être automatiquement éliminé lors de la fermeture du navigateur et force la reconnexion en demandant à nouveau les identifiants, 
+            ou le site web conserve un témoin de connexion avec une durée de validité variant selon la conception du site web.
             </li>
         </ul>
-        <p>Toutes ces méthodes d\'exploitations mènent ensuite à l\'injection dans un navigateur de l\'attaquant le nom du cookie et une valeur associée et cela permet de se connecter sans avoir les identifiants à un utilisateur dans le site web.</p>
     </section>
     <section>
         <h2>Exécution de l\'attaque</h2>
         <ul class="list">
-            <li><strong>Création du courriel</strong><br />
-                Le courriel est créé par l\'attaquant selon l\'un des principes mentionnés dans les méthodes d\'attaques.
-            </li>
             <li><strong>Attendre</strong><br />
-                L\'attaquant attends que la victime télécharge et installe l\'extension, s\'il y a lieu. Il attends aussi la connexion de l\'utilisateur sur le site web pour recevoir les témoins des jetons de connexion sur son ordinateur. 
+                Si l\'option de créer une extension a été priorisée, on doit attendre qu\'un utilisateur du site web la télécharge et l\'installe sur le navigateur ciblé pour l\'attaque. 
+                Une fois cela effectué, l\'attaquant peut récupérer les témoins de connexion en recevant de façon régulière, ces dernières des utilisateurs qui ont téléchargé l\'extension vulnérable.
             </li>
-            <li><strong>Connexion de l\'attaquant</strong><br />
-                Une fois que l\'attaquant a reçu les témoins, il peut débuter la connexion au site. Il filtre d\'abord les témoins pour ne garder que les jetons reliés au site web. Ensuite, par attaque de force brute, l\'attaquant essaie les différentes combinaisons possibles pour se connecter. Si le site indique que l\'utilisateur est connecté, alors l\'attaque s\'est déroulée avec succès. 
+            <li><strong>Filtration des témoins</strong><br />
+                L\'attaquant filtre les témoins pour ne conserver que ceux en lien avec le site web vulnérable à l\'attaque
+            </li>
+            <li><strong>Injection des valeurs dans le navigateur</strong><br />
+            L\'attaquant modifie les valeurs de propriétés des témoins de son navigateur qui est le même navigateur que celui ciblé pour l\'attaque en les remplaçant.
+            </li>
+            <li><strong>Connexion sans identifiants sur le site web</strong><br />
+                l\'attaquant ouvre le navigateur et se dirige sur le site web pour vérifier que la connexion sans les identifiants est un succès.
+                Si la connexion est un succès, l\'attaquant peut modifier toutes les informations au compte de la victime, 
+                autrement si cela est un échec, alors l\'attaquant devra trouver et investiguer plus en profondeur, 
+                en regardant si l\'authentification multi facteur est activé ou toutes autres actions ou services qui surveille 
+                les activités frauduleuses sur les comptes du site web.
             </li>
         </ul>
     </section>
     <section>
-        <h2>Analyse du code vulnérable</h2>
+        <!--<h2>Analyse du code vulnérable</h2>
         <p>Le code vulnérable ci-dessous est la requête de vérification de la connexion d\'un utilisateur</p>
         <pre class="line-numbers" data-line="5"><code class="language-php">
         function is_logged_in($token) {
@@ -169,33 +167,37 @@ $exploit = '<div>
         
             return $nb > 0;
         }</code></pre>
-        <p>on peut remarquer que cette ligne n\'ajoute pas la vérification de la provenance de l\'utilisateur.</p>
+        <p>on peut remarquer que cette ligne n\'ajoute pas la vérification de la provenance de l\'utilisateur.</p>-->
     </section>
 </div>';
 
 $fix = '<div>
     <section>
         <h2>Mesures de protection</h2>
+        <p>Il n\'existe pas réellement de correction au problème au vol de témoins de connexion, 
+            mais on peut mitiger le problème en documentant et en informant principalement les usagers sur le risque du vol, 
+            en suivant l\'une des trois options ci-dessous, et que la première option est celle qui devrait être la plus privilégiée et faite régulièrement.
+        </p>
         <ul class="list">
             <li><strong>Éducation des utilisateurs</strong><br />
-                On peut éduquer les utilisateurs sur l\'attaque par courriel. De vérifier la provenance des courriels, autrement dit, l\'expéditeur, de vérifier les fautes d\'orthographe ou de ne pas ouvrir un courriel si on ne connait pas la provenance et de l\'expédier, si possible, à l\'équipe de sécurité qui gère les courriels indésirables.
+                On peut effectuer de la formation en informant les utilisateurs de ne pas télécharger sans vérifier la provenance de l\'extension que 
+                l\'on désire installer à partir du navigateur. Par exemple, le Google Chrome Web Store qui répertorie les extensions compatibles avec le 
+                navigateur Google Chrome est surveillé périodiquement par Google pour repérer et éliminer les extensions malveillantes, 
+                ou si le navigateur est installé dans le réseau d\'une entreprise, pourra être contrôlé par les équipes informatiques pour empêcher 
+                l\'installation et le téléchargement des extensions. 
+                Dans le cas de Mozilla Firefox, on peut voir une notice de Mozilla indiquant qu\'ils sont incapables de valider l\'authenticité de l\'extension, 
+                et ce sont ces derniers qu\'ils devraient être évités lors du téléchargement d\'extensions.    
             </li>
-            <li><strong>Sécuriser à la création les cookies</strong><br />
-                On peut ajouter les attributs `HTTP-Only` et `Same-site` des cookies pour ne permettre leur exécution que sur le site web qui l\'exploite.
+            <li><strong>Outils de surveillance des activités suspectes</strong><br />
+                Le site web peut mettre en place des outils de surveillances des activités suspectes sur les comptes pour aider à réduire les problèmes liés au vol
+                 des témoins de connexions, en envoyant par courriel, au destinataire du compte, qu\'il y a eu une tentative de connexion à son compte, 
+                 et de cliquer sur un lien, si cela n\'est pas lié à une activité que la victime a fait elle-même pour changer la sécurité de son compte et 
+                 la renforcer. 
             </li>
-            <li><strong>Modifier la base de données</strong><br />
-                On peut ajouter des champs de localisation, des informations de l\'agent utilisateur du navigateur, etc.
-                <br />
-                De plus, en installant les composants  <a href="https://dev.maxmind.com/geoip/geoip2/geolite2/">GeoIP2 </a> et
-                <a href="https://github.com/maxmind/GeoIP2-php/releases">la dernière sortie de geoip2.phar</a> dans les fichiers sources du serveur PHP.
-                <br />
-                On peut ajouter ce bout de code, voir la section sur la correction de la correction de code vulnérable plus bas.               
-            </li>
-            <li><strong>Longueur des cookies</strong><br />
-                On peut allonger la longugeur des cookies à une longueur suffisante pour éviter les attaques par force brute.
-            </li>
-            <li><strong>Outils de détection des menaces</strong><br />
-                Si aucune des méthodes ci-dessus ne peut être effectué, la dernière option serait d\'ajouter un outils de détection des menaces actives. Cet outil détectera les possibles menaces avant qu\'elles n\'arrivent si un cookie est dérobé.
+            <li><strong>Ajouter une couche de protection supplémentaire</strong><br />
+                Les propriétaires du site web peuvent ajouter l\'authentification multi facteur pour limiter le vol. 
+                À partir de l\'authentification multi facteur, on peut choisir un téléphone, un gestionnaire de mot de passe à usage temporel unique (OTP) 
+                ou une clé physique de type FIDO, par exemple Yubikey.
             </li>
         </ul>
     </section>
@@ -214,7 +216,7 @@ $fix = '<div>
         </ul>
     </section>
     <section>
-        <h2>Correction du code vulnérable</h2>
+       <!-- <h2>Correction du code vulnérable</h2>
         <p>Correction de la fonction is_logged_in et ajout de la fonction de recherche de la localisation de l\'utilisateur</p>
         <pre class="line-numbers"><code class="language-mysql">
         ALTER TABLE `tokens` 
@@ -266,14 +268,14 @@ $fix = '<div>
         Les lignes 25 à 28 sont les lignes de populations des variables de la requête. <br />
         La ligne 26 permet de récupérer la géolocalisation. <br />
         La ligne 28 permet de récupérer l\'agent utilisateur du navigateur de l\'utilisateur.
-        </p>
+        </p>-->
     </section>
     <section>
         <h2>Documentation et ressources</h2>
         <ul class="list">
-            <li><a href="https://developer.mozilla.org/fr/docs/Glossary/User_agent" target="_blank">Mozilla Developer Network [Agent utilisateur]</a></li>
+            <!--<li><a href="https://developer.mozilla.org/fr/docs/Glossary/User_agent" target="_blank">Mozilla Developer Network [Agent utilisateur]</a></li>-->
             <li><a href="https://elsefix.com/fr/what-is-a-pass-the-cookie-attack-how-to-stay-logged-in-to-websites-safely.html" target="_blank">Elsefix [Qu\'est-ce qu\'une attaque Pass-the-Cookies]</a></li>
-            <li><a href="https://whatmyuseragent.com/" target="_blank">What\'s My User Agent?</a></li>
+            <!--<li><a href="https://whatmyuseragent.com/" target="_blank">What\'s My User Agent?</a></li>-->
         </ul>
     </section>
 </div>';
