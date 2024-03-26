@@ -106,6 +106,14 @@ $demonstration = '<div class="split">
         <h2>Résultat</h2>
         <p>[Contenu]</p>
     </section>-->
+    <section>
+        <h2>Scénario 2</h2>
+        <ul>
+            <ol> Exemple avec un compte Google </ol>
+            <ol> Utiliser une extension (Cookie Editor) </ol>
+            <ol> Récupérer les cookies et passer sur le même navigateur sur un autre ordinateur (préférablement sur un autre réseau) </ol>
+        </ul>
+    </section>
 </div>';
 
 $exploit = '<div>
