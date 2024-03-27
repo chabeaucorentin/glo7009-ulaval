@@ -72,9 +72,9 @@ $presentation = '<div class="table">
 </div>';
 
 $demonstration = '<div class="split">
-    <form method="POST">
+    <form method="POST" action="login">
         <div>
-            <h2>Scénario 1</h2>
+            <h2>Scénario 1 - Vulnérable</h2>
             '.((isset($_COOKIE["userToken"]) && is_logged_in($_COOKIE["userToken"])) ? '
             <p style="color: green;">L\'usager est connecté</p>
             ' : '
@@ -98,7 +98,7 @@ $demonstration = '<div class="split">
             '.((isset($_COOKIE["userToken"]) && is_logged_in($_COOKIE["userToken"])) ? '
             <button name="disconnect" type="submit" value="disconnect" onclick='.logoutProcess().'>Déconnexion</button>
             ' : '
-            <button name="connect" type="submit" value="connect" onclick='.((isset($_GET["toEmail"])) ? loginProcessVulnerable($_GET["toEmail"]) : loginProcess()).'>Connexion</button>
+            <button name="connect" type="submit" value="connect">Connexion</button>
             ').'
         </footer>
     </form>
@@ -120,94 +120,207 @@ $exploit = '<div>
     <section>
         <h2>Conditions préalables pour l\'exploitation</h2>
         <ul class="list">
-            <li>Pour être capable de subtiliser des témoins de connexions, on doit connaître le site que l\'on désire attaquer.</li>
+            <li>Extension de navigateur vulnérable (récupère les témoins et les envoie à l\'attaquant)</li>
+            <li>L\'attaquant est connecté sur le même réseau.</li>
+            <li>L\'attaquant peut récupérer un équipement informatique détenant des informations non détruites sécuritairement.</li>
         </ul>
     </section>
     <section>
-        <h2>Méthodes d\'exploitation</h2>
+        <h2>Vecteur d\'attaque</h2>
         <ul class="list">
-            <li><strong>Création d\'une extension vulnérable</strong><br />
-            L\'attaquant doit créer une extension de navigateur vulnérable à l\'usurpation des témoins de connexions.</li>
-            <li><strong>Retrouver un équipement informatique détenant des informations non détruites</strong><br />
-            L\'attaquant peut retrouver un ordinateur ou un téléphone de l\'utilisateur du site. </li>
-            <li><strong>Option « Se souvenir de moi » </strong><br />
-            L\'utilisateur doit aussi avoir cliquer, si disponible, l\'option « se souvenir de moi », qui permet de conserver un témoin de l\'état de connexion au service du site web, autrement, selon le site web, ce dernier pourrait être automatiquement éliminé lors de la fermeture du navigateur et force la reconnexion en demandant à nouveau les identifiants, 
-            ou le site web conserve un témoin de connexion avec une durée de validité variant selon la conception du site web.
-            </li>
+            <li>Attaque active permettant d\'accéder aux identifiants d\'un utilisateur par ingénierie sociale.
         </ul>
     </section>
     <section>
         <h2>Exécution de l\'attaque</h2>
         <ul class="list">
             <li><strong>Attendre</strong><br />
-                Si l\'option de créer une extension a été priorisée, on doit attendre qu\'un utilisateur du site web la télécharge et l\'installe sur le navigateur ciblé pour l\'attaque. 
-                Une fois cela effectué, l\'attaquant peut récupérer les témoins de connexion en recevant de façon régulière, ces dernières des utilisateurs qui ont téléchargé l\'extension vulnérable.
+                Après attente de l\'installation de l\'extension et l\'extension récupère les jetons et les envoient à l\'attaquant.    
             </li>
             <li><strong>Filtration des témoins</strong><br />
-                L\'attaquant filtre les témoins pour ne conserver que ceux en lien avec le site web vulnérable à l\'attaque
+                Ensuite, l\'attaquant filtre les témoins pour ne conserver que ceux en lien avec le site web vulnérable à l\'attaque
             </li>
             <li><strong>Injection des valeurs dans le navigateur</strong><br />
             L\'attaquant modifie les valeurs de propriétés des témoins de son navigateur qui est le même navigateur que celui ciblé pour l\'attaque en les remplaçant.
             </li>
-            <li><strong>Connexion sans identifiants sur le site web</strong><br />
-                l\'attaquant ouvre le navigateur et se dirige sur le site web pour vérifier que la connexion sans les identifiants est un succès.
-                Si la connexion est un succès, l\'attaquant peut modifier toutes les informations au compte de la victime, 
-                autrement si cela est un échec, alors l\'attaquant devra trouver et investiguer plus en profondeur, 
-                en regardant si l\'authentification multi facteur est activé ou toutes autres actions ou services qui surveille 
-                les activités frauduleuses sur les comptes du site web.
-            </li>
         </ul>
     </section>
     <section>
-        <!--<h2>Analyse du code vulnérable</h2>
-        <p>Le code vulnérable ci-dessous est la requête de vérification de la connexion d\'un utilisateur</p>
-        <pre class="line-numbers" data-line="5"><code class="language-php">
-        function is_logged_in($token) {
-            global $db;
-        
-            $req = "SELECT token_code FROM tokens WHERE token_code = ?";
-            $stmt = mysqli_prepare($db, $req);
-            mysqli_stmt_bind_param($stmt, "s", $token);
-            mysqli_stmt_execute($stmt);
-            mysqli_stmt_store_result($stmt);
-            $nb = mysqli_stmt_num_rows($stmt);
-            mysqli_stmt_close($stmt);
-        
-            return $nb > 0;
-        }</code></pre>
-        <p>on peut remarquer que cette ligne n\'ajoute pas la vérification de la provenance de l\'utilisateur.</p>-->
+        <h2>Analyse du code vulnérable</h2>
+        <p>La fonction PHP de connexion ci-dessous est vulnérable, car on n\'insère pas, 
+            pendant la connexion, la localisation de l\'adresse IP permettant de repérer 
+            l\'endroit de la connexion. 
+            Autrement dit, la fonction login ne met pas les valeurs de sécurités pour notifier l\'utilisateur en cas de connexion à un nouvel emplacement.
+        </p>
+        <pre class="line-numbers" data-line="5-10"><code class="language-php">
+            function login($email, $password) {
+                …
+                if (isset($id)) {
+                    $req = "INSERT INTO tokens (token_code, token_user_id) VALUES (?, ?)";
+                    $stmt = mysqli_prepare($db, $req);
+                    $token = generate_token(50);
+                    mysqli_stmt_bind_param($stmt, "si", $token, $id);
+                    mysqli_stmt_execute($stmt);
+                    mysqli_stmt_close($stmt);
+            
+                    return $token;
+                }
+                return null;
+            }
+        </code></pre>
+        <p>La seconde fonction PHP de connexion ci-dessous est aussi vulnérable, car il n\'y a pas de vérification de l\'endroit d\'où vient la connexion.</p>
+        <pre class="line-numbers" data-line="4,11"><code class="language-php">
+            function is_logged_in($token) {
+                global $db;
+                $req = "SELECT token_code FROM tokens WHERE token_code = ?";
+                $stmt = mysqli_prepare($db, $req);
+                mysqli_stmt_bind_param($stmt, "s", $token);
+                mysqli_stmt_execute($stmt);
+                mysqli_stmt_store_result($stmt);
+                $nb = mysqli_stmt_num_rows($stmt);
+                mysqli_stmt_close($stmt);
+                return $nb > 0;
+            }
+        </code></pre>
     </section>
 </div>';
 
 $fix = '<div>
     <section>
         <h2>Mesures de protection</h2>
-        <p>Il n\'existe pas réellement de correction au problème au vol de témoins de connexion, 
-            mais on peut mitiger le problème en documentant et en informant principalement les usagers sur le risque du vol, 
-            en suivant l\'une des trois options ci-dessous, et que la première option est celle qui devrait être la plus privilégiée et faite régulièrement.
-        </p>
         <ul class="list">
             <li><strong>Éducation des utilisateurs</strong><br />
-                On peut effectuer de la formation en informant les utilisateurs de ne pas télécharger sans vérifier la provenance de l\'extension que 
-                l\'on désire installer à partir du navigateur. Par exemple, le Google Chrome Web Store qui répertorie les extensions compatibles avec le 
-                navigateur Google Chrome est surveillé périodiquement par Google pour repérer et éliminer les extensions malveillantes, 
-                ou si le navigateur est installé dans le réseau d\'une entreprise, pourra être contrôlé par les équipes informatiques pour empêcher 
-                l\'installation et le téléchargement des extensions. 
-                Dans le cas de Mozilla Firefox, on peut voir une notice de Mozilla indiquant qu\'ils sont incapables de valider l\'authenticité de l\'extension, 
-                et ce sont ces derniers qu\'ils devraient être évités lors du téléchargement d\'extensions.    
+                Éduquer et informer les utilisateurs sur les risques du vol des témoins de connexions. 
+                (Cette option est celle à privilégier, car elle permet de limiter le plus possible des dégâts)
             </li>
             <li><strong>Outils de surveillance des activités suspectes</strong><br />
-                Le site web peut mettre en place des outils de surveillances des activités suspectes sur les comptes pour aider à réduire les problèmes liés au vol
-                 des témoins de connexions, en envoyant par courriel, au destinataire du compte, qu\'il y a eu une tentative de connexion à son compte, 
-                 et de cliquer sur un lien, si cela n\'est pas lié à une activité que la victime a fait elle-même pour changer la sécurité de son compte et 
-                 la renforcer. 
+                Mettre en place des outils de surveillance des activités. 
+                (Envoi d\'un courriel à l\'utilisateur pour spécifier une nouvelle connexion à un nouvel emplacement)
             </li>
             <li><strong>Ajouter une couche de protection supplémentaire</strong><br />
-                Les propriétaires du site web peuvent ajouter l\'authentification multi facteur pour limiter le vol. 
-                À partir de l\'authentification multi facteur, on peut choisir un téléphone, un gestionnaire de mot de passe à usage temporel unique (OTP) 
-                ou une clé physique de type FIDO, par exemple Yubikey.
+                Ajouter l\'authentification multi facteur. 
+                (Limiter les risques en ajoutant une clé physique FIDO (Yubikey) ou d\'ajouter un gestionnaire de mot de passe temporelle à usage unique (OTP))
             </li>
         </ul>
+    </section>
+    <section>
+        <h2>Détection de la vulnérabilité</h2>
+        <ul class="list">
+            <li>La détection ne pourra pas être 100% efficace.
+                Avec des outils de surveillance des activités, on pourra effectuer un envoi de courriel, 
+                si la localisation du client diffère de celle actuellement stocké sur la BD des connexions actives.
+            </li>
+        </ul>
+    </section>
+    <section>
+       <h2>Correction du code vulnérable</h2>
+       <p> Pour être capable de corriger le code précédent, on doit modifier la table des connexions actives dans la base de données. Voici le code: </p>
+       <pre class="line-numbers"><code class="language-mysql">
+        ALTER TABLE `tokens` ADD `token_latitude` VARCHAR(30) NOT NULL AFTER `token_user_id`, 
+                             ADD `token_longitude` VARCHAR(30) NOT NULL AFTER `token_latitude`, 
+                             ADD `token_city` VARCHAR(50) NOT NULL AFTER `token_longitude`, 
+                             ADD `token_country` VARCHAR(10) NOT NULL AFTER `token_city`;
+       </code></pre>
+        <p>En reprenant le code précédent, la version corrigée du code de connexion d\'un usager est le suivant :</p>
+        <pre class="line-numbers" data-line="4-14,16,19"><code class="language-php">
+            function login($email, $password) {
+                …
+                $apiURL = \'https://freegeoip.app/json/\'. $_SERVER[\'REMOTE_ADDR\'];
+                $curlRequest = curl_init($apiURL);
+                curl_setopt($curlRequest, CURLOPT_RETURNTRANSFER, true);
+                $apiResponse = curl_exec($curlRequest);
+                curl_close($curlRequest);
+                $ipData = json_decode($apiResponse, true);
+                if (!empty($ipData)){
+                $latitude = $ipData[\'latitude\'];
+                $longitude = $ipData[\'longitude\'];
+                $city = $ipData[\'city\'];
+                $country = $ipData[\'country_code\'];
+                if (isset($id)) {
+                    $req = "INSERT INTO tokens (token_code, token_user_id, token_latitude, token_longitude, token_city, token_country) VALUES (?, ?, ?, ?, ?, ?)";
+                    $stmt = mysqli_prepare($db, $req);
+                    $token = generate_token(50);
+                    mysqli_stmt_bind_param($stmt, "si", $token, $id, $latitude, $longitude, $city, $country);
+                    mysqli_stmt_execute($stmt);
+                    mysqli_stmt_close($stmt);
+                    return $token;
+                }
+            }
+                return 0;
+            }
+        </code></pre><br />
+        <p>Les lignes 4 à 14, permettent de générer le code servant à retrouver la localisation du client à partir de son adresse IP. <br/>
+        La ligne 16 sert à la création de la requête d\'ajout du jeton d\'accès lorsque le client se connecte. <br />
+        La ligne 19 permet de lier les variables définis aux paramètres de la requête avant de l\'exécuter.
+        </p>
+        <p> De même pour la vérification de la connexion </p>
+        <pre class="line-numbers" data-line="4-5,12-22,24-50"><code class="language-php">
+        function is_logged_in($token) {
+            global $db;
+            $user ="SELECT user_email FROM users WHERE user_id = ?";
+            $req = "SELECT token_code, token_user_id, token_latitude, token_longitude, token_city, token_country FROM tokens WHERE token_code = ?";
+            $stmt = mysqli_prepare($db, $req);
+            mysqli_stmt_bind_param($stmt, "s", $token);
+            mysqli_stmt_execute($stmt);
+            mysqli_stmt_store_result($stmt);
+            $nb = mysqli_stmt_num_rows($stmt);
+            mysqli_stmt_close($stmt);
+            $apiURL = \'https://freegeoip.app/json/\'. $_SERVER[\'REMOTE_ADDR\'];	
+            $curlRequest = curl_init($apiURL);
+            curl_setopt($curlRequest, CURLOPT_RETURNTRANSFER, true);
+            $apiResponse = curl_exec($curlRequest);
+            curl_close($curlRequest);
+            $ipData = json_decode($apiResponse, true);
+            if (!empty($ipData)){
+                $latitude = $ipData[\'latitude\'];
+                $longitude = $ipData[\'longitude\'];
+                $city = $ipData[\'city\'];
+                $country = $ipData[\'country_code\'];
+                if ($nb > 0 && $nb == 1) {
+                    $result = mysqli_stmt_get_result($stmt);
+                    while ($row = mysqli_fetch_row($result)) {
+                        $token_user_id = $row[1];
+                        $token_latitude = $row[2];
+                        $token_longitude = $row[3];
+                        $token_city = $row[4];
+                        $token_country = $row[5];
+                        $stmt -> free_result();
+                        break;
+                    }
+                    $user_stmt = mysqli_prepare($db, $user);
+                    mysqli_stmt_bind_param($user_stmt, "s", $token_user_id);
+                    mysqli_stmt_execute($user_stmt);
+                    mysqli_stmt_store_result($user_stmt);
+                    $result_user = mysqli_stmt_get_result($user_stmt);
+                    while($row = mysqli_fetch_row($result_user)) {
+                        $user_email = $row[0];
+                        break;      
+                    }
+                    if ($token_latitude != $latitude || $token_longitude != $longitude || $token_city != $city || $token_country != $country) {
+                        $mail_to = $user_email;
+                        $mail_subject = \'Une connexion inhabituelle est survenue\';
+                        $mail_message = \'Une connexion est survenue sur votre compte, si cela vient de vous, vous n\'avez rien à faire, autrement, 
+                            on vous suggère de vous connecter à votre compte et d\'effectuer une modification de votre mot de passe, 
+                            et de vérifier votre ordinateur contre les voleurs de témoins de connexions. \';
+                        $mail_headers =\'From : webmestre@glo7009.laval.university\'. \'\r\n\'. \'Reply-To : webmestre@glo7009.laval.university\'. \'\r\n\' . \'X-Mailer :PHP/\'.phpversion();
+                        mail($mail_to,$mail_subject,$mail_message,$mail_headers);
+                    }
+                return $nb > 0;
+            }
+             else {return 0;}
+          }
+            else {
+                return 0;
+        } 
+    }
+        
+        </code></pre>
+        <p> Les lignes 4 et 5 présentent la création de la requête de récupération du jeton d\'accès pour la validation de la connexion courante. <br />
+        Les lignes 12 à 22 présentent la requête d\'acquisition de l\'emplacement de l\'utilisateur selon son adresse IP. <br />
+        Les lignes 24 à 30 présentent la récupération de l\'enregistrement de l\'utilisateur dans la table des connexions actives. <br />
+        Les lignes 32 à 34 présentent la récupération de l\'adresse courriel de l\'utilisateur. <br />
+        Les lignes 36 à 50 présentent la vérification de l\'emplacement de l\'utilisateur selon ce qui est inscrit dans la base de donnée, et de l\'envoi d\'un courriel si la vérification d\'exactitude echoue.
+        </p>
     </section>
     <section>
         <h2>Outils de détection</h2>
@@ -223,67 +336,12 @@ $fix = '<div>
             </li>
         </ul>
     </section>
-    <section>
-       <!-- <h2>Correction du code vulnérable</h2>
-        <p>Correction de la fonction is_logged_in et ajout de la fonction de recherche de la localisation de l\'utilisateur</p>
-        <pre class="line-numbers"><code class="language-mysql">
-        ALTER TABLE `tokens` 
-            ADD `token_user_localization` VARCHAR(255) NOT NULL AFTER `token_user_id`, 
-            ADD `token_user_ip` VARCHAR(255) NOT NULL AFTER `token_user_localization`, 
-            ADD `token_navigator_user_agent` VARCHAR(255) NOT NULL AFTER `token_user_ip`; 
-    </code></pre><br />
-    Ensuite, on modifie la requête de vérification de la connexion en ajoutant les champs ajoutés à la base de données: <br />
-    <pre class="line-numbers" data-line="1-13,16-23,25-28"><code class="language-php">
-        require_once("geoip2.phar");
-        use GeoIp2\Database\Reader;
-        function clientIpAddress(){
-            if(!empty($_SERVER[\'HTTP_CLIENT_IP\'])){
-            $address = $_SERVER[\'HTTP_CLIENT_IP\'];
-            }elseif(!empty($_SERVER[\'HTTP_X_FORWARDED_FOR\'])){
-            $ address = $_SERVER[\'HTTP_X_FORWARDED_FOR\'];
-            }else{
-            $ address = $_SERVER[\'REMOTE_ADDR\'];
-            }
-            return $address;
-        };
-        function is_logged_in($token) {
-            global $db;
-            $reader = new Reader(\'/path/to/GeoLite2-Country.mmdb\');
-            $client_ip = clientIpAddress();
-            $client_record = $reader->country($client_ip);
-            $req = "SELECT token_code " .
-                    "FROM tokens WHERE token_code = ? " .
-                    "AND token_user_localization = ? " .
-                    "AND token_user_ip = ? " .
-                    "AND token_navigator_user_agent = ?;";
-            $stmt = mysqli_prepare($db, $req);
-            mysqli_stmt_bind_param($stmt, "s", $token);
-            mysqli_stmt_bind_param($stmt, "s","[".$client_record->location->latitude.",".$client_record->location->longitude."]");
-            mysqli_stmt_bind_param($stmt, "s", $client_ip);
-            mysqli_stmt_bind_param($stmt, "s", $_SERVER[\'HTTP_USER_AGENT\']);
-            mysqli_stmt_execute($stmt);
-            mysqli_stmt_store_result($stmt);
-            $nb = mysqli_stmt_num_rows($stmt);
-            mysqli_stmt_close($stmt);
-
-            return $nb > 0;
-        }
-    </code></pre><br />
-        <p>Les lignes 1 à 3, servent à l\'appel de la librairie de géolocalisation de l\'utilisateur. <br/>
-        Les lignes 4 à 13 servent à la fonction de récupération de l\'adresse IP de l\'utilisateur, même si ce dernier est derrière un proxy. <br />
-        Les lignes 16 à 18 permettent d\'initier la librairie de géolocalisation et de récupérer l\'adresse IP de l\'utilisateur dans une variable <br />
-        Les lignes 19 à 23 sont la nouvelle version de la requête de vérification de connexion de l\'utilisation <br />
-        Les lignes 25 à 28 sont les lignes de populations des variables de la requête. <br />
-        La ligne 26 permet de récupérer la géolocalisation. <br />
-        La ligne 28 permet de récupérer l\'agent utilisateur du navigateur de l\'utilisateur.
-        </p>-->
-    </section>
+   
     <section>
         <h2>Documentation et ressources</h2>
         <ul class="list">
-            <!--<li><a href="https://developer.mozilla.org/fr/docs/Glossary/User_agent" target="_blank">Mozilla Developer Network [Agent utilisateur]</a></li>-->
             <li><a href="https://elsefix.com/fr/what-is-a-pass-the-cookie-attack-how-to-stay-logged-in-to-websites-safely.html" target="_blank">Elsefix [Qu\'est-ce qu\'une attaque Pass-the-Cookies]</a></li>
-            <!--<li><a href="https://whatmyuseragent.com/" target="_blank">What\'s My User Agent?</a></li>-->
+            <li><a href="https://www.crowdstrike.com/cybersecurity-101/pass-the-hash/" target="_blank">Crowdstrike [What is a pass-the-hash attack]</a></li>
         </ul>
     </section>
 </div>';
