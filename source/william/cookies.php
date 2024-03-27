@@ -20,7 +20,6 @@ require("model.php");
  *               COOKIES AUTHENTICATION              *
  *****************************************************/
 // CODE
-
 /*****************************************************
  *                      CONTENT                      *
  *****************************************************/
@@ -69,10 +68,11 @@ $presentation = '<div class="table">
             </li>
         </ul>
     </section>
-</div>';
-
+</div>'; 
+$demonstration = '';
+if ($_SERVER['REQUEST_METHOD'] != 'POST') {
 $demonstration = '<div class="split">
-    <form method="POST" action="login">
+    <form method="POST" action="login.php">
         <div>
             <h2>Scénario 1 - Vulnérable</h2>
             '.((isset($_COOKIE["userToken"]) && is_logged_in($_COOKIE["userToken"])) ? '
@@ -96,13 +96,14 @@ $demonstration = '<div class="split">
         </div>
         <footer>
             '.((isset($_COOKIE["userToken"]) && is_logged_in($_COOKIE["userToken"])) ? '
-            <button name="disconnect" type="submit" value="disconnect" onclick='.logoutProcess().'>Déconnexion</button>
+            <button name="disconnect" type="submit" value="disconnect">Déconnexion</button>
             ' : '
             <button name="connect" type="submit" value="connect">Connexion</button>
             ').'
         </footer>
-    </form>
-    <!--<section>
+    </form>';
+}
+$demonstration .= '    <!--<section>
         <h2>Résultat</h2>
         <p>[Contenu]</p>
     </section>-->
