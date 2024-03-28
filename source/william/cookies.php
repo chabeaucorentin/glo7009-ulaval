@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <?php
 /*****************************************************
  * cookies.php                                       *
@@ -19,7 +18,45 @@ require("model.php");
 /*****************************************************
  *               COOKIES AUTHENTICATION              *
  *****************************************************/
-// CODE
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST["connect"])) {
+        $error = array();
+        if (isset($_POST["email"])) {
+            if (!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
+                $error["email"] = "Veuillez entrer une adresse courriel valide.";
+            }
+        } else {
+            $error["email"] = "Veuillez entrer une adresse courriel.";
+        }
+
+        if (!isset($_POST["password"]) || (isset($_POST["password"]) && empty($_POST["password"]))){ 
+            $error["password"] = "Veuillez entrer un mot de passe.";
+        }
+
+        if (!isset($error["email"]) && !isset($error["password"])) {
+            $token = login($_POST["email"], $_POST["password"]);
+            if (isset($token)) {
+                if (isset($_POST["persistent"])) {
+                    setcookie("userToken", $token, time() + (60*60*24*30));
+                } else {
+                    setcookie("userToken",$token, time()+(60*60*24));
+                }
+                header("Location:".$config["site_link"]."/".$menu[2]["folder"]."/".$menu[2]["files"][0]["name"]."?view=demonstration");
+                exit();
+            } else {
+                $error["token"] = "Nom d'utilisateur ou mot de passe incorrect.";
+            }
+        }
+    } else if (isset($_POST["modifyCookie"])) {
+        $_COOKIE["userToken"] = $_POST["cookieField"];
+    }
+     else if (isset($_POST["disconnect"])) {
+        logout($_COOKIE["userToken"]);
+        unset($_POST);
+        unset($_COOKIE);
+    }
+}
+
 /*****************************************************
  *                      CONTENT                      *
  *****************************************************/
@@ -68,28 +105,30 @@ $presentation = '<div class="table">
             </li>
         </ul>
     </section>
-</div>'; 
-$demonstration = '';
-if ($_SERVER['REQUEST_METHOD'] != 'POST') {
+</div>';
+
 $demonstration = '<div class="split">
-    <form method="POST" action="login.php">
+    <form method="POST">
         <div>
-            <h2>Scénario 1 - Vulnérable</h2>
+            <h2>Scénario</h2>
             '.((isset($_COOKIE["userToken"]) && is_logged_in($_COOKIE["userToken"])) ? '
             <p style="color: green;">L\'usager est connecté</p>
             ' : '
             <div class="form-group">
+                '.((isset($error["token"])) ? '<div class="alert">'.$error["token"].'</div>' : '').'
+            </div>
+            <div class="form-group">
                 <label for="email">Adresse email :</label>
-                '.((isset($error)) ? '<div class="alert">'.$error.'</div>' : '').'
-                <input id="email" class="form-control'.((isset($error)) ? ' invalid' : '').'" name="email" type="email" />
+                '.((isset($error["email"])) ? '<div class="alert">'.$error["email"].'</div>' : '').'
+                <input id="email" class="form-control'.((isset($error["email"])) ? ' invalid' : '').'" name="email" type="email"'.((isset($error["email"])) ? ' value="'.$_POST["email"].'"' : '').' />
             </div>
             <div class="form-group">
                 <label for="password">Mot de passe :</label>
-                '.((isset($error)) ? '<div class="alert">'.$error.'</div>' : '').'
-                <input id="password" class="form-control'.((isset($error)) ? ' invalid' : '').'" name="password" type="password" />
+                '.((isset($error["password"])) ? '<div class="alert">'.$error["password"].'</div>' : '').'
+                <input id="password" class="form-control'.((isset($error["password"])) ? ' invalid' : '').'" name="password" type="password" />
             </div>
             <div class="form-group">
-                <input id="persistent" class="form-check'.((isset($error)) ? ' invalid' : '').'" name="persistent" type="checkbox" />
+                <input id="persistent" class="form-check" name="persistent" type="checkbox" />
                 <label for="persistent">Se souvenir de moi</label>
             </div>
             ').'
@@ -101,20 +140,19 @@ $demonstration = '<div class="split">
             <button name="connect" type="submit" value="connect">Connexion</button>
             ').'
         </footer>
-    </form>';
-}
-$demonstration .= '    <!--<section>
-        <h2>Résultat</h2>
-        <p>[Contenu]</p>
-    </section>-->
-    <section>
-        <h2>Scénario 2</h2>
-        <ul>
-            <ol> Exemple avec un compte Google </ol>
-            <ol> Utiliser une extension (Cookie Editor) </ol>
-            <ol> Récupérer les cookies et passer sur le même navigateur sur un autre ordinateur (préférablement sur un autre réseau) </ol>
-        </ul>
-    </section>
+    </form>
+    <form method="POST">
+        <div>
+            <h2>Configuration</h2>
+            <div class="form-group">
+                <label for="cookieField">Valeur du témoin (cookie)</label>
+                <input id="cookieField" class="form-control" name="cookieField" type="text" value="'.$_COOKIE["userToken"].'"/>
+            </div>
+        </div>
+        <footer>
+            <button name="modifyCookie" type="submit" value="modifyCookie">Modifier le témoin</button>
+        </footer>
+    </form>
 </div>';
 
 $exploit = '<div>
