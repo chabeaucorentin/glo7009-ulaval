@@ -19,7 +19,18 @@ require("model.php");
  *               COOKIES AUTHENTICATION              *
  *****************************************************/
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST["connect"])) {
+    if (isset($_POST["modifyCookie"]) && isset($_POST["cookieField"])) {
+        if (!isset($_COOKIE["userToken"])) {
+            setcookie("userToken", $_POST["cookieField"], time() + (60*60*24));
+            header("Location:".$config["site_link"]."/".$menu[2]["folder"]."/".$menu[2]["files"][0]["name"]."?view=demonstration");
+            exit();
+        } else {
+            unset($_COOKIE["userToken"]);
+            setcookie("userToken",$_POST["cookieField"], time() + (60*60*24));
+            header("Location:". $config["site_link"]."/".$menu[2]["folder"]."/".$menu[2]["files"][0]["name"]."?view=demonstration");
+            exit();
+        }
+    } else if (isset($_POST["connect"])) {
         $error = array();
         if (isset($_POST["email"])) {
             if (!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
@@ -47,8 +58,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $error["token"] = "Nom d'utilisateur ou mot de passe incorrect.";
             }
         }
-    } else if (isset($_POST["modifyCookie"])) {
-        $_COOKIE["userToken"] = $_POST["cookieField"];
     }
      else if (isset($_POST["disconnect"])) {
         logout($_COOKIE["userToken"]);
@@ -112,8 +121,8 @@ $demonstration = '<div class="split">
         <div>
             <h2>Scénario</h2>
             '.((isset($_COOKIE["userToken"]) && is_logged_in($_COOKIE["userToken"])) ? '
-            <p style="color: green;">L\'usager est connecté</p>
-            ' : '
+            <p style="color: green;">L\'usager est connecté.</p>
+            ' : ((isset($_COOKIE["userToken"]) && !is_logged_in($_COOKIE["userToken"])) ? '<p style="color: red;">Votre tentative a échoué.</p>' :'
             <div class="form-group">
                 '.((isset($error["token"])) ? '<div class="alert">'.$error["token"].'</div>' : '').'
             </div>
@@ -131,10 +140,10 @@ $demonstration = '<div class="split">
                 <input id="persistent" class="form-check" name="persistent" type="checkbox" />
                 <label for="persistent">Se souvenir de moi</label>
             </div>
-            ').'
+            ')).'
         </div>
         <footer>
-            '.((isset($_COOKIE["userToken"]) && is_logged_in($_COOKIE["userToken"])) ? '
+            '.((isset($_COOKIE["userToken"])) ? '
             <button name="disconnect" type="submit" value="disconnect">Déconnexion</button>
             ' : '
             <button name="connect" type="submit" value="connect">Connexion</button>
