@@ -121,8 +121,7 @@ $demonstration = '<div class="split">
         <div>
             <h2>Scénario</h2>
             '.((isset($_COOKIE["userToken"]) && is_logged_in($_COOKIE["userToken"])) ? '
-            <p style="color: green;">L\'usager est connecté.</p>
-            ' : ((isset($_COOKIE["userToken"]) && !is_logged_in($_COOKIE["userToken"])) ? '<p style="color: red;">Votre tentative a échoué.</p>' :'
+            <p style="color: green;">L\'usager est connecté.</p>':'
             <div class="form-group">
                 '.((isset($error["token"])) ? '<div class="alert">'.$error["token"].'</div>' : '').'
             </div>
@@ -140,10 +139,10 @@ $demonstration = '<div class="split">
                 <input id="persistent" class="form-check" name="persistent" type="checkbox" />
                 <label for="persistent">Se souvenir de moi</label>
             </div>
-            ')).'
+            ').'
         </div>
         <footer>
-            '.((isset($_COOKIE["userToken"])) ? '
+            '.((isset($_COOKIE["userToken"]) && is_logged_in($_COOKIE["userToken"])) ? '
             <button name="disconnect" type="submit" value="disconnect">Déconnexion</button>
             ' : '
             <button name="connect" type="submit" value="connect">Connexion</button>
