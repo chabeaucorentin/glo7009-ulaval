@@ -18,7 +18,17 @@ require("model.php");
 /*****************************************************
  *                   SQL INJECTION                   *
  *****************************************************/
-$results = display_sql_results(query($_POST["firstname"]));
+//$results = display_sql_results(query($_POST["firstname"]));
+$results = "Aucun résultat...";
+if(array_key_exists('safe_search_button', $_POST)) { 
+    $sql_result = safe_query($_POST["firstname"]);
+    $results = display_sql_results($sql_result);
+    
+}
+elseif(array_key_exists('vulnerable_search_button', $_POST)) { 
+    $sql_result = vulnerable_query($_POST["firstname"]);
+    $results = display_sql_results($sql_result);
+}
 
 /*****************************************************
  *                      CONTENT                      *
@@ -27,47 +37,41 @@ $presentation = '<div class="table">
     <div class="row split">
         <section>
             <h2>Catégorie</h2>
-            <p>[Nom de la catégorie](Ex : Vulnérabilité d\'exécution de code arbitraire)</p>
+            <p>Injection SQL</p>
         </section>
         <section>
             <h2>Impact potentiel</h2>
-            <p>[Confidentialité, intégrité et disponibilité]</p>
+            <p>Confidentialité, intégrité et disponibilité</p>
         </section>
     </div>
     <section class="row">
         <h2>Description</h2>
-        <p>[Description de la vulnérabilité, ses effets potentiels et le risque qu\'elle représente]</p>
+        <p>Une injection SQL se produit lorsqu’un attaquant exploite une entrée utilisateur pour altérer le déroulement normal d’une requête SQL. Le malfaiteur va tenter de sortir de la requête afin d’obtenir plus de résultats qu’attendu ou apporter des modifications à un plus grand nombre d’enregistrements. Les risques associés aux injections SQL sont nombreux et peuvent affecter la confidentialité, l’intégrité et la disponibilité.</p>
     </section>
     <section class="row">
         <h2>Objectifs</h2>
-        <!-- Supprimer ce paragraphe -->
-        <p><em>[Description des buts, intentions et avantages qu\'un attaquant pourrait avoir en exploitant la vulnérabilité]</em></p>
-        <!-- FIN Supprimer ce paragraphe -->
         <ul class="list">
-            <li>[Objectif 1](Ex : Contourner les restrictions de mise en ligne pour contrôler un serveur)</li>
-            <li>[Objectif 2](Ex : Dégrader les performances ou la disponibilité d\'un service)</li>
-            <li>[Objectif 3](Ex : Voler des données sensibles ou confidentielles)</li>
+            <li>Dégrader les performances ou la disponibilité d’un service.</li>
+            <li>Voler des données sensibles ou confidentielles.</li>
+            <li>Apporter des modifications sur les données.</li>
+            <li>Surcharger la base de données en exécutant des requêtes complexes.</li>
         </ul>
     </section>
     <section class="row">
         <h2>Causes</h2>
-        <!-- Supprimer ce paragraphe -->
-        <p><em>[Description des facteurs qui introduisent la vulnérabilité]</em></p>
-        <!-- FIN Supprimer ce paragraphe -->
         <ul class="list">
-            <li>[Cause 1](Ex : Les entrées ne sont pas vérifiées)</li>
-            <li>[Cause 2](Ex : Les données sensibles sont directement exploitées)</li>
-            <li>[Cause 3](Ex : Les fichiers téléchargés sont exécutés dans un environnement non sécurisé)</li>
+            <li>Les entrées utilisateurs ne sont pas vérifiées suffisamment.</li>
+            <li>Les paramètres de la requête ne sont pas nettoyés.</li>
         </ul>
     </section>
     <section class="row">
         <h2>Exemples marquants</h2>
         <ul class="list">
-            <li><strong>[Nom de l\'attaque ou de la vulnérabilité 1](Ex : Drupalgeddon2 (CVE-2018-7600))</strong><br />
-                [Brève description de l\'incident, du contexte et des conséquences]
+            <li><strong>WordPress (CVE-2022-21664)</strong><br />
+                WordPress a été menacée par une faille critique qui permettait aux entrées d’être interprétées comme étant des requêtes SQL. Cela pouvait conduire à l’injection de requêtes SQL.
             </li>
-            <li><strong>[Nom de l\'attaque ou de la vulnérabilité 2](Ex : WordPress Plugin File Manager (CVE-2020-25213))</strong><br />
-                [Brève description de l\'incident, du contexte et des conséquences]
+            <li><strong>Student Information Chatbot (CVE-2024-28816)</strong><br />
+                Chatbot intégrait une vulnérabilité qui permettait la réalisation d’une attaque par injection SQL en altérant le nom d’utilisateur utilisé dans la fonction de connexion.            
             </li>
         </ul>
     </section>
@@ -83,89 +87,59 @@ $demonstration = '<div class="split">
             </div>
         </div>
         <footer>
-            <button type="submit">Rechercher</button>
+            <button name="vulnerable_search_button" type="submit">Rechercher</button>
         </footer>
     </form>
     <section>
         <h2>Résultat</h2>
-        <p>'.((isset($results)) ? $results : '').'</p>
+        <p>'.$results.'</p>
     </section>
 </div>';
 
 $exploit = '<div>
     <section>
         <h2>Conditions préalables pour l\'exploitation</h2>
-        <!-- Supprimer ce paragraphe -->
-        <p><em>[Description des conditions requises pour exploiter la vulnérabilité]</em></p>
-        <!-- FIN Supprimer ce paragraphe -->
         <ul class="list">
-            <li><strong>[Condition 1](Ex : Aucune validation de l\'extension<br />
-                OU<br />
-                Validation basée uniquement sur l\'extension)</strong><br />
-                [Brève description de la condition]
-            </li>
-            <li><strong>[Condition 2](Ex : Répertoire avec permissions d\'exécution)</strong><br />
-                [Brève description de la condition]
-            </li>
+            <li>Les entrées utilisateurs ne sont pas vérifiées suffisamment.<br />
         </ul>
     </section>
     <section>
         <h2>Méthodes d\'exploitation</h2>
-        <!-- Supprimer ce paragraphe -->
-        <p><em>[Description des méthodes qui permettent à un attaquant d\'exploiter la vulnérabilité]</em></p>
-        <!-- FIN Supprimer ce paragraphe -->
         <ul class="list">
-            <li><strong>[Méthode 1](Ex : Télécharger des fichiers malveillants)</strong><br />
-                [Brève description de la méthode]
-            </li>
-            <li><strong>[Méthode 2](Ex : Contourner la validation par extension de fichier)</strong><br />
-                [Brève description de la méthode]
-            </li>
+            <li>Injecter depuis les paramètres d’une URL.</li>
+            <li>Injecter depuis les champs d’un formulaire.</li>
+            <li>Injecter des requêtes erronées pour obtenir des informations sensibles depuis le serveur.</li>
         </ul>
     </section>
     <section>
         <h2>Exécution de l\'attaque</h2>
-        <!-- Supprimer ce paragraphe -->
-        <p><em>[Description des étapes qui permettent à un attaquant d\'exécuter l\'attaque]</em></p>
-        <!-- FIN Supprimer ce paragraphe -->
         <ul class="list">
-            <li><strong>[Étape 1](Ex : Sélectionner le fichier malveillant)</strong><br />
-                [Brève description du contexte]
-            </li>
-            <li><strong>[Étape 2](Ex : Télécharger le fichier malveillant)</strong><br />
-                [Brève description du contexte]
-            </li>
-            <li><strong>[Étape 3](Ex : Activer le script)</strong><br />
-                [Brève description du contexte]
-            </li>
+            <li>Trouver une entrée utilisateur vulnérable.</li>
+            <li>Injecter et exécuter une requête SQL.</li>
         </ul>
     </section>
     <section>
         <h2>Analyse du code vulnérable</h2>
-        <p>[Description du code]</p>
-        <pre class="line-numbers" data-line="2"><code class="language-php">function addition($a, $b) {
-    $result = $a + $b; // Pas de vérification des valeurs
-    return $result;
-}
-
-echo addition(1 + 2); // 3</code></pre>
-        <p>[Description de la/les ligne(s) qui introdui(sen)t la/les vulnérabilité(s)]</p>
-    </section>
+        <p>Un exemple de cette vulnérabilité pourrait être une page qui affiche les informations d’un usager lorsque celui-ci entre son nom d’utilisateur. La requête serait construite comme suit :</p>
+        <pre class="line-numbers" data-line=""><code class="language-php">$sql_request = 
+    "SELECT user_firstname, user_lastname FROM users WHERE user_email=’$user_input’";
+return mysqli_query($db, $sql_request);</code></pre>
+        <p>Une entrée malicieuse incluant le caractère d’échappement ’’’ pourrait être de la forme x’ OR 1=’1. Puisque cette entrée n’est pas vérifiée, la requête devient :</p>
+    
+        <pre class="line-numbers" data-line=""><code class="language-php">$sql_request = 
+    "SELECT user_firstname, user_lastname FROM users WHERE user_email=’x’ OR 1=’1’";</code></pre>
+        
+        <p>La clause WHERE de la requête sera toujours vraie. Ainsi, les informations de tous les usagers seront retournées lors de l’exécution de la requête.</p>
+        </section>
 </div>';
 
 $fix = '<div>
     <section>
         <h2>Mesures de protection</h2>
         <ul class="list">
-            <li><strong>[Nom de la mesure 1](Ex : Validation stricte des entrées)</strong><br />
-                [Brève description de la mesure]
-            </li>
-            <li><strong>[Nom de la mesure 2](Ex : Restriction des permissions de fichier)</strong><br />
-                [Brève description de la mesure]
-            </li>
-            <li><strong>[Nom de la mesure 3](Ex : Isolation des fichiers téléchargés)</strong><br />
-                [Brève description de la mesure]
-            </li>
+            <li>Convertir les caractères d’échappement.</li>
+            <li>Traiter les requêtes avant de les exécuter.</li>
+            <li>Limiter les messages d’erreur afin qu’ils ne contiennent aucune information sur la structure de la base de données.</li>
         </ul>
     </section>
     <section>
@@ -187,18 +161,21 @@ $fix = '<div>
     </section>
     <section>
         <h2>Correction du code vulnérable</h2>
-        <p>[Description du code]</p>
-        <pre class="line-numbers" data-line="2,5-7"><code class="language-php">function addition($a, $b) {
-    if (is_int($a) && is_int($b)) { // Vérification que $a et $b sont des entiers
-        $result = $a + $b;
-        return $result;
-    else {
-        return "Les 2 paramètres doivent être des entiers !";
-    }
-}
-
-echo addition(1 + 2); // 3</code></pre>
-        <p>[Description de la/les ligne(s) modifiée(s)]</p>
+        <p>Une solution qui permet de corriger cette vulnérabilité est d’utiliser des requêtes paramétrables. On utilise des paramètres de substitution dans des espaces réservés pour les données (indiqué par un ‘?’), plutôt que d’insérer directement les valeurs de l’usager. Lorsque ces dernières sont insérées dans la requête, on s’assure qu’elles sont correctement échappées.</p>
+        <pre class="line-numbers" data-line=""><code class="language-php">$sql_statement = 
+        $db->prepare("SELECT user_firstname, user_lastname FROM users WHERE user_firstname=?");
+$sql_statement->bind_param("s", $value);
+$sql_statement->execute();
+return $sql_statement->get_result();
+        </code></pre>
+        <p>[Cet exemple de code présente respectivement les étapes pour :
+        <ul class="list">
+            <li>Préparer la requête,</li>
+            <li>Assigner les paramètres,</li>
+            <li>Exécuter la requête,</li>
+            <li>Obtenir les résultats.</li>
+        </ul>
+        </p>
     </section>
     <section>
         <h2>Documentation et ressources</h2>

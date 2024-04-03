@@ -18,7 +18,20 @@ require("model.php");
 /*****************************************************
  *                   XSS INJECTION                   *
  *****************************************************/
-//CODE
+
+$value_display = "<img src='rpc.jpg'/>";
+if(array_key_exists('ajouterImage', $_POST)) { 
+    $value_display = $_POST["xss"];
+    #$input = htmlspecialchars($input);
+}
+if (isset($_GET['display'])) {
+    $value_display = $_GET['display'];
+}
+
+$value_entered = "<img src=&quot;x&quot onerror=&quot;javascript:(()=>{wins_usr = 3;loadScore()})()&quot;/>";
+if (isset($_GET['xss'])) {
+    $value_entered = $_GET['xss'];
+}
 
 /*****************************************************
  *                      CONTENT                      *
@@ -27,56 +40,68 @@ $presentation = '<div class="table">
     <div class="row split">
         <section>
             <h2>Catégorie</h2>
-            <p>[Nom de la catégorie](Ex : Vulnérabilité d\'exécution de code arbitraire)</p>
+            <p>Injection XSS</p>
         </section>
         <section>
             <h2>Impact potentiel</h2>
-            <p>[Confidentialité, intégrité et disponibilité]</p>
+            <p>Confidentialité, intégrité et disponibilité</p>
         </section>
     </div>
     <section class="row">
         <h2>Description</h2>
-        <p>[Description de la vulnérabilité, ses effets potentiels et le risque qu\'elle représente]</p>
+        <p>Une injection XSS (Cross-Site Scripting) est un type d’injection très répandue qui se produit lorsqu’un utilisateur injecte un script malicieux (typiquement en JavaScript) dans des pages web utilisées par d’autres utilisateurs. Il existe différents types d’injection XSS :
+            
+        <ul class="list">
+        <li><strong>Attaque XSS stockée</strong><br />
+            Le script malicieux est conservé en permanence sur le serveur. Il n’est exécuté que lorsqu’un utilisateur accède à une page.        
+        </li>
+        <li><strong>Attaque XSS réfléchie</strong><br />
+            L’attaquant crée une soumission de formulaire qui inclut le script à exécuter. Lorsqu’un utilisateur soumet le formulaire, les données contenant le script malveillant sont envoyées au serveur et retourné à l’utilisateur.        
+        </li>
+        <li><strong>XSS basé sur le DOM</strong><br />
+            Le script malicieux est injecté dans le DOM (Document Object Model) d’une page web et interprété par le navigateur de l’utilisateur. Les injections se produisent donc une fois la page chargée.
+        </li>
+        </ul>
+</section>
+</p>
     </section>
     <section class="row">
         <h2>Objectifs</h2>
-        <!-- Supprimer ce paragraphe -->
-        <p><em>[Description des buts, intentions et avantages qu\'un attaquant pourrait avoir en exploitant la vulnérabilité]</em></p>
-        <!-- FIN Supprimer ce paragraphe -->
         <ul class="list">
-            <li>[Objectif 1](Ex : Contourner les restrictions de mise en ligne pour contrôler un serveur)</li>
-            <li>[Objectif 2](Ex : Dégrader les performances ou la disponibilité d\'un service)</li>
-            <li>[Objectif 3](Ex : Voler des données sensibles ou confidentielles)</li>
+            <li>Usurper l’identité d’un utilisateur légitime.</li>
+            <li>Dégrader les performances ou la disponibilité d’un service.</li>
+            <li>Voler des données sensibles ou confidentielles.</li>
         </ul>
     </section>
     <section class="row">
         <h2>Causes</h2>
-        <!-- Supprimer ce paragraphe -->
-        <p><em>[Description des facteurs qui introduisent la vulnérabilité]</em></p>
-        <!-- FIN Supprimer ce paragraphe -->
         <ul class="list">
-            <li>[Cause 1](Ex : Les entrées ne sont pas vérifiées)</li>
-            <li>[Cause 2](Ex : Les données sensibles sont directement exploitées)</li>
-            <li>[Cause 3](Ex : Les fichiers téléchargés sont exécutés dans un environnement non sécurisé)</li>
+            <li>Les entrées utilisateurs et l’encodage en sortie ne sont pas vérifiés suffisamment.</li>
+            <li>Les en-têtes n’utilisent pas des politiques de sécurité sur le contenu (CSP).</li>
         </ul>
     </section>
     <section class="row">
         <h2>Exemples marquants</h2>
         <ul class="list">
-            <li><strong>[Nom de l\'attaque ou de la vulnérabilité 1](Ex : Drupalgeddon2 (CVE-2018-7600))</strong><br />
-                [Brève description de l\'incident, du contexte et des conséquences]
+            <li><strong>Google Chrome (CVE-2023-5480)</strong><br />
+                Une implémentation mal adaptée dans les outils de paiements permet à l’attaquant d’outrepasser les préventions contre les injections XSS par un fichier malicieux.
             </li>
-            <li><strong>[Nom de l\'attaque ou de la vulnérabilité 2](Ex : WordPress Plugin File Manager (CVE-2020-25213))</strong><br />
-                [Brève description de l\'incident, du contexte et des conséquences]
+            <li><strong>Fortinet (CVE-2023-45587)</strong><br />
+                Une neutralisation impropre des entrées pendant la génération d’une page permet à un attaquant d’exécuter du code ou des commandes via des requêtes HTTP.
             </li>
         </ul>
     </section>
 </div>';
 
 $demonstration = '<div class="split">
+
     <form method="POST" onsubmit="return playGame()">
         <div>
             <h2>Scénario</h2>
+            <div id="display">
+                <label for="cpu_score">ORDINATEUR:</label> <span id="cpu_score">0</span><br>
+                <label for="usr_score">UTILISATEUR:</label> <span id="usr_score">0</span><br><br>
+            </div>
             <div class="form-group">
                 <label for="choice">Choix :</label>
                 <select id="choice" class="form-control" name="choice">
@@ -85,42 +110,37 @@ $demonstration = '<div class="split">
                     <option value="ciseau">Ciseau</option>
                 </select>
             </div>
-            <div class="form-group">
-                <img src="rpc.jpg" alt="Roche Papier Ciseau" />
-            </div>
         </div>
         <footer>
             <button type="submit">Jouer</button>
         </footer>
     </form>
-    <div class="table">
-        <section class="row">
-            <h2>Injection par image</h2>
-            <ul class="list">
-                <li>Étape 1</li>
-                <li>Étape 2</li>
-                <li>Étape 3</li>
-            </ul>
-        </section>
-        <section class="row">
-            <h2>Injection par marque-page</h2>
-            <ul class="list">
-                <li>Étape 1</li>
-                <li>Étape 2</li>
-                <li>Étape 3</li>
-            </ul>
-        </section>
-    </div>
+    <form method="POST">
+        <div>
+            <h2>Injection:</h2>
+            <div class="form-group">
+                <label for="xss"> Image:</label>
+                <input id="xss" name="xss" type="text" value="'.$value_entered.'">
+            </div>
+            <div id="display">
+                '.$value_display.'
+            </div>
+        </div>
+        <footer>
+            <button name="ajouterImage" type="submit">Ajouter</button>
+        </footer>
+    </form>
 </div>
 <script>
-    let games = 0;
-    let wins = 0;
+    let wins_cpu = 0;
+    let wins_usr = 0;
+    let computerChoice = "";
+    let userChoice = "";
 
     function playGame() {
-        games++;
-        const userChoice = document.getElementById("choice").value;
+        userChoice = document.getElementById("choice").value;
         const choices = ["roche", "papier", "ciseau"];
-        const computerChoice = choices[Math.floor(Math.random() * choices.length)];
+        computerChoice = choices[Math.floor(Math.random() * choices.length)];
         let resultMessage;
 
         if (userChoice === computerChoice) {
@@ -129,90 +149,77 @@ $demonstration = '<div class="split">
             (userChoice === "papier" && computerChoice === "roche") ||
             (userChoice === "ciseau" && computerChoice === "papier")) {
             resultMessage = "Bravo, tu as gagne!";
-            wins++;
+            wins_usr++;
         } else {
-            resultMessage = "HAHA Tu as perdu!";
+            resultMessage = "Ooops, tu as perdu...";
+            wins_cpu++;
         }
 
-        alert(
-            "Ton choix : " + userChoice + "\n" +
-            "Mon choix : " + computerChoice + "\n\n" +
-            resultMessage + "\n\n" +
-            "Nombre de partie jouée : " + games + "\n" +
-            "Nombre de victoire : " + wins);
+        //alert(
+        //    "Ton choix : " + userChoice + "\n" +
+        //    "Mon choix : " + computerChoice + "\n\n" +
+        //    resultMessage + "\n\n" +
+        //    "USER: " + wins_usr + "\n" +
+        //    "CPU: " + wins_cpu);
 
         isGameOver();
+
+        loadScore();
 
         return false;
     }
 
     function isGameOver() {
-        if (wins >= 5) {
-            alert("Bravo, tu as gagne le jeu! WOUHOU");
-            games = 0;
-            wins = 0;
+        if (wins_usr >= 3) {
+            alert("Bravo, tu as gagne le jeu!");
+            wins_usr = 0;
+            wins_cpu = 0;
+        }
+        else if (wins_cpu >= 3) {
+            alert("Ooops tu as perdu...");
+            wins_usr = 0;
+            wins_cpu = 0;
         }
     }
+    
+    function loadScore() {
+        document.getElementById("usr_score").innerHTML = wins_usr;
+        document.getElementById("cpu_score").innerHTML = wins_cpu; 
+    }
+
 </script>';
 
 $exploit = '<div>
     <section>
         <h2>Conditions préalables pour l\'exploitation</h2>
-        <!-- Supprimer ce paragraphe -->
-        <p><em>[Description des conditions requises pour exploiter la vulnérabilité]</em></p>
-        <!-- FIN Supprimer ce paragraphe -->
         <ul class="list">
-            <li><strong>[Condition 1](Ex : Aucune validation de l\'extension<br />
-                OU<br />
-                Validation basée uniquement sur l\'extension)</strong><br />
-                [Brève description de la condition]
-            </li>
-            <li><strong>[Condition 2](Ex : Répertoire avec permissions d\'exécution)</strong><br />
-                [Brève description de la condition]
-            </li>
+            <li>Le navigateur permet l’exécution de code JavaScript.</li>
+            <li>Les entrées utilisateurs ne sont pas vérifiées suffisamment.</li>
         </ul>
     </section>
     <section>
         <h2>Méthodes d\'exploitation</h2>
-        <!-- Supprimer ce paragraphe -->
-        <p><em>[Description des méthodes qui permettent à un attaquant d\'exploiter la vulnérabilité]</em></p>
-        <!-- FIN Supprimer ce paragraphe -->
         <ul class="list">
-            <li><strong>[Méthode 1](Ex : Télécharger des fichiers malveillants)</strong><br />
-                [Brève description de la méthode]
-            </li>
-            <li><strong>[Méthode 2](Ex : Contourner la validation par extension de fichier)</strong><br />
-                [Brève description de la méthode]
-            </li>
+            <li>Injection de code dans une image ou dans les paramètres d’un URL.</li>
+            <li>Injection dans le DOM.</li>
+            <li>Redirection vers un site malicieux.</li>
         </ul>
     </section>
     <section>
         <h2>Exécution de l\'attaque</h2>
-        <!-- Supprimer ce paragraphe -->
-        <p><em>[Description des étapes qui permettent à un attaquant d\'exécuter l\'attaque]</em></p>
-        <!-- FIN Supprimer ce paragraphe -->
         <ul class="list">
-            <li><strong>[Étape 1](Ex : Sélectionner le fichier malveillant)</strong><br />
-                [Brève description du contexte]
-            </li>
-            <li><strong>[Étape 2](Ex : Télécharger le fichier malveillant)</strong><br />
-                [Brève description du contexte]
-            </li>
-            <li><strong>[Étape 3](Ex : Activer le script)</strong><br />
-                [Brève description du contexte]
-            </li>
+            <li>Choisir un point d’entrée vulnérable.</li>
+            <li>Injection d’un code malicieux.</li>
+            <li>Exécution du code.</li>
         </ul>
     </section>
     <section>
         <h2>Analyse du code vulnérable</h2>
-        <p>[Description du code]</p>
-        <pre class="line-numbers" data-line="2"><code class="language-php">function addition($a, $b) {
-    $result = $a + $b; // Pas de vérification des valeurs
-    return $result;
-}
-
-echo addition(1 + 2); // 3</code></pre>
-        <p>[Description de la/les ligne(s) qui introdui(sen)t la/les vulnérabilité(s)]</p>
+        <p>Un exemple de cette vulnérabilité serait une page qui accepte une entrée utilisateur sans modification. Cette entrée est ensuite affichée sur la page web. L’utilisateur peut donc entrer une balise image contenant un chemin indisponible et une fonction dans le champ ‘onerror’.</p>
+        <pre class="line-numbers" data-line=""><code class="language-php">
+            <img src=’rpc.jpg’ onerror=’javascript:(()=>{alert(‘XSS’);})()’/>"
+        </code></pre>
+        <p>La fonction du champ ‘onerror’ sera exécutée, car l’image n’est pas trouvée. Ce code affichera une alerte contenant le message ‘XSS’.</p>
     </section>
 </div>';
 
@@ -220,22 +227,12 @@ $fix = '<div>
     <section>
         <h2>Mesures de protection</h2>
         <ul class="list">
-            <li><strong>[Nom de la mesure 1](Ex : Validation stricte des entrées)</strong><br />
-                [Brève description de la mesure]
-            </li>
-            <li><strong>[Nom de la mesure 2](Ex : Restriction des permissions de fichier)</strong><br />
-                [Brève description de la mesure]
-            </li>
-            <li><strong>[Nom de la mesure 3](Ex : Isolation des fichiers téléchargés)</strong><br />
-                [Brève description de la mesure]
-            </li>
+            <li>Valider et nettoyer les entrées utilisateurs.</li>
+            <li>Définir une politique de sécurité de contenu (CSP).</li>
+            <li>Surveiller les tentatives de modification du DOM.</li>
         </ul>
     </section>
     <section>
-        <h2>Outils de détection</h2>
-        <!-- Supprimer ce paragraphe -->
-        <p><em>[Description des outils de détection]</em></p>
-        <!-- FIN Supprimer ce paragraphe -->
         <ul class="list">
             <li><strong>[Outil 1](Ex : Nikto)</strong><br />
                 [Brève description de la mesure]
@@ -250,18 +247,15 @@ $fix = '<div>
     </section>
     <section>
         <h2>Correction du code vulnérable</h2>
-        <p>[Description du code]</p>
-        <pre class="line-numbers" data-line="2,5-7"><code class="language-php">function addition($a, $b) {
-    if (is_int($a) && is_int($b)) { // Vérification que $a et $b sont des entiers
-        $result = $a + $b;
-        return $result;
-    else {
-        return "Les 2 paramètres doivent être des entiers !";
-    }
-}
-
-echo addition(1 + 2); // 3</code></pre>
-        <p>[Description de la/les ligne(s) modifiée(s)]</p>
+        <p>Un CSP (Content Security Policy) est une sécurité permettant contrôler les sources de contenu autorisées à être chargées sur une page web. L’objectif étant de réduire les risques liés aux attaques par injection.</p>
+        <pre class="line-numbers" data-line=""><code class="language-php">header("Content-Security-Policy: default-src ’self’;img-src ’self’;script-src ’self’;");</code></pre>
+        <p>Cette ligne de code représente une politique de sécurité du contenu qui définit les directives de sécurité pour le chargement des ressources sur un site web.
+            <ul class="list">
+                <li>default-src ’self’ : spécifie que par défaut, les ressources doivent être chargées depuis le même domaine.</li>
+                <li>img-src ’self’ : autorise le chargement des images uniquement depuis le même domaine. Si cet attribut est omis, le chargement des images ne se fera qu’en provenance des sites spécifiés par l’attribut default-src.</li>
+                <li>script-src ’self’ : permet le chargement de scripts uniquement depuis le même domaine.  Si cet attribut est omis, les fonctions JavaScript n’exécuteront que les scripts provenant des sites spécifiés par l’attribut default-src.</li>
+            </ul>
+        </p>
     </section>
     <section>
         <h2>Documentation et ressources</h2>
