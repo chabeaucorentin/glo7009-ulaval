@@ -23,21 +23,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["modifyCookie"]) && isset($_POST["cookieField"])) {
         if (!isset($_COOKIE["userToken"])) {
             setcookie("userToken", $_POST["cookieField"], time() + 
-                        (60 * 60 * 24));
+            (60 * 60 * 24));
             header("Location:" . $config["site_link"] . "/" . 
-                    $menu[2]["folder"] . "/" . $menu[2]["files"][0]["name"] . 
-                    "?view=demonstration");
+            $menu[2]["folder"] . "/" . $menu[2]["files"][0]["name"] . 
+            "?view=demonstration");
             exit();
         } else {
             unset($_COOKIE["userToken"]);
             setcookie("userToken", $_POST["cookieField"], time() + 
-                        (60 * 60 * 24));
+            (60 * 60 * 24));
             header("Location:" . $config["site_link"] . "/" . 
-                    $menu[2]["folder"] . "/" . $menu[2]["files"][0]["name"] . 
-                    "?view=demonstration");
+            $menu[2]["folder"] . "/" . $menu[2]["files"][0]["name"] . 
+            "?view=demonstration");
             exit();
         }
     } else if (isset($_POST["connect"])) {
+        
         $error = array();
         if (isset($_POST["email"])) {
             if (!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
@@ -154,7 +155,7 @@ $presentation = '<div class="table">
 </div>';
 
 $demonstration = '<div class="split">
-    <form method="POST">
+    <form id="formConnection" method="POST">
         <div>
             <h2>Scénario</h2>
             ' . ((isset($_COOKIE["userToken"]) && 
