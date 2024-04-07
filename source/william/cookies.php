@@ -25,6 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     } else if (isset($_POST["connect"])) {
         $error = array();
+
         if (isset($_POST["email"])) {
             if (!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
                $error["email"] = "Veuillez entrer une adresse courriel valide.";
@@ -39,6 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if (!isset($error["email"]) && !isset($error["password"])) {
             $token = login($_POST["email"], $_POST["password"]);
+
             if (isset($token)) {
                 if (isset($_POST["persistent"])) {
                     setcookie("userToken", $token, time() + (60 * 60 * 24 * 30));
