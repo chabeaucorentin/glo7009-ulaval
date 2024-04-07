@@ -91,8 +91,6 @@ function sendmail($fromName, $from, $to, $subject, $message, $messageType,
         'From' => $fromAddress,
         'Reply-To' => $fromEmail
     );
-    unset($_SERVER['HTTP_USER_AGENT']);
-    unset($_SERVER['REMOTE_ADDR']);
     $r = mail($to, $subject, $message,$headers, "-f".$fromEmail);
     return $r;
 }
