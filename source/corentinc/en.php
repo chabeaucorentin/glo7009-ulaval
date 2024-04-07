@@ -1,2 +1,2 @@
 <?php
-$text = "This is an English text !";
+echo "This is an English text.";

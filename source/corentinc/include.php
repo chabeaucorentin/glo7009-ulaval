@@ -21,10 +21,12 @@ require("../includes/bootstrap.php");
 if (isset($_POST["lang"])) {
     $lang = $_POST["lang"];
 } else {
-    $lang = "fr";
+    $lang = "fr.php";
 }
 
-include($lang.".php");
+$load = htmlspecialchars(file_get_contents($lang), ENT_QUOTES);
+$success = (isset($_POST["include"]) && $load);
+$error = (isset($_POST["include"]) && !$load);
 
 /*****************************************************
  *                      CONTENT                      *
@@ -33,47 +35,66 @@ $presentation = '<div class="table">
     <div class="row split">
         <section>
             <h2>Catégorie</h2>
-            <p>[Nom de la catégorie](Ex : Vulnérabilité d\'exécution de code arbitraire)</p>
+            <p>Vulnérabilités d’exécution de code arbitraire</p>
         </section>
         <section>
             <h2>Impact potentiel</h2>
-            <p>[Confidentialité, intégrité et disponibilité]</p>
+            <p>Confidentialité, intégrité et disponibilité</p>
         </section>
     </div>
     <section class="row">
         <h2>Description</h2>
-        <p>[Description de la vulnérabilité, ses effets potentiels et le risque qu\'elle représente]</p>
+        <p>En vue d’une meilleure organisation du code, il nous arrive souvent de structurer nos projets en les
+        découpant en plusieurs fichiers. L’objectif principal étant de faciliter la réutilisation de parties communes ou
+        d’importer du code dépendamment de certaines conditions. Une telle organisation du code pourrait introduire une
+        vulnérabilité par inclusion de fichiers (File Inclusion Vulnerability). La raison étant souvent causée par une
+        vérification insuffisante des entrées utilisateurs.</p>
+        <p>Cette attaque pourrait être exploitée lorsque l’exécution par mise en ligne évoquée au point 2.1 a mené au
+        téléchargement d’un fichier malicieux sur le serveur. Deux types d’inclusions sont possibles :</p>
+        <ul class="list">
+            <li><strong>Inclusion d’un fichier local (LFI)</strong><br />
+                Le fichier est déjà présent sur le serveur distant pouvant permettant à l’attaquant d’accéder à des
+                fichiers locaux. Des données sensibles du système pourraient être accessibles tels que l’accès au
+                fichier ‘/etc/passwd’ qui contient la liste de tous les utilisateurs. Bien qu’il ne contienne pas les
+                mots de passe, un attaquant peut tenter une attaque par brute force.
+            </li>
+            <li><strong>Inclusion d’un fichier distant (RFI)</strong><br />
+                Le fichier se trouve sur un autre serveur et est injecté depuis une adresse externe. L’attaquant
+                pourrait inclure un fichier malveillant depuis un serveur qu’il contrôle. La configuration du serveur
+                PHP doit autoriser l’option ‘allow_url_include’ afin de permettre une telle inclusion.
+            </li>
+        </ul>
     </section>
     <section class="row">
         <h2>Objectifs</h2>
-        <!-- Supprimer ce paragraphe -->
-        <p><em>[Description des buts, intentions et avantages qu\'un attaquant pourrait avoir en exploitant la vulnérabilité]</em></p>
-        <!-- FIN Supprimer ce paragraphe -->
         <ul class="list">
-            <li>[Objectif 1](Ex : Contourner les restrictions de mise en ligne pour contrôler un serveur)</li>
-            <li>[Objectif 2](Ex : Dégrader les performances ou la disponibilité d\'un service)</li>
-            <li>[Objectif 3](Ex : Voler des données sensibles ou confidentielles)</li>
+            <li>Contourner les restrictions de mise en ligne pour contrôler un serveur.</li>
+            <li>Dégrader les performances ou la disponibilité d’un service.</li>
+            <li>Voler des données sensibles ou confidentielles.</li>
         </ul>
     </section>
     <section class="row">
         <h2>Causes</h2>
-        <!-- Supprimer ce paragraphe -->
-        <p><em>[Description des facteurs qui introduisent la vulnérabilité]</em></p>
-        <!-- FIN Supprimer ce paragraphe -->
         <ul class="list">
-            <li>[Cause 1](Ex : Les entrées ne sont pas vérifiées)</li>
-            <li>[Cause 2](Ex : Les données sensibles sont directement exploitées)</li>
-            <li>[Cause 3](Ex : Les fichiers téléchargés sont exécutés dans un environnement non sécurisé)</li>
+            <li>Les entrées utilisateurs ne sont pas vérifiées suffisamment.</li>
         </ul>
     </section>
     <section class="row">
         <h2>Exemples marquants</h2>
         <ul class="list">
-            <li><strong>[Nom de l\'attaque ou de la vulnérabilité 1](Ex : Drupalgeddon2 (CVE-2018-7600))</strong><br />
-                [Brève description de l\'incident, du contexte et des conséquences]
+            <li><a href="https://vuldb.com/?id.114758" target="_blank">Site Editor Local File Inclusion
+            (CVE-2018-7422)</a><br />
+                Ce module WordPress contenait une vulnérabilité d’inclusion d’un fichier local. Le chemin vers le
+                fichier inclus était construit en utilisant le paramètre ‘ajax_path’ de la requête qui n’admettait
+                aucune vérification. Le site web était donc exposé à des attaques en permettant l’accès et l’exécution
+                des fichiers situés sur le serveur.
             </li>
-            <li><strong>[Nom de l\'attaque ou de la vulnérabilité 2](Ex : WordPress Plugin File Manager (CVE-2020-25213))</strong><br />
-                [Brève description de l\'incident, du contexte et des conséquences]
+            <li><a
+            href="https://infosecwriteups.com/tackling-cve-2021-41277-using-a-vulnerability-database-5e960b8a07c5"
+            target="_blank">Metabase Local File Inclusion (CVE-2021-41277)</a><br />
+                Cette vulnérabilité est située dans la plateforme open-source d’analyse de données Metabase. Elle est
+                causée par la fonction d’import de carte GeoJSON personnalisée qui ne vérifie pas l’URL qui est chargée.
+                Cela pouvait conduire à une inclusion d’un fichier local.
             </li>
         </ul>
     </section>
@@ -83,135 +104,129 @@ $demonstration = '<div class="split">
     <form method="POST">
         <div>
             <h2>Scénario</h2>
+            '.((isset($_POST["save"])) ?
+            '<div class="form-group">
+                <div class="alert alert-success">La langue a bien été modifiée.</div>
+            </div>
+            ' : '').'
             <div class="form-group">
-                <label for="lang">Nom du fichier :</label>
-                '.((isset($error)) ? '<div class="alert">'.$error.'</div>' : '').'
-                <input id="lang" class="form-control'.((isset($error)) ? ' invalid' : '').'" name="lang" type="text" />
+                <label for="lang">Langue</label>
+                <select id="lang" class="form-control" name="lang">
+                    <option value="fr.php">Français</option>
+                    <option value="en.php"'.(($lang == "en.php") ? ' selected' : '').'>Anglais</option>
+                </select>
             </div>
         </div>
         <footer>
-            <button type="submit">Enregistrer</button>
+            <button name="save" type="submit">Enregistrer</button>
         </footer>
     </form>
-    <section>
-        <h2>Résultat</h2>
-        <p>'.$text.'</p>
-    </section>
+    <div class="table">
+        <form class="row" method="POST">
+            <h2>Inclusion</h2>
+            '.(($success) ?
+            '<div class="form-group">
+                <div class="alert alert-success">Le fichier a bien été importé.</div>
+            </div>
+            ' : '').'
+            <div class="form-group">
+                <label for="path">Chemin vers le fichier</label>
+                '.(($error) ? '<p class="alert alert-danger">Le chemin vers le fichier n’est pas valide.</p>' : '').'
+                <input id="path" class="form-control'.(($error) ? ' invalid' : '').'" name="lang"
+                type="text" value="'.$lang.'" />
+            </div>
+            <div>
+                <button name="include" type="submit">Inclure</button>
+            </div>
+        </form>
+        <section class="row">
+            <h2>Résultat</h2>
+            '.(($load) ? '<pre class="line-numbers"><code class="language-php">'.$load.'</code></pre>' :
+            '<p class="error">Erreur lors du chargement du fichier "'.$lang.'"</p>').'
+        </section>
+    </div>
 </div>';
 
 $exploit = '<div>
     <section>
-        <h2>Conditions préalables pour l\'exploitation</h2>
-        <!-- Supprimer ce paragraphe -->
-        <p><em>[Description des conditions requises pour exploiter la vulnérabilité]</em></p>
-        <!-- FIN Supprimer ce paragraphe -->
+        <h2>Conditions préalables pour l’exploitation</h2>
         <ul class="list">
-            <li><strong>[Condition 1](Ex : Aucune validation de l\'extension<br />
-                OU<br />
-                Validation basée uniquement sur l\'extension)</strong><br />
-                [Brève description de la condition]
-            </li>
-            <li><strong>[Condition 2](Ex : Répertoire avec permissions d\'exécution)</strong><br />
-                [Brève description de la condition]
-            </li>
+            <li>L’entrée utilisateur n’est pas vérifiée suffisamment.</li>
+            <li>Le chemin du fichier inclus est dynamique.</li>
+            <li>Pour RFI, l’option ‘allow_url_include’ doit être activée sur le serveur.</li>
         </ul>
     </section>
     <section>
-        <h2>Méthodes d\'exploitation</h2>
-        <!-- Supprimer ce paragraphe -->
-        <p><em>[Description des méthodes qui permettent à un attaquant d\'exploiter la vulnérabilité]</em></p>
-        <!-- FIN Supprimer ce paragraphe -->
+        <h2>Méthodes d’exploitation</h2>
         <ul class="list">
-            <li><strong>[Méthode 1](Ex : Télécharger des fichiers malveillants)</strong><br />
-                [Brève description de la méthode]
-            </li>
-            <li><strong>[Méthode 2](Ex : Contourner la validation par extension de fichier)</strong><br />
-                [Brève description de la méthode]
-            </li>
+            <li>Altérer une entrée utilisateur.</li>
+            <li>Récupérer le contenu d’un fichier ou l’exécuter.</li>
         </ul>
     </section>
     <section>
-        <h2>Exécution de l\'attaque</h2>
-        <!-- Supprimer ce paragraphe -->
-        <p><em>[Description des étapes qui permettent à un attaquant d\'exécuter l\'attaque]</em></p>
-        <!-- FIN Supprimer ce paragraphe -->
+        <h2>Exécution de l’attaque</h2>
         <ul class="list">
-            <li><strong>[Étape 1](Ex : Sélectionner le fichier malveillant)</strong><br />
-                [Brève description du contexte]
-            </li>
-            <li><strong>[Étape 2](Ex : Télécharger le fichier malveillant)</strong><br />
-                [Brève description du contexte]
-            </li>
-            <li><strong>[Étape 3](Ex : Activer le script)</strong><br />
-                [Brève description du contexte]
-            </li>
+            <li>Trouver une entrée utilisateur vulnérable.</li>
+            <li>Trouver l’emplacement d’un fichier.</li>
+            <li>Inclure le fichier dans l’entrée utilisateur.</li>
         </ul>
     </section>
     <section>
-        <h2>Analyse du code vulnérable</h2>
-        <p>[Description du code]</p>
-        <pre class="line-numbers" data-line="2"><code class="language-php">function addition($a, $b) {
-    $result = $a + $b; // Pas de vérification des valeurs
-    return $result;
+        <h2>Analyse d’un code vulnérable</h2>
+        <p>Pour illustrer cette vulnérabilité, prenons l’exemple d’un site web qui importe un fichier de langue sans
+        vérification de l’entrée de l’utilisateur. Cette attaque peut être exploitée pour exécuter un fichier
+        malveillant précédemment mis en ligne ou afficher des données sensibles.</p>
+        <pre class="line-numbers" data-line="7"><code class="language-php">if (isset($_GET["lang"])) {
+    $lang = $_GET["lang"];
+} else {
+    $lang = "fr.php";
 }
 
-echo addition(1 + 2); // 3</code></pre>
-        <p>[Description de la/les ligne(s) qui introdui(sen)t la/les vulnérabilité(s)]</p>
+include($lang);</code></pre>
+        <p>Dans le cas où aucun paramètre n’est donné, le code inclura simplement le fichier ‘fr.php’. Un attaquant peut
+        altérer la valeur de ‘lang’ pour accéder localement à un fichier. Une attaque d’inclusion de fichier distant est
+        également possible si l’option ‘allow_url_include’ est activée sur le serveur. Voici un exemple de requête qui
+        permettrait d’exécuter un fichier ‘vul.php’ mis en ligne avec le code présenté dans l’<a href="'.
+        $config["site_link"]."/".$menu[0]["folder"]."/".$menu[0]["files"][0]["name"].'?view=exploit">exécution par mise
+        en ligne</a> :</p>
+        <div class="border">
+            <p><strong>/fichier.php?lang=uploads/vul.php.jpg</strong></p>
+        </div>
     </section>
 </div>';
 
 $fix = '<div>
     <section>
-        <h2>Mesures de protection</h2>
+        <h2>Mesures de prévention</h2>
         <ul class="list">
-            <li><strong>[Nom de la mesure 1](Ex : Validation stricte des entrées)</strong><br />
-                [Brève description de la mesure]
-            </li>
-            <li><strong>[Nom de la mesure 2](Ex : Restriction des permissions de fichier)</strong><br />
-                [Brève description de la mesure]
-            </li>
-            <li><strong>[Nom de la mesure 3](Ex : Isolation des fichiers téléchargés)</strong><br />
-                [Brève description de la mesure]
-            </li>
-        </ul>
-    </section>
-    <section>
-        <h2>Outils de détection</h2>
-        <!-- Supprimer ce paragraphe -->
-        <p><em>[Description des outils de détection]</em></p>
-        <!-- FIN Supprimer ce paragraphe -->
-        <ul class="list">
-            <li><strong>[Outil 1](Ex : Nikto)</strong><br />
-                [Brève description de la mesure]
-            </li>
-            <li><strong>[Outil 2](Ex : ZAP)</strong><br />
-                [Brève description de la mesure]
-            </li>
-            <li><strong>[Outil 3](Ex : Skipfish)</strong><br />
-                [Brève description de la mesure]
-            </li>
+            <li>Définir une liste blanche d’entrées.</li>
+            <li>Désactiver l’option ‘allow_url_include’ sur le serveur.</li>
         </ul>
     </section>
     <section>
         <h2>Correction du code vulnérable</h2>
-        <p>[Description du code]</p>
-        <pre class="line-numbers" data-line="2,5-7"><code class="language-php">function addition($a, $b) {
-    if (is_int($a) && is_int($b)) { // Vérification que $a et $b sont des entiers
-        $result = $a + $b;
-        return $result;
-    else {
-        return "Les 2 paramètres doivent être des entiers !";
-    }
+        <p>La prévention contre cette attaque consiste à vérifier les entrées utilisateur avant de les utiliser. Une
+        vérification de la langue est donc nécessaire pour s’assurer qu’elle se trouve bien dans la liste des langues
+        autorisées.</p>
+        <pre class="line-numbers" data-line="1-3"><code class="language-php">$allowed_langs = ["fr", "en"];
+
+if (isset($_GET["lang"]) && in_array($_GET["lang"], $allowed_langs)) {
+    $lang = $_GET["lang"];
+} else {
+    $lang = "fr";
 }
 
-echo addition(1 + 2); // 3</code></pre>
-        <p>[Description de la/les ligne(s) modifiée(s)]</p>
+include($lang.".php");</code></pre>
+        <p>La désactivation de l’option ‘allow_url_include’ permet également de réduire les risques d’une attaque
+        d’inclusion d’un fichier distant. Elle est par défaut désactivée sur les serveurs ce qui la rend plus
+        difficilement exploitable.</p>
     </section>
     <section>
         <h2>Documentation et ressources</h2>
         <ul class="list">
-            <li><a href="#" target="_blank">[Nom de la ressource 1]</a></li>
-            <li><a href="#" target="_blank">[Nom de la ressource 2]</a></li>
+            <li><a href=
+            "https://spanning.com/blog/file-inclusion-vulnerabilities-lfi-rfi-web-based-application-security-part-9/"
+            target="_blank">File Inclusion Vulnerabilities</a></li>
         </ul>
     </section>
 </div>';
