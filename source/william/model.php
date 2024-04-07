@@ -71,28 +71,27 @@ function logout($token) {
     mysqli_stmt_close($stmt);
 }
 
+function sendmail($fromName, $from, $to, $subject, $message, $messageType, $failRedirect) {
+    if (!filter_var($from, FILTER_VALIDATE_EMAIL) && !empty($from)) {
+        $fromEmail = $from.'@'.$_SERVER['HTTP_HOST'];
+    } else if (empty($from)) {
+        header("Location: ".$failRedirect);
+        exit();
+    } else {
+        $fromEmail = $from;
+    }
 
-function sendmail($fromName, $from, $to, $subject, $message, $messageType, 
-    $failRedirect) {
-        $site = $_SERVER['HTTP_HOST'];
-        if (!filter_var($from, FILTER_VALIDATE_EMAIL) && !empty($from)) {
-            $fromEmail = $from . '@'.$site;
-        } else if (empty($from)) {
-            header("Location:" . $failRedirect);
-            exit();
-        } else {
-            $fromEmail = $from;
-        }
     $fromAddress = $fromName." <".$fromEmail.">";
+
     $headers = array(
-        'MIME-Version' => "1.0",
-        'Content-type' => ($messageType == "html" ? "text/html":"text").
-        "; charset=utf-8",
-        'From' => $fromAddress,
-        'Reply-To' => $fromEmail
+        "MIME-Version" => "1.0",
+        "Content-type" => ($messageType == "html" ? "text/html" : "text")."; charset=utf-8",
+        "From" => $fromAddress,
+        "Reply-To" => $fromEmail
     );
+
     unset($_SERVER['HTTP_USER_AGENT']);
     unset($_SERVER['REMOTE_ADDR']);
-    $r = mail($to, $subject, $message,$headers, "-f".$fromEmail);
-    return $r;
+
+    return mail($to, $subject, $message, $headers, "-f".$fromEmail);
 }
