@@ -19,10 +19,10 @@ require("model.php");
  *               COOKIES AUTHENTICATION              *
  *****************************************************/
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST["edit"]) && isset($_POST["cookie"])) {
+    if (isset($_POST["update"]) && isset($_POST["cookie"])) {
         setcookie("userToken", $_POST["cookie"], time() + (60 * 60 * 24));
-        header("Refresh: 0");
-        exit();
+        $_COOKIE["userToken"] = $_POST["cookie"];
+        $update = true;
     } else if (isset($_POST["connect"])) {
         $error = array();
 
@@ -47,8 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 } else {
                     setcookie("userToken", $token, time() + (60 * 60 * 24));
                 }
-                header("Refresh: 0");
-                exit();
+                $_COOKIE["userToken"] = $token;
             } else {
                 $error["token"] = "Nom d'utilisateur ou mot de passe incorrect.";
             }
@@ -56,8 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else if (isset($_POST["disconnect"])) {
         logout($_COOKIE["userToken"]);
         setcookie("userToken", "", time() - 3600);
-        header("Refresh: 0");
-        exit();
+        $_COOKIE["userToken"] = "";
     }
 }
 
@@ -128,17 +126,17 @@ $demonstration = '<div class="split">
             <p class="success">L’usager est connecté en tant que <strong>'.
             get_logged_in_user_fullname($_COOKIE["userToken"]).'</strong>.</p>' : '
             <div class="form-group">
-                '.((isset($error["token"])) ? '<div class="alert">'.$error["token"].'</div>' : '').'
+                '.((isset($error["token"])) ? '<div class="alert alert-danger">'.$error["token"].'</div>' : '').'
             </div>
             <div class="form-group">
                 <label for="email">Adresse email</label>
-                '.((isset($error["email"])) ? '<div class="alert">'.$error["email"].'</div>' : '').'
+                '.((isset($error["email"])) ? '<div class="alert alert-danger">'.$error["email"].'</div>' : '').'
                 <input id="email" class="form-control'.((isset($error["email"])) ? ' invalid' : '').'" name="email"
                 type="email"'.((isset($error["email"])) ? ' value="'.$_POST["email"].'"' : '').' />
             </div>
             <div class="form-group">
                 <label for="password">Mot de passe</label>
-                '.((isset($error["password"])) ? '<div class="alert">'.$error["password"].'</div>' : '').'
+                '.((isset($error["password"])) ? '<div class="alert alert-danger">'.$error["password"].'</div>' : '').'
                 <input id="password" class="form-control'.((isset($error["password"])) ? ' invalid' : '').'" name=
                 "password" type="password" />
             </div>
@@ -159,13 +157,18 @@ $demonstration = '<div class="split">
     <form method="POST">
         <div>
             <h2>Configuration</h2>
+            '.((isset($update)) ?
+            '<div class="form-group">
+                <div class="alert alert-success">Le témoin a bien été modifié.</div>
+            </div>
+            ' : '').'
             <div class="form-group">
                 <label for="cookie">Témoin (cookie)</label>
                 <input id="cookie" class="form-control" name="cookie" type="text" value="'.$_COOKIE["userToken"].'" />
             </div>
         </div>
         <footer>
-            <button name="edit" type="submit">Modifier</button>
+            <button name="update" type="submit">Modifier</button>
         </footer>
     </form>
 </div>';
