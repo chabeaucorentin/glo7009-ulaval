@@ -186,7 +186,7 @@ $presentation = '<div class="table">
     <div class="row split">
         <section>
             <h2>Catégorie</h2>
-            <p>Authentification par hameçonnage</p>
+            <p>Authentification par phishing</p>
         </section>
         <section>
             <h2>Impact potentiel</h2>
@@ -195,38 +195,48 @@ $presentation = '<div class="table">
     </div>
     <section class="row">
         <h2>Description</h2>
-        <p>[Description de la vulnérabilité, ses effets potentiels et le risque qu\'elle représente]</p>
+        <p>L’authentification par phishing consiste à se faire passer pour une 
+            autorité dans le but de récupérer des informations sensibles. 
+            L’attaque peut prendre différentes formes, telles que les adresses 
+            courriels, les SMS, les publicités, etc. L’attaquant va tenter de 
+            créer un sentiment d’urgence chez la victime enfin de la pousser à 
+            agir.</p>
     </section>
     <section class="row">
         <h2>Objectifs</h2>
-        <!-- Supprimer ce paragraphe -->
-        <p><em>[Description des buts, intentions et avantages qu\'un attaquant pourrait avoir en exploitant la vulnérabilité]</em></p>
-        <!-- FIN Supprimer ce paragraphe -->
         <ul class="list">
-            <li>[Objectif 1](Ex : Contourner les restrictions de mise en ligne pour contrôler un serveur)</li>
-            <li>[Objectif 2](Ex : Dégrader les performances ou la disponibilité d\'un service)</li>
-            <li>[Objectif 3](Ex : Voler des données sensibles ou confidentielles)</li>
+            <li>Contourner les mesures d’authentification.</li>
+            <li>Voler des données sensibles ou confidentielles.</li>
         </ul>
     </section>
     <section class="row">
         <h2>Causes</h2>
-        <!-- Supprimer ce paragraphe -->
-        <p><em>[Description des facteurs qui introduisent la vulnérabilité]</em></p>
-        <!-- FIN Supprimer ce paragraphe -->
         <ul class="list">
-            <li>[Cause 1](Ex : Les entrées ne sont pas vérifiées)</li>
-            <li>[Cause 2](Ex : Les données sensibles sont directement exploitées)</li>
-            <li>[Cause 3](Ex : Les fichiers téléchargés sont exécutés dans un environnement non sécurisé)</li>
+            <li>L’attaquant a accès aux adresses courriel.</li>
         </ul>
     </section>
     <section class="row">
         <h2>Exemples marquants</h2>
         <ul class="list">
-            <li><strong>[Nom de l\'attaque ou de la vulnérabilité 1](Ex : Drupalgeddon2 (CVE-2018-7600))</strong><br />
-                [Brève description de l\'incident, du contexte et des conséquences]
+            <li><strong>
+            <a href="https://nvd.nist.gov/vuln/detail/CVE-2023-28069">
+            Dell Streaming Data Platform (CVE-2023-28069)
+            </a></strong><br />
+            Une vulnérabilité dans la plateforme de flux continu des données de 
+            Dell a permis à un attaquant d’inciter un utilisateur légitime à 
+            cliquer sur un lien malicieux. Cet attaquant a pu réaliser son 
+            attaque sans être connecté sur la plateforme. Cette attaque est 
+            possible sur toutes les versions 1.4 et les précédentes.
             </li>
-            <li><strong>[Nom de l\'attaque ou de la vulnérabilité 2](Ex : WordPress Plugin File Manager (CVE-2020-25213))</strong><br />
-                [Brève description de l\'incident, du contexte et des conséquences]
+            <li><strong>
+            <a href=" https://nvd.nist.gov/vuln/detail/CVE-2021-29432">
+            Sydent (CVE-2021-29432)
+            </a></strong><br />
+            La compagnie Matrix est une compagnie qui œuvre pour un monde 
+            sécurisé de communication décentralisé et un réseau open-source. 
+            Une vulnérabilité dans leur serveur d’identité Sydent pouvait être 
+            utilisée pour transmettre des courriels arbitraires à toutes les 
+            adresses.
             </li>
         </ul>
     </section>
@@ -401,100 +411,80 @@ $demonstration = '<div class="split">
 
 $exploit = '<div>
     <section>
-        <h2>Conditions préalables pour l\'exploitation</h2>
-        <!-- Supprimer ce paragraphe -->
-        <p><em>[Description des conditions requises pour exploiter la vulnérabilité]</em></p>
-        <!-- FIN Supprimer ce paragraphe -->
+        <h2>Conditions préalables pour l’exploitation</h2>
         <ul class="list">
-            <li><strong>[Condition 1](Ex : Aucune validation de l\'extension<br />
-                OU<br />
-                Validation basée uniquement sur l\'extension)</strong><br />
-                [Brève description de la condition]
-            </li>
-            <li><strong>[Condition 2](Ex : Répertoire avec permissions d\'exécution)</strong><br />
-                [Brève description de la condition]
-            </li>
+            <li>L’attaquant détient une liste d’adresses courriels.</li>
+            <li>L’attaquant a extrait la page de connexion du site web.</li>
         </ul>
     </section>
     <section>
         <h2>Méthodes d\'exploitation</h2>
-        <!-- Supprimer ce paragraphe -->
-        <p><em>[Description des méthodes qui permettent à un attaquant d\'exploiter la vulnérabilité]</em></p>
-        <!-- FIN Supprimer ce paragraphe -->
         <ul class="list">
-            <li><strong>[Méthode 1](Ex : Télécharger des fichiers malveillants)</strong><br />
-                [Brève description de la méthode]
-            </li>
-            <li><strong>[Méthode 2](Ex : Contourner la validation par extension de fichier)</strong><br />
-                [Brève description de la méthode]
-            </li>
+            <li>Envoyer un lien malicieux par courriel.</li>
+            <li>Envoyer un lien malicieux par SMS.</li>
         </ul>
     </section>
     <section>
         <h2>Exécution de l\'attaque</h2>
-        <!-- Supprimer ce paragraphe -->
-        <p><em>[Description des étapes qui permettent à un attaquant d\'exécuter l\'attaque]</em></p>
-        <!-- FIN Supprimer ce paragraphe -->
         <ul class="list">
-            <li><strong>[Étape 1](Ex : Sélectionner le fichier malveillant)</strong><br />
-                [Brève description du contexte]
-            </li>
-            <li><strong>[Étape 2](Ex : Télécharger le fichier malveillant)</strong><br />
-                [Brève description du contexte]
-            </li>
-            <li><strong>[Étape 3](Ex : Activer le script)</strong><br />
-                [Brève description du contexte]
-            </li>
+            <li>Concevoir un site malicieux imitant le site cible.</li>
+            <li>Transmettre le lien aux victimes.</li>
+            <li>Patienter jusqu’à ce qu’au moins une victime clique sur le 
+            lien.</li>
+            <li>Récupérer les informations de connexion.</li>
+            <li>Rediriger la victime vers le site cible.</li>
         </ul>
     </section>
     <section>
         <h2>Analyse du code vulnérable</h2>
-        <p>[Description du code]</p>
-        <pre class="line-numbers" data-line="2"><code class="language-php">function addition($a, $b) {
-    $result = $a + $b; // Pas de vérification des valeurs
-    return $result;
-}
-
-echo addition(1 + 2); // 3</code></pre>
-        <p>[Description de la/les ligne(s) qui introdui(sen)t la/les vulnérabilité(s)]</p>
+        <p>Pour expliquer cette attaque, nous allons parcourir les démarches 
+        d’exploitation étape par étape.</p>
+        <p>Premièrement, l’attaquant commence par récupérer la page de connexion
+         d’un site cible et modifier la structure pour s’envoyer un courriel 
+         détenant les informations de connexion.</p>
+        <p>Deuxièmement, l’attaquant va créer un courriel qui imite l’autorité 
+        afin de viser un groupe de victimes avec des adresses courriels qu’il 
+        aurait récupérés précédemment. Lorsqu’il a terminé de rédiger son 
+        courriel, l’attaquant va le transmettre au groupe et attendre une action
+         de leur part. Les utilisateurs qui ne se méfient pas seront piégés, car
+          ils fourniront leurs informations d’identifications.
+        </p>
+        <p>
+        Enfin, l’attaque se termine lorsque l’attaquant utilise les informations
+         des utilisateurs à leur insu.
+        </p>
     </section>
 </div>';
 
 $fix = '<div>
     <section>
         <h2>Mesures de protection</h2>
+        <p>On peut se prémunir de cette attaque en mettant en place différentes 
+        mesures :</p>
         <ul class="list">
-            <li><strong>[Nom de la mesure 1](Ex : Validation stricte des entrées)</strong><br />
-                [Brève description de la mesure]
+            <li><strong>Vérifier la provenance des courriels</strong><br />
+            Les utilisateurs peuvent vérifier la provenance des courriels qu’ils
+             reçoivent en regardant le nom inscrit dans ces courriels. Si 
+             toutefois celui-ci ne permet pas de distinguer le vrai courriel de 
+             celui de l’attaquant, il faudra regarder la source du message. De 
+             plus, les courriels malveillants en provenance de l’attaquant 
+             contiennent souvent des termes génériques ou des fautes 
+             d’orthographes d’usage. Les pistes mentionnées précédemment 
+             devraient accroître la vigilance concernant la provenance des 
+             courriels frauduleux.
             </li>
-            <li><strong>[Nom de la mesure 2](Ex : Restriction des permissions de fichier)</strong><br />
-                [Brève description de la mesure]
+            <li><strong>Vérifier la provenance du lien</strong><br />
+            Le lien ne devrait pas déformer le nom du site. Si ce dernier 
+            correspond au nom de domaine du site visé, il est peu probable qu’il
+             s’agisse d’une attaque. Dans le cas contraire, les utilisateurs 
+             devraient s’en méfier.
             </li>
-            <li><strong>[Nom de la mesure 3](Ex : Isolation des fichiers téléchargés)</strong><br />
-                [Brève description de la mesure]
+            <li><strong>Éviter de cliquer sur des liens</strong><br />
+            Les utilisateurs devraient se méfier des liens et de la nature du 
+            message provenant de courriels non sollicités, dont particulièrement
+             ceux qui poussent à agir dans l’urgence. Les utilisateurs vigilants
+              sont plus enclins à vérifier l’authenticité d’un message.
             </li>
-        </ul>
-    </section>
-    <section>
-        <h2>Correction du code vulnérable</h2>
-        <p>[Description du code]</p>
-        <pre class="line-numbers" data-line="2,5-7"><code class="language-php">function addition($a, $b) {
-    if (is_int($a) && is_int($b)) { // Vérification que $a et $b sont des entiers
-        $result = $a + $b;
-        return $result;
-    else {
-        return "Les 2 paramètres doivent être des entiers !";
-    }
-}
-
-echo addition(1 + 2); // 3</code></pre>
-        <p>[Description de la/les ligne(s) modifiée(s)]</p>
-    </section>
-    <section>
-        <h2>Documentation et ressources</h2>
-        <ul class="list">
-            <li><a href="#" target="_blank">[Nom de la ressource 1]</a></li>
-            <li><a href="#" target="_blank">[Nom de la ressource 2]</a></li>
         </ul>
     </section>
 </div>';
