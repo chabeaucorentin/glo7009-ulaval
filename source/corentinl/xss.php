@@ -18,7 +18,7 @@ require("model.php");
 /*****************************************************
  *                   XSS INJECTION                   *
  *****************************************************/
-$injection = "&lt;img src=&quot;rpc.jpg&quot; onerror=&quot;(()=&gt;{wins_usr = 3;loadScore()})()&quot; /&gt;";
+$injection = "&lt;img src=&quot;rpc.jpg&quot; onerror=&quot;(()=&gt;{wins_usr = 3;loadScore()})()&quot;/&gt;";
 
 /*****************************************************
  *                      CONTENT                      *
@@ -90,8 +90,11 @@ $demonstration = '<div class="split">
         <div>
             <h2>Scénario</h2>
             <div id="display">
-                <label for="cpu_score">ORDINATEUR:</label> <span id="cpu_score">0</span><br>
-                <label for="usr_score">UTILISATEUR:</label> <span id="usr_score">0</span><br><br>
+                <label for="cpu_score">ORDINATEUR:</label> <span id="cpu_score">0</span> - 
+                <span id="cpu_choice"></span><br>
+                <label for="usr_score">UTILISATEUR:</label> <span id="usr_score">0</span> - 
+                <span id="usr_choice"></span><br>
+                <span id="winner"></span><br>
             </div>
             <div class="form-group">
                 <label for="choice">Sélection</label>
@@ -114,7 +117,7 @@ $demonstration = '<div class="split">
             </div>
             <div class="form-group">
                 <label for="xss">Code XSS</label>
-                <textarea id="xss" class="form-control small" name="xss">'.$injection. '</textarea>
+                <textarea id="xss" class="form-control small" name="xss">'.$injection.'</textarea>
             </div>
             <div>
                 <button type="submit">Injecter</button>
@@ -152,13 +155,6 @@ $demonstration = '<div class="split">
             wins_cpu++;
         }
 
-        //alert(
-        //    "Ton choix : " + userChoice + "\n" +
-        //    "Mon choix : " + computerChoice + "\n\n" +
-        //    resultMessage + "\n\n" +
-        //    "USER: " + wins_usr + "\n" +
-        //    "CPU: " + wins_cpu);
-
         isGameOver();
         loadScore();
 
@@ -167,19 +163,24 @@ $demonstration = '<div class="split">
 
     function isGameOver() {
         if (wins_usr >= 3) {
-            alert("Bravo, tu as gagne le jeu!");
+            document.getElementById("winner").innerHTML = "<br>YOU WON, CONGRATULATION!<br>";
             wins_usr = 0;
             wins_cpu = 0;
         } else if (wins_cpu >= 3) {
-            alert("Ooops tu as perdu...");
+            document.getElementById("winner").innerHTML = "<br>YOU LOST!<br>";
             wins_usr = 0;
             wins_cpu = 0;
+        }
+        else{
+            document.getElementById("winner").innerHTML = "";
         }
     }
 
     function loadScore() {
         document.getElementById("usr_score").innerHTML = wins_usr;
         document.getElementById("cpu_score").innerHTML = wins_cpu; 
+        document.getElementById("cpu_choice").innerHTML = computerChoice;
+        document.getElementById("usr_choice").innerHTML = userChoice;
     }
 
     function inject() {
