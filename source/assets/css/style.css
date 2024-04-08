@@ -79,6 +79,10 @@ button:focus {
     background-color: #C7C7C7;
 }
 
+.d-none {
+    display: none;
+}
+
 @media print {
     hr {
         border-color: #000;

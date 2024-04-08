@@ -110,6 +110,9 @@ $demonstration = '<div class="split">
         <form class="row" method="POST" onsubmit="return inject()">
             <h2>Injection</h2>
             <div class="form-group">
+                <div id="injected" class="alert alert-success d-none">Le code XSS a bien été injecté.</div>
+            </div>
+            <div class="form-group">
                 <label for="xss">Code XSS</label>
                 <textarea id="xss" class="form-control small" name="xss">'.$injection. '</textarea>
             </div>
@@ -180,6 +183,7 @@ $demonstration = '<div class="split">
     }
 
     function inject() {
+        document.getElementById("injected").classList.remove("d-none");
         document.getElementById("injection").innerHTML = document.getElementById("xss").value;
         return false;
     }
