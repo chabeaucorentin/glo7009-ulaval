@@ -20,7 +20,7 @@ require("model.php");
  *****************************************************/
 $results = "Aucun résultat";
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["firstname"])) {
+if (isset($_POST["firstname"])) {
     $firstname = $_POST["firstname"];
     $sql_result = query($firstname);
     $results = get_html_result($sql_result);
