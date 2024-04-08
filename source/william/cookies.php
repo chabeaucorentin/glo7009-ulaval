@@ -105,14 +105,13 @@ $presentation = '<div class="table">
     <section class="row">
         <h2>Exemples marquants</h2>
         <ul class="list">
-            <li><strong><a href="https://nvd.nist.gov/vuln/detail/CVE-2021-44151#match-9099598">Reprise Software
-            (CVE-2021-44151)</a></strong><br />
+            <li><a href="https://nvd.nist.gov/vuln/detail/CVE-2021-44151#match-9099598">Reprise Software
+            (CVE-2021-44151)</a><br />
                 Une attaque par vol de témoins de session est survenue sur l’hébergeur de licence Reprise Software.
                 Cette entreprise n’utilisait que des témoins qui n’avaient qu’une courte longueur (4 caractères
                 hexadécimaux pour Windows ou 8 pour le système Linux).
             </li>
-            <li><strong><a href="https://www.cve.news/cve-2023-5723/">Firefox Vulnerability (CVE-2023-5723)</a></strong>
-            <br />
+            <li><a href="https://www.cve.news/cve-2023-5723/">Firefox Vulnerability (CVE-2023-5723)</a><br />
                 Une attaque par vol de cookies est possible sur les versions 119 et antérieures de Firefox. L’appel à la
                 fonction JavaScript ‘document.cookie’ peut permettre à l’attaquant d’avoir temporairement accès aux
                 témoins stockés dans le navigateur en exécutant un script provenant d’un site.
