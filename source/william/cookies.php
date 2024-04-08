@@ -20,7 +20,7 @@ require("model.php");
  *****************************************************/
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["edit"]) && isset($_POST["cookie"])) {
-        setcookie("userToken", $_POST["cookieField"], time() + (60 * 60 * 24));
+        setcookie("userToken", $_POST["cookie"], time() + (60 * 60 * 24));
         header("Refresh: 0");
         exit();
     } else if (isset($_POST["connect"])) {
@@ -125,7 +125,8 @@ $demonstration = '<div class="split">
         <div>
             <h2>Scénario</h2>
             '.((isset($_COOKIE["userToken"]) && is_logged_in($_COOKIE["userToken"])) ? '
-            <p class="success">L’usager est connecté.</p>' : '
+            <p class="success">L’usager est connecté en tant que <strong>'.
+            get_logged_in_user_fullname($_COOKIE["userToken"]).'</strong>.</p>' : '
             <div class="form-group">
                 '.((isset($error["token"])) ? '<div class="alert">'.$error["token"].'</div>' : '').'
             </div>
