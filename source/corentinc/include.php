@@ -24,6 +24,8 @@ if (isset($_POST["lang"])) {
     $lang = "fr.php";
 }
 
+include($lang);
+
 $load = htmlspecialchars(file_get_contents($lang), ENT_QUOTES);
 $success = (isset($_POST["include"]) && $load);
 $error = (isset($_POST["include"]) && !$load);
