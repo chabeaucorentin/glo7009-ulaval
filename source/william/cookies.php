@@ -19,12 +19,13 @@ require("model.php");
  *               COOKIES AUTHENTICATION              *
  *****************************************************/
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST["edit"]) && isset($_POST["cookie"])) {
-        setcookie("userToken", $_POST["cookieField"], time() + (60 * 60 * 24));
-        header("Refresh: 0");
-        exit();
+    if (isset($_POST["update"]) && isset($_POST["cookie"])) {
+        setcookie("userToken", $_POST["cookie"], time() + (60 * 60 * 24));
+        $_COOKIE["userToken"] = $_POST["cookie"];
+        $update = true;
     } else if (isset($_POST["connect"])) {
         $error = array();
+
         if (isset($_POST["email"])) {
             if (!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
                $error["email"] = "Veuillez entrer une adresse courriel valide.";
@@ -39,14 +40,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if (!isset($error["email"]) && !isset($error["password"])) {
             $token = login($_POST["email"], $_POST["password"]);
+
             if (isset($token)) {
                 if (isset($_POST["persistent"])) {
                     setcookie("userToken", $token, time() + (60 * 60 * 24 * 30));
                 } else {
                     setcookie("userToken", $token, time() + (60 * 60 * 24));
                 }
-                header("Refresh: 0");
-                exit();
+                $_COOKIE["userToken"] = $token;
             } else {
                 $error["token"] = "Nom d'utilisateur ou mot de passe incorrect.";
             }
@@ -54,8 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else if (isset($_POST["disconnect"])) {
         logout($_COOKIE["userToken"]);
         setcookie("userToken", "", time() - 3600);
-        header("Refresh: 0");
-        exit();
+        $_COOKIE["userToken"] = "";
     }
 }
 
@@ -66,7 +66,7 @@ $presentation = '<div class="table">
     <div class="row split">
         <section>
             <h2>Catégorie</h2>
-            <p>Authentification par cookies</p>
+            <p>Vulnérabilités dans les mécanismes d’authentification</p>
         </section>
         <section>
             <h2>Impact potentiel</h2>
@@ -103,14 +103,13 @@ $presentation = '<div class="table">
     <section class="row">
         <h2>Exemples marquants</h2>
         <ul class="list">
-            <li><strong><a href="https://nvd.nist.gov/vuln/detail/CVE-2021-44151#match-9099598">Reprise Software
-            (CVE-2021-44151)</a></strong><br />
+            <li><a href="https://nvd.nist.gov/vuln/detail/CVE-2021-44151#match-9099598" target="_blank">Reprise Software
+            (CVE-2021-44151)</a><br />
                 Une attaque par vol de témoins de session est survenue sur l’hébergeur de licence Reprise Software.
                 Cette entreprise n’utilisait que des témoins qui n’avaient qu’une courte longueur (4 caractères
                 hexadécimaux pour Windows ou 8 pour le système Linux).
             </li>
-            <li><strong><a href="https://www.cve.news/cve-2023-5723/">Firefox Vulnerability (CVE-2023-5723)</a></strong>
-            <br />
+            <li><a href="https://www.cve.news/cve-2023-5723/" target="_blank">Firefox Vulnerability (CVE-2023-5723)</a><br />
                 Une attaque par vol de cookies est possible sur les versions 119 et antérieures de Firefox. L’appel à la
                 fonction JavaScript ‘document.cookie’ peut permettre à l’attaquant d’avoir temporairement accès aux
                 témoins stockés dans le navigateur en exécutant un script provenant d’un site.
@@ -124,19 +123,20 @@ $demonstration = '<div class="split">
         <div>
             <h2>Scénario</h2>
             '.((isset($_COOKIE["userToken"]) && is_logged_in($_COOKIE["userToken"])) ? '
-            <p class="success">L’usager est connecté.</p>' : '
+            <p class="success">L’usager est connecté en tant que <strong>'.
+            get_logged_in_user_fullname($_COOKIE["userToken"]).'</strong>.</p>' : '
             <div class="form-group">
-                '.((isset($error["token"])) ? '<div class="alert">'.$error["token"].'</div>' : '').'
+                '.((isset($error["token"])) ? '<div class="alert alert-danger">'.$error["token"].'</div>' : '').'
             </div>
             <div class="form-group">
                 <label for="email">Adresse email</label>
-                '.((isset($error["email"])) ? '<div class="alert">'.$error["email"].'</div>' : '').'
+                '.((isset($error["email"])) ? '<div class="alert alert-danger">'.$error["email"].'</div>' : '').'
                 <input id="email" class="form-control'.((isset($error["email"])) ? ' invalid' : '').'" name="email"
                 type="email"'.((isset($error["email"])) ? ' value="'.$_POST["email"].'"' : '').' />
             </div>
             <div class="form-group">
                 <label for="password">Mot de passe</label>
-                '.((isset($error["password"])) ? '<div class="alert">'.$error["password"].'</div>' : '').'
+                '.((isset($error["password"])) ? '<div class="alert alert-danger">'.$error["password"].'</div>' : '').'
                 <input id="password" class="form-control'.((isset($error["password"])) ? ' invalid' : '').'" name=
                 "password" type="password" />
             </div>
@@ -157,13 +157,18 @@ $demonstration = '<div class="split">
     <form method="POST">
         <div>
             <h2>Configuration</h2>
+            '.((isset($update)) ?
+            '<div class="form-group">
+                <div class="alert alert-success">Le témoin a bien été modifié.</div>
+            </div>
+            ' : '').'
             <div class="form-group">
                 <label for="cookie">Témoin (cookie)</label>
                 <input id="cookie" class="form-control" name="cookie" type="text" value="'.$_COOKIE["userToken"].'" />
             </div>
         </div>
         <footer>
-            <button name="edit" type="submit">Modifier</button>
+            <button name="update" type="submit">Modifier</button>
         </footer>
     </form>
 </div>';

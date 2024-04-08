@@ -69,7 +69,7 @@ $menu = array(
             ),
             array(
                 "name" => "phishing.php",
-                "title" => "Authentification par phish."
+                "title" => "Authentification par phishing"
             ),
         )
     )

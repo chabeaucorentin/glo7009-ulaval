@@ -61,6 +61,23 @@ function is_logged_in($token) {
     return $nb > 0;
 }
 
+function get_logged_in_user_fullname($token) {
+    global $db;
+
+    $req = "SELECT user_firstname, user_lastname FROM users
+            INNER JOIN tokens ON user_id = token_user_id
+            WHERE token_code = ?";
+    $stmt = mysqli_prepare($db, $req);
+    mysqli_stmt_bind_param($stmt, "s", $token);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_bind_result($stmt, $first_name, $last_name);
+    mysqli_stmt_fetch($stmt);
+    $full_name = $first_name." ".$last_name;
+    mysqli_stmt_close($stmt);
+
+    return $full_name;
+}
+
 function logout($token) {
     global $db;
 
@@ -71,24 +88,24 @@ function logout($token) {
     mysqli_stmt_close($stmt);
 }
 
-function sendmail($fromName, $from, $to, $subject, $message, $messageType, $failRedirect) {
+function sendmail($from_name, $from, $to, $subject, $message, $message_type, $fail_redirect) {
     if (!filter_var($from, FILTER_VALIDATE_EMAIL) && !empty($from)) {
-        $fromEmail = $from.'@'.$_SERVER['HTTP_HOST'];
+        $from_email = $from."@".$_SERVER["HTTP_HOST"];
     } else if (empty($from)) {
-        header("Location: ".$failRedirect);
+        header("Location: ".$fail_redirect);
         exit();
     } else {
-        $fromEmail = $from;
+        $from_email = $from;
     }
 
-    $fromAddress = $fromName." <".$fromEmail.">";
+    $from_address = $from_name." <".$from_email.">";
 
     $headers = array(
         "MIME-Version" => "1.0",
-        "Content-type" => ($messageType == "html" ? "text/html" : "text")."; charset=utf-8",
-        "From" => $fromAddress,
-        "Reply-To" => $fromEmail
+        "Content-type" => ($message_type == "html" ? "text/html" : "text")."; charset=utf-8",
+        "From" => $from_address,
+        "Reply-To" => $from_email
     );
-    $r = mail($to, $subject, $message,$headers, "-f".$fromEmail);
-    return $r;
+
+    return mail($to, $subject, $message,$headers, "-f".$from_email);
 }
