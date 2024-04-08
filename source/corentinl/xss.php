@@ -27,7 +27,7 @@ $presentation = '<div class="table">
     <div class="row split">
         <section>
             <h2>Catégorie</h2>
-            <p>Injection XSS</p>
+            <p>Vulnérabilités d’injection de code</p>
         </section>
         <section>
             <h2>Impact potentiel</h2>
