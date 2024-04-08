@@ -66,7 +66,7 @@ $presentation = '<div class="table">
     <div class="row split">
         <section>
             <h2>Catégorie</h2>
-            <p>Authentification par cookies</p>
+            <p>Vulnérabilités dans les mécanismes d’authentification</p>
         </section>
         <section>
             <h2>Impact potentiel</h2>
