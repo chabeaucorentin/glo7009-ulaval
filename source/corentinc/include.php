@@ -51,8 +51,9 @@ $presentation = '<div class="table">
         d’importer du code dépendamment de certaines conditions. Une telle organisation du code pourrait introduire une
         vulnérabilité par inclusion de fichiers (File Inclusion Vulnerability). La raison étant souvent causée par une
         vérification insuffisante des entrées utilisateurs.</p>
-        <p>Cette attaque pourrait être exploitée lorsque l’exécution par mise en ligne évoquée au point 2.1 a mené au
-        téléchargement d’un fichier malicieux sur le serveur. Deux types d’inclusions sont possibles :</p>
+        <p>Cette attaque pourrait être exploitée lorsque l’<a href="'.$config["site_link"]."/".$menu[0]["folder"]."/".
+        $menu[0]["files"][0]["name"].'">exécution par mise en ligne</a> a mené au téléchargement d’un fichier malicieux
+        sur le serveur. Deux types d’inclusions sont possibles :</p>
         <ul class="list">
             <li><strong>Inclusion d’un fichier local (LFI)</strong><br />
                 Le fichier est déjà présent sur le serveur distant pouvant permettant à l’attaquant d’accéder à des
