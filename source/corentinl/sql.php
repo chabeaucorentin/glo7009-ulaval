@@ -18,16 +18,12 @@ require("model.php");
 /*****************************************************
  *                   SQL INJECTION                   *
  *****************************************************/
-//$results = display_sql_results(query($_POST["firstname"]));
-$results = "Aucun résultat...";
-if(array_key_exists('safe_search_button', $_POST)) { 
-    $sql_result = safe_query($_POST["firstname"]);
-    $results = display_sql_results($sql_result);
-    
-}
-elseif(array_key_exists('vulnerable_search_button', $_POST)) { 
-    $sql_result = vulnerable_query($_POST["firstname"]);
-    $results = display_sql_results($sql_result);
+$results = "Aucun résultat";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["firstname"])) {
+    $firstname = $_POST["firstname"];
+    $sql_result = query($firstname);
+    $results = get_html_result($sql_result);
 }
 
 /*****************************************************
@@ -46,7 +42,11 @@ $presentation = '<div class="table">
     </div>
     <section class="row">
         <h2>Description</h2>
-        <p>Une injection SQL se produit lorsqu’un attaquant exploite une entrée utilisateur pour altérer le déroulement normal d’une requête SQL. Le malfaiteur va tenter de sortir de la requête afin d’obtenir plus de résultats qu’attendu ou apporter des modifications à un plus grand nombre d’enregistrements. Les risques associés aux injections SQL sont nombreux et peuvent affecter la confidentialité, l’intégrité et la disponibilité.</p>
+        <p>Une injection SQL se produit lorsqu’un attaquant exploite une entrée utilisateur pour altérer le déroulement
+        normal d’une requête SQL. Le malfaiteur va tenter de sortir de la requête afin d’obtenir plus de résultats
+        qu’attendu ou apporter des modifications à un plus grand nombre d’enregistrements. Les risques associés aux
+        injections SQL sont nombreux et peuvent affecter la <strong>confidentialité</strong>,
+        l’<strong>intégrité</strong> et la <strong>disponibilité</strong>.</p>
     </section>
     <section class="row">
         <h2>Objectifs</h2>
@@ -67,11 +67,15 @@ $presentation = '<div class="table">
     <section class="row">
         <h2>Exemples marquants</h2>
         <ul class="list">
-            <li><strong>WordPress (CVE-2022-21664)</strong><br />
-                WordPress a été menacée par une faille critique qui permettait aux entrées d’être interprétées comme étant des requêtes SQL. Cela pouvait conduire à l’injection de requêtes SQL.
+            <li><a href="https://www.cvedetails.com/cve/CVE-2022-21664/" target="_blank">WordPress (CVE-2022-21664)</a>
+            <br />
+                WordPress a été menacé par une faille critique qui permettait aux entrées d’être interprétées comme
+                étant des requêtes SQL. Cela pouvait conduire à l’injection de requêtes SQL.
             </li>
-            <li><strong>Student Information Chatbot (CVE-2024-28816)</strong><br />
-                Chatbot intégrait une vulnérabilité qui permettait la réalisation d’une attaque par injection SQL en altérant le nom d’utilisateur utilisé dans la fonction de connexion.            
+            <li><a href="https://www.cvedetails.com/cve/CVE-2024-28816/" target="_blank">Student Information Chatbot
+            (CVE-2024-28816)</a><br />
+                Chatbot intégrait une vulnérabilité qui permettait la réalisation d’une attaque par injection SQL en
+                altérant le nom d’utilisateur utilisé dans la fonction de connexion.
             </li>
         </ul>
     </section>
@@ -82,12 +86,13 @@ $demonstration = '<div class="split">
         <div>
             <h2>Scénario</h2>
             <div class="form-group">
-                <label for="firstname">Nom :</label>
-                <input id="firstname" class="form-control" name="firstname" type="text" />
+                <label for="firstname">Nom</label>
+                <input id="firstname" class="form-control" name="firstname" type="text" placeholder="Ex : Melissa"'.
+                ((isset($firstname)) ? ' value="'.htmlspecialchars($firstname, ENT_QUOTES).'"' : '').' />
             </div>
         </div>
         <footer>
-            <button name="vulnerable_search_button" type="submit">Rechercher</button>
+            <button type="submit">Rechercher</button>
         </footer>
     </form>
     <section>
@@ -98,13 +103,13 @@ $demonstration = '<div class="split">
 
 $exploit = '<div>
     <section>
-        <h2>Conditions préalables pour l\'exploitation</h2>
+        <h2>Conditions préalables pour l’exploitation</h2>
         <ul class="list">
-            <li>Les entrées utilisateurs ne sont pas vérifiées suffisamment.<br />
+            <li>Les entrées utilisateurs ne sont pas vérifiées suffisamment.</li>
         </ul>
     </section>
     <section>
-        <h2>Méthodes d\'exploitation</h2>
+        <h2>Méthodes d’exploitation</h2>
         <ul class="list">
             <li>Injecter depuis les paramètres d’une URL.</li>
             <li>Injecter depuis les champs d’un formulaire.</li>
@@ -112,76 +117,62 @@ $exploit = '<div>
         </ul>
     </section>
     <section>
-        <h2>Exécution de l\'attaque</h2>
+        <h2>Exécution de l’attaque</h2>
         <ul class="list">
             <li>Trouver une entrée utilisateur vulnérable.</li>
             <li>Injecter et exécuter une requête SQL.</li>
         </ul>
     </section>
     <section>
-        <h2>Analyse du code vulnérable</h2>
-        <p>Un exemple de cette vulnérabilité pourrait être une page qui affiche les informations d’un usager lorsque celui-ci entre son nom d’utilisateur. La requête serait construite comme suit :</p>
-        <pre class="line-numbers" data-line=""><code class="language-php">$sql_request = 
-    "SELECT user_firstname, user_lastname FROM users WHERE user_email=’$user_input’";
+        <h2>Analyse d’un code vulnérable</h2>
+        <p>Un exemple de cette vulnérabilité pourrait être une page qui affiche les informations d’un usager lorsque
+        celui-ci entre son nom d’utilisateur. La requête serait construite comme suit :</p>
+        <pre class="line-numbers"><code class="language-php">$sql_request = '.
+        '"SELECT user_firstname, user_lastname FROM users WHERE user_email=’$user_input’";
 return mysqli_query($db, $sql_request);</code></pre>
-        <p>Une entrée malicieuse incluant le caractère d’échappement ’’’ pourrait être de la forme x’ OR 1=’1. Puisque cette entrée n’est pas vérifiée, la requête devient :</p>
-    
-        <pre class="line-numbers" data-line=""><code class="language-php">$sql_request = 
-    "SELECT user_firstname, user_lastname FROM users WHERE user_email=’x’ OR 1=’1’";</code></pre>
-        
-        <p>La clause WHERE de la requête sera toujours vraie. Ainsi, les informations de tous les usagers seront retournées lors de l’exécution de la requête.</p>
-        </section>
+        <p>Une entrée malicieuse incluant le caractère d’échappement « \' » pourrait être de la forme
+        <strong>x\' OR 1=\'1</strong>. Puisque cette entrée n’est pas vérifiée, la requête devient :</p>
+        <pre class="line-numbers"><code class="language-php">$sql_request = '.
+        '"SELECT user_firstname, user_lastname FROM users WHERE user_email=\'x\' OR 1=\'1\'";</code></pre>
+        <p>La clause WHERE de la requête sera toujours vraie. Ainsi, les informations de tous les usagers seront
+        retournées lors de l’exécution de la requête.</p>
+    </section>
 </div>';
 
 $fix = '<div>
     <section>
-        <h2>Mesures de protection</h2>
+        <h2>Mesures de prévention</h2>
         <ul class="list">
             <li>Convertir les caractères d’échappement.</li>
             <li>Traiter les requêtes avant de les exécuter.</li>
-            <li>Limiter les messages d’erreur afin qu’ils ne contiennent aucune information sur la structure de la base de données.</li>
-        </ul>
-    </section>
-    <section>
-        <h2>Outils de détection</h2>
-        <!-- Supprimer ce paragraphe -->
-        <p><em>[Description des outils de détection]</em></p>
-        <!-- FIN Supprimer ce paragraphe -->
-        <ul class="list">
-            <li><strong>[Outil 1](Ex : Nikto)</strong><br />
-                [Brève description de la mesure]
-            </li>
-            <li><strong>[Outil 2](Ex : ZAP)</strong><br />
-                [Brève description de la mesure]
-            </li>
-            <li><strong>[Outil 3](Ex : Skipfish)</strong><br />
-                [Brève description de la mesure]
-            </li>
+            <li>Limiter les messages d’erreur afin qu’ils ne contiennent aucune information sur la structure de la base
+            de données.</li>
         </ul>
     </section>
     <section>
         <h2>Correction du code vulnérable</h2>
-        <p>Une solution qui permet de corriger cette vulnérabilité est d’utiliser des requêtes paramétrables. On utilise des paramètres de substitution dans des espaces réservés pour les données (indiqué par un ‘?’), plutôt que d’insérer directement les valeurs de l’usager. Lorsque ces dernières sont insérées dans la requête, on s’assure qu’elles sont correctement échappées.</p>
-        <pre class="line-numbers" data-line=""><code class="language-php">$sql_statement = 
-        $db->prepare("SELECT user_firstname, user_lastname FROM users WHERE user_firstname=?");
+        <p>Une solution qui permet de corriger cette vulnérabilité est d’utiliser des requêtes paramétrables. On utilise
+        des paramètres de substitution dans des espaces réservés pour les données (indiqué par un ‘?’), plutôt que
+        d’insérer directement les valeurs de l’usager. Lorsque ces dernières sont insérées dans la requête, on s’assure
+        qu’elles sont correctement échappées.</p>
+        <pre class="line-numbers"><code class="language-php">$sql_statement = '.
+        '$db->prepare("SELECT user_firstname, user_lastname FROM users WHERE user_firstname=?");
+
 $sql_statement->bind_param("s", $value);
 $sql_statement->execute();
-return $sql_statement->get_result();
-        </code></pre>
-        <p>[Cet exemple de code présente respectivement les étapes pour :
+return $sql_statement->get_result();</code></pre>
+        <p>Cet exemple de code présente respectivement les étapes pour :</p>
         <ul class="list">
             <li>Préparer la requête,</li>
             <li>Assigner les paramètres,</li>
             <li>Exécuter la requête,</li>
             <li>Obtenir les résultats.</li>
         </ul>
-        </p>
     </section>
     <section>
         <h2>Documentation et ressources</h2>
         <ul class="list">
-            <li><a href="#" target="_blank">[Nom de la ressource 1]</a></li>
-            <li><a href="#" target="_blank">[Nom de la ressource 2]</a></li>
+            <li><a href="https://owasp.org/www-community/attacks/SQL_Injection" target="_blank">SQL Injection</a></li>
         </ul>
     </section>
 </div>';

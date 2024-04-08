@@ -590,6 +590,10 @@ button:focus {
     resize: none;
 }
 
+.container .vulnerability article form .form-group textarea.small {
+    height: 100px;
+}
+
 .container .vulnerability article form footer {
     position: relative;
     width: 100%;

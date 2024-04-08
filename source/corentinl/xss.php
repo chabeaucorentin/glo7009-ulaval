@@ -18,20 +18,7 @@ require("model.php");
 /*****************************************************
  *                   XSS INJECTION                   *
  *****************************************************/
-
-$value_display = "<img src='rpc.jpg'/>";
-if(array_key_exists('ajouterImage', $_POST)) { 
-    $value_display = $_POST["xss"];
-    #$input = htmlspecialchars($input);
-}
-if (isset($_GET['display'])) {
-    $value_display = $_GET['display'];
-}
-
-$value_entered = "<img src=&quot;x&quot onerror=&quot;javascript:(()=>{wins_usr = 3;loadScore()})()&quot;/>";
-if (isset($_GET['xss'])) {
-    $value_entered = $_GET['xss'];
-}
+$injection = "&lt;img src=&quot;rpc.jpg&quot; onerror=&quot;(()=&gt;{wins_usr = 3;loadScore()})()&quot; /&gt;";
 
 /*****************************************************
  *                      CONTENT                      *
@@ -49,21 +36,24 @@ $presentation = '<div class="table">
     </div>
     <section class="row">
         <h2>Description</h2>
-        <p>Une injection XSS (Cross-Site Scripting) est un type d’injection très répandue qui se produit lorsqu’un utilisateur injecte un script malicieux (typiquement en JavaScript) dans des pages web utilisées par d’autres utilisateurs. Il existe différents types d’injection XSS :
-            
+        <p>Une injection XSS (Cross-Site Scripting) est un type d’injection très répandue qui se produit lorsqu’un
+        utilisateur injecte un script malicieux (typiquement en JavaScript) dans des pages web utilisées par d’autres
+        utilisateurs. Il existe différents types d’injection XSS :</p>
         <ul class="list">
-        <li><strong>Attaque XSS stockée</strong><br />
-            Le script malicieux est conservé en permanence sur le serveur. Il n’est exécuté que lorsqu’un utilisateur accède à une page.        
-        </li>
-        <li><strong>Attaque XSS réfléchie</strong><br />
-            L’attaquant crée une soumission de formulaire qui inclut le script à exécuter. Lorsqu’un utilisateur soumet le formulaire, les données contenant le script malveillant sont envoyées au serveur et retourné à l’utilisateur.        
-        </li>
-        <li><strong>XSS basé sur le DOM</strong><br />
-            Le script malicieux est injecté dans le DOM (Document Object Model) d’une page web et interprété par le navigateur de l’utilisateur. Les injections se produisent donc une fois la page chargée.
-        </li>
+            <li><strong>Attaque XSS stockée</strong><br />
+                Le script malicieux est conservé en permanence sur le serveur. Il n’est exécuté que lorsqu’un
+                utilisateur accède à une page.
+            </li>
+            <li><strong>Attaque XSS réfléchie</strong><br />
+                L’attaquant crée une soumission de formulaire qui inclut le script à exécuter. Lorsqu’un utilisateur
+                soumet le formulaire, les données contenant le script malveillant sont envoyées au serveur et retourné à
+                l’utilisateur.
+            </li>
+            <li><strong>XSS basé sur le DOM</strong><br />
+                Le script malicieux est injecté dans le DOM (Document Object Model) d’une page web et interprété par le
+                navigateur de l’utilisateur. Les injections se produisent donc une fois la page chargée.
+            </li>
         </ul>
-</section>
-</p>
     </section>
     <section class="row">
         <h2>Objectifs</h2>
@@ -83,10 +73,12 @@ $presentation = '<div class="table">
     <section class="row">
         <h2>Exemples marquants</h2>
         <ul class="list">
-            <li><strong>Google Chrome (CVE-2023-5480)</strong><br />
+            <li><a href="https://www.cvedetails.com/cve/CVE-2023-5480/" target="_blank">Google Chrome
+            (CVE-2023-5480)</a><br />
                 Une implémentation mal adaptée dans les outils de paiements permet à l’attaquant d’outrepasser les préventions contre les injections XSS par un fichier malicieux.
             </li>
-            <li><strong>Fortinet (CVE-2023-45587)</strong><br />
+            <li><a href="https://www.cvedetails.com/cve/CVE-2023-45587/" target="_blank">Fortinet (CVE-2023-45587)</a>
+            <br />
                 Une neutralisation impropre des entrées pendant la génération d’une page permet à un attaquant d’exécuter du code ou des commandes via des requêtes HTTP.
             </li>
         </ul>
@@ -94,7 +86,6 @@ $presentation = '<div class="table">
 </div>';
 
 $demonstration = '<div class="split">
-
     <form method="POST" onsubmit="return playGame()">
         <div>
             <h2>Scénario</h2>
@@ -103,11 +94,11 @@ $demonstration = '<div class="split">
                 <label for="usr_score">UTILISATEUR:</label> <span id="usr_score">0</span><br><br>
             </div>
             <div class="form-group">
-                <label for="choice">Choix :</label>
+                <label for="choice">Sélection</label>
                 <select id="choice" class="form-control" name="choice">
                     <option value="roche">Roche</option>
                     <option value="papier">Papier</option>
-                    <option value="ciseau">Ciseau</option>
+                    <option value="ciseau">Ciseaux</option>
                 </select>
             </div>
         </div>
@@ -115,21 +106,24 @@ $demonstration = '<div class="split">
             <button type="submit">Jouer</button>
         </footer>
     </form>
-    <form method="POST">
-        <div>
-            <h2>Injection:</h2>
+    <div class="table">
+        <form class="row" method="POST" onsubmit="return inject()">
+            <h2>Injection</h2>
             <div class="form-group">
-                <label for="xss"> Image:</label>
-                <input id="xss" name="xss" type="text" value="'.$value_entered.'">
+                <label for="xss">Code XSS</label>
+                <textarea id="xss" class="form-control small" name="xss">'.$injection. '</textarea>
             </div>
-            <div id="display">
-                '.$value_display.'
+            <div>
+                <button type="submit">Injecter</button>
             </div>
-        </div>
-        <footer>
-            <button name="ajouterImage" type="submit">Ajouter</button>
-        </footer>
-    </form>
+        </form>
+        <section class="row">
+            <h2>Résultat</h2>
+            <div id="injection">
+                Aucun code injecté
+            </div>
+        </section>
+    </div>
 </div>
 <script>
     let wins_cpu = 0;
@@ -163,7 +157,6 @@ $demonstration = '<div class="split">
         //    "CPU: " + wins_cpu);
 
         isGameOver();
-
         loadScore();
 
         return false;
@@ -174,31 +167,34 @@ $demonstration = '<div class="split">
             alert("Bravo, tu as gagne le jeu!");
             wins_usr = 0;
             wins_cpu = 0;
-        }
-        else if (wins_cpu >= 3) {
+        } else if (wins_cpu >= 3) {
             alert("Ooops tu as perdu...");
             wins_usr = 0;
             wins_cpu = 0;
         }
     }
-    
+
     function loadScore() {
         document.getElementById("usr_score").innerHTML = wins_usr;
         document.getElementById("cpu_score").innerHTML = wins_cpu; 
     }
 
+    function inject() {
+        document.getElementById("injection").innerHTML = document.getElementById("xss").value;
+        return false;
+    }
 </script>';
 
 $exploit = '<div>
     <section>
-        <h2>Conditions préalables pour l\'exploitation</h2>
+        <h2>Conditions préalables pour l’exploitation</h2>
         <ul class="list">
-            <li>Le navigateur permet l’exécution de code JavaScript.</li>
             <li>Les entrées utilisateurs ne sont pas vérifiées suffisamment.</li>
+            <li>Le navigateur permet l’exécution de code JavaScript.</li>
         </ul>
     </section>
     <section>
-        <h2>Méthodes d\'exploitation</h2>
+        <h2>Méthodes d’exploitation</h2>
         <ul class="list">
             <li>Injection de code dans une image ou dans les paramètres d’un URL.</li>
             <li>Injection dans le DOM.</li>
@@ -206,7 +202,7 @@ $exploit = '<div>
         </ul>
     </section>
     <section>
-        <h2>Exécution de l\'attaque</h2>
+        <h2>Exécution de l’attaque</h2>
         <ul class="list">
             <li>Choisir un point d’entrée vulnérable.</li>
             <li>Injection d’un code malicieux.</li>
@@ -214,18 +210,20 @@ $exploit = '<div>
         </ul>
     </section>
     <section>
-        <h2>Analyse du code vulnérable</h2>
-        <p>Un exemple de cette vulnérabilité serait une page qui accepte une entrée utilisateur sans modification. Cette entrée est ensuite affichée sur la page web. L’utilisateur peut donc entrer une balise image contenant un chemin indisponible et une fonction dans le champ ‘onerror’.</p>
-        <pre class="line-numbers" data-line=""><code class="language-php">
-            <img src=’rpc.jpg’ onerror=’javascript:(()=>{alert(‘XSS’);})()’/>"
-        </code></pre>
-        <p>La fonction du champ ‘onerror’ sera exécutée, car l’image n’est pas trouvée. Ce code affichera une alerte contenant le message ‘XSS’.</p>
+        <h2>Analyse d’un code vulnérable</h2>
+        <p>Un exemple de cette vulnérabilité serait une page qui accepte une entrée utilisateur sans modification. Cette
+        entrée est ensuite affichée sur la page web. L’utilisateur peut donc entrer une balise image contenant un chemin
+        indisponible et une fonction dans le champ ‘onerror’.</p>
+        <pre class="line-numbers"><code class="language-html">'.
+        '&lt;img src="x" onerror="javascript:(()=>{alert(\'XSS\');})()" /&gt;</code></pre>
+        <p>La fonction du champ ‘onerror’ sera exécutée, car l’image ‘x’ n’est pas trouvée. Ce code affichera une alerte
+        contenant le message ‘XSS’.</p>
     </section>
 </div>';
 
 $fix = '<div>
     <section>
-        <h2>Mesures de protection</h2>
+        <h2>Mesures de prévention</h2>
         <ul class="list">
             <li>Valider et nettoyer les entrées utilisateurs.</li>
             <li>Définir une politique de sécurité de contenu (CSP).</li>
@@ -233,35 +231,29 @@ $fix = '<div>
         </ul>
     </section>
     <section>
-        <ul class="list">
-            <li><strong>[Outil 1](Ex : Nikto)</strong><br />
-                [Brève description de la mesure]
-            </li>
-            <li><strong>[Outil 2](Ex : ZAP)</strong><br />
-                [Brève description de la mesure]
-            </li>
-            <li><strong>[Outil 3](Ex : Skipfish)</strong><br />
-                [Brève description de la mesure]
-            </li>
-        </ul>
-    </section>
-    <section>
         <h2>Correction du code vulnérable</h2>
-        <p>Un CSP (Content Security Policy) est une sécurité permettant contrôler les sources de contenu autorisées à être chargées sur une page web. L’objectif étant de réduire les risques liés aux attaques par injection.</p>
-        <pre class="line-numbers" data-line=""><code class="language-php">header("Content-Security-Policy: default-src ’self’;img-src ’self’;script-src ’self’;");</code></pre>
-        <p>Cette ligne de code représente une politique de sécurité du contenu qui définit les directives de sécurité pour le chargement des ressources sur un site web.
-            <ul class="list">
-                <li>default-src ’self’ : spécifie que par défaut, les ressources doivent être chargées depuis le même domaine.</li>
-                <li>img-src ’self’ : autorise le chargement des images uniquement depuis le même domaine. Si cet attribut est omis, le chargement des images ne se fera qu’en provenance des sites spécifiés par l’attribut default-src.</li>
-                <li>script-src ’self’ : permet le chargement de scripts uniquement depuis le même domaine.  Si cet attribut est omis, les fonctions JavaScript n’exécuteront que les scripts provenant des sites spécifiés par l’attribut default-src.</li>
-            </ul>
-        </p>
+        <p>Un CSP (Content Security Policy) est une sécurité permettant contrôler les sources de contenu autorisées à
+        être chargées sur une page web. L’objectif étant de réduire les risques liés aux attaques par injection.</p>
+        <pre class="line-numbers" data-line=""><code class="language-php">'.
+        'header("Content-Security-Policy: default-src \'self\'; img-src \'self\'; script-src \'self\';");</code></pre>
+        <p>Cette ligne de code représente une politique de sécurité du contenu qui définit les directives de sécurité
+        pour le chargement des ressources sur un site web.</p>
+        <ul class="list">
+            <li><strong>default-src \'self\' :</strong> Spécifie que par défaut, les ressources doivent être chargées
+            depuis le même domaine.</li>
+            <li><strong>img-src \'self\' :</strong> Autorise le chargement des images uniquement depuis le même domaine.
+            Si cet attribut est omis, le chargement des images ne se fera qu’en provenance des sites spécifiés par
+            l’attribut default-src.</li>
+            <li><strong>script-src \'self\' :</strong> Permet le chargement de scripts uniquement depuis le même
+            domaine. Si cet attribut est omis, les fonctions JavaScript n’exécuteront que les scripts provenant des
+            sites spécifiés par l’attribut default-src.</li>
+        </ul>
     </section>
     <section>
         <h2>Documentation et ressources</h2>
         <ul class="list">
-            <li><a href="#" target="_blank">[Nom de la ressource 1]</a></li>
-            <li><a href="#" target="_blank">[Nom de la ressource 2]</a></li>
+            <li><a href="https://owasp.org/www-community/attacks/xss/" target="_blank">XSS Injection</a></li>
+            <li><a href="https://owasp.org/www-community/attacks/DOM_Based_XSS" target="_blank">DOM Based XSS</a></li>
         </ul>
     </section>
 </div>';
