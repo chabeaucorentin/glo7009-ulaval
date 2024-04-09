@@ -83,6 +83,18 @@ button:focus {
     display: none;
 }
 
+.text-right {
+    text-align: right !important;
+}
+
+.mb-0 {
+    margin-bottom: 0 !important;
+}
+
+.mb-5 {
+    margin-bottom: 5px !important;
+}
+
 @media print {
     hr {
         border-color: #000;
@@ -223,13 +235,13 @@ button:focus {
     top: 75px;
     left: 0;
     bottom: 0;
-    height: calc(100vh - 76px);
+    height: calc(100dvh - 76px);
     width: 270px;
     display: -webkit-box;
     display: flex;
     flex-direction: column;
     overflow-x: hidden;
-    overflow-y: scroll;
+    overflow-y: auto;
     white-space: nowrap;
     border-right: 1px solid #E3E3E3;
     background-color: #FFF;
@@ -297,8 +309,7 @@ button:focus {
     position: fixed;
     top: 75px;
     left: 270px;
-    height: calc(100vh - 140px);
-    width: calc(100vw - 270px);
+    height: calc(100dvh - 140px);
     padding: 20px;
     display: -webkit-box;
     display: flex;
@@ -309,7 +320,7 @@ button:focus {
 
 .container:not(:has(> .vulnerability)) {
     overflow-x: hidden;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .container a {
@@ -463,7 +474,7 @@ button:focus {
 }
 
 .container .vulnerability article {
-    height: calc(100vh - 309px);
+    height: calc(100dvh - 309px);
 }
 
 .container article.error,
@@ -479,8 +490,7 @@ button:focus {
     margin-bottom: 20px;
 }
 
-.container .vulnerability article:not(:has(> .table)):not(:has(> .split > *)) section:not(:last-child),
-.container .vulnerability article > .split div section:not(.row):not(:last-child) {
+.container .vulnerability article:not(:has(> .table)) section:not(:last-child) {
     padding-bottom: 0;
 }
 
@@ -505,7 +515,7 @@ button:focus {
 .container .vulnerability article:not(:has(> .split)),
 .container .vulnerability article > .split > * {
     overflow-x: hidden;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .container .vulnerability article > .split > form:has(> footer) {
@@ -539,9 +549,12 @@ button:focus {
 
 .container .vulnerability article form:has(> footer) > div {
     height: calc(100% - 61px);
-    padding: 20px;
     overflow-x: hidden;
-    overflow-y: scroll;
+    overflow-y: auto;
+}
+
+.container .vulnerability article form:has(> footer) > div:not(.table) {
+    padding: 20px;
 }
 
 .container .vulnerability article form .form-group:not(:last-child) {
@@ -579,6 +592,14 @@ button:focus {
     margin-bottom: 10px;
     font-weight: bold;
     border-radius: 3px;
+}
+
+.container .vulnerability article form .form-group .alert.alert-success {
+    color: #059C0F;
+    background-color: #D4EDDA;
+}
+
+.container .vulnerability article form .form-group .alert.alert-danger {
     color: #E30513;
     background-color: #F8D7DA;
 }
@@ -598,12 +619,108 @@ button:focus {
     height: 100px;
 }
 
+.container .vulnerability article form .form-group .form-check {
+    position: absolute;
+    left: -5px;
+    height: 18px;
+    display: block;
+    font-size: 16px;
+    outline: none;
+    border-radius: 3px;
+    border: 2px solid #E3E3E3;
+}
+
+.container .vulnerability article form .form-group .form-check + label {
+    position: relative;
+    left: 20px;
+    margin-bottom: 0;
+}
+
 .container .vulnerability article form footer {
     position: relative;
     width: 100%;
     padding-top: 15px;
     padding-bottom: 15px;
     text-align: right;
+}
+
+.container .vulnerability article .identity {
+    max-width: 400px;
+    border-radius: 6px;
+    border: 1px solid #E3E3E3;
+}
+
+.container .vulnerability article .identity header {
+    padding: 16px;
+    display: -webkit-box;
+    display: flex;
+    align-items: center;
+    border-radius: 5px 5px 0 0;
+    background-image: url("../images/identity/cover.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.container .vulnerability article .identity header img {
+    height: 40px;
+    width: 80px;
+}
+
+.container .vulnerability article .identity > .validity {
+    padding: 8px;
+    margin-bottom: 0;
+    font-size: 13px;
+    text-align: center;
+    background-color: #FFC103;
+}
+
+.container .vulnerability article .identity > div {
+    padding: 16px 16px 10px;
+    text-align: center;
+}
+
+.container .vulnerability article .identity > div .image {
+    width: 140px;
+    margin-bottom: 16px;
+    display: inline-block;
+    border-radius: 4px;
+    border: 1px solid #E3E3E3;
+}
+
+.container .vulnerability article .identity > div .firstname,
+.container .vulnerability article .identity > div .lastname {
+    font-size: 17px;
+}
+
+.container .vulnerability article .identity > div .firstname {
+    margin-bottom: 4px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.container .vulnerability article .identity > div .lastname,
+.container .vulnerability article .identity > div .student {
+    margin-bottom: 16px;
+}
+
+.container .vulnerability article .identity > div .student,
+.container .vulnerability article .identity > div .ni {
+    font-size: 15px;
+}
+
+.container .vulnerability article .identity > div .ni {
+    margin-bottom: 8px;
+}
+
+.container .vulnerability article .identity > div .code {
+    height: 50px;
+    width: 288px;
+}
+
+.container .vulnerability article .border {
+    padding: 5px;
+    text-align: center;
+    border: 1px solid #E3E3E3;
 }
 
 @media print {
@@ -706,7 +823,11 @@ button:focus {
         border: 1px solid #000;
     }
 
-    .container .vulnerability article form .form-group .alert {
+    .container .vulnerability article form .form-group .alert-success {
+        border: 1px solid #059C0F;
+    }
+
+    .container .vulnerability article form .form-group .alert-danger {
         border: 1px solid #E30513;
     }
 
@@ -716,6 +837,20 @@ button:focus {
 
     .container .vulnerability article form .form-group textarea.form-control {
         height: auto !important;
+    }
+
+    .container .vulnerability article .identity {
+        -webkit-print-color-adjust: exact;
+        color-adjust: exact;
+        border-color: #000;
+    }
+
+    .container .vulnerability article .identity > div .image {
+        border-color: #000;
+    }
+
+    .container .vulnerability article .border {
+        border-color: #000;
     }
 }
 

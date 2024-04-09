@@ -21,16 +21,16 @@ require("includes/bootstrap.php");
 $content = '<article class="welcome">
     <h1>Projet de session</h1>
     <section>
-        <p>Bienvenue sur notre plateforme dédiée à l\'étude et à la correction de vulnérabilités courantes dans les
+        <p>Bienvenue sur notre plateforme dédiée à l’étude et à la correction de vulnérabilités courantes dans les
         applications web.</p>
         <p>Vous serez guidé à travers un parcours structuré afin de comprendre et mettre en place des solutions
         efficaces.</p>
-        <p>Ce projet a été réalisé dans le cadre du cours de <strong>Sécurité des logiciels (GLO-7009)</strong> à l\'<a
+        <p>Ce projet a été réalisé dans le cadre du cours de <strong>Sécurité des logiciels (GLO-7009)</strong> à l’<a
         href="https://www.ulaval.ca/" title="Université Laval" target="_blank">Université Laval</a>.</p>
     </section>
     <section>
         <h2>Objectif</h2>
-        <p>Notre plateforme vise à offrir une expérience interactive centrée sur la compréhension, l\'identification et
+        <p>Notre plateforme vise à offrir une expérience interactive centrée sur la compréhension, l’identification et
         la correction de vulnérabilités.</p>
         <p>Des failles exploitables ont été consciemment intégrées afin de servir des objectifs pédagogiques.</p>
     </section>
@@ -48,7 +48,7 @@ $content = '<article class="welcome">
                 <li>
                     <a>
                         <p><strong>Démonstration</strong></p>
-                        <p>Illustration de la vulnérabilité, tant dans un cadre légitime qu\'abusif.</p>
+                        <p>Illustration de la vulnérabilité, tant dans un cadre légitime qu’abusif.</p>
                     </a>
                 </li>
                 <li>

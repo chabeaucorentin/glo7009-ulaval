@@ -29,7 +29,7 @@ $presentation = '<div class="table">
     <div class="row split">
         <section>
             <h2>Catégorie</h2>
-            <p>[Nom de la catégorie](Ex : Vulnérabilité d\'exécution de code arbitraire)</p>
+            <p>[Nom de la catégorie](Ex : Vulnérabilité d’exécution de code arbitraire)</p>
         </section>
         <section>
             <h2>Impact potentiel</h2>
@@ -38,17 +38,17 @@ $presentation = '<div class="table">
     </div>
     <section class="row">
         <h2>Description</h2>
-        <p>[Description de la vulnérabilité, ses effets potentiels et le risque qu\'elle représente]</p>
+        <p>[Description de la vulnérabilité, ses effets potentiels et le risque qu’elle représente]</p>
     </section>
     <section class="row">
         <h2>Objectifs</h2>
         <!-- Supprimer ce paragraphe -->
-        <p><em>[Description des buts, intentions et avantages qu\'un attaquant pourrait avoir en exploitant la vulnérabilité]</em></p>
+        <p><em>[Description des buts, intentions et avantages qu’un attaquant pourrait avoir en exploitant la vulnérabilité]</em></p>
         <!-- FIN Supprimer ce paragraphe -->
         <ul class="list">
-            <li>[Objectif 1](Ex : Contourner les restrictions de mise en ligne pour contrôler un serveur)</li>
-            <li>[Objectif 2](Ex : Dégrader les performances ou la disponibilité d\'un service)</li>
-            <li>[Objectif 3](Ex : Voler des données sensibles ou confidentielles)</li>
+            <li>[Objectif 1](Ex : Contourner les restrictions de mise en ligne pour contrôler un serveur.)</li>
+            <li>[Objectif 2](Ex : Dégrader les performances ou la disponibilité d’un service.)</li>
+            <li>[Objectif 3](Ex : Voler des données sensibles ou confidentielles.)</li>
         </ul>
     </section>
     <section class="row">
@@ -57,19 +57,19 @@ $presentation = '<div class="table">
         <p><em>[Description des facteurs qui introduisent la vulnérabilité]</em></p>
         <!-- FIN Supprimer ce paragraphe -->
         <ul class="list">
-            <li>[Cause 1](Ex : Les entrées ne sont pas vérifiées)</li>
-            <li>[Cause 2](Ex : Les données sensibles sont directement exploitées)</li>
-            <li>[Cause 3](Ex : Les fichiers téléchargés sont exécutés dans un environnement non sécurisé)</li>
+            <li>[Cause 1](Ex : Aucune validation du nom, type, contenu ou taille pour les fichiers téléchargés.)</li>
+            <li>[Cause 2](Ex : Le répertoire de mise en ligne autorise l’exécution des fichiers téléchargés.)</li>
+            <li>[Cause 3](Ex : Le serveur contient des scripts obsolètes qui intègrent la vulnérabilité.)</li>
         </ul>
     </section>
     <section class="row">
         <h2>Exemples marquants</h2>
         <ul class="list">
-            <li><strong>[Nom de l\'attaque ou de la vulnérabilité 1](Ex : Drupalgeddon2 (CVE-2018-7600))</strong><br />
-                [Brève description de l\'incident, du contexte et des conséquences]
+            <li><a href="#" target="_blank">[Nom de l’attaque ou de la vulnérabilité 1](Ex : Drupalgeddon2 (CVE-2018-7600))</a><br />
+                [Brève description de l’incident, du contexte et des conséquences]
             </li>
-            <li><strong>[Nom de l\'attaque ou de la vulnérabilité 2](Ex : WordPress Plugin File Manager (CVE-2020-25213))</strong><br />
-                [Brève description de l\'incident, du contexte et des conséquences]
+            <li><a href="#" target="_blank">[Nom de l’attaque ou de la vulnérabilité 2](Ex : Contact Form 7 (CVE-2020-35489))</a><br />
+                [Brève description de l’incident, du contexte et des conséquences]
             </li>
         </ul>
     </section>
@@ -114,54 +114,40 @@ $demonstration = '<div class="split">
 
 $exploit = '<div>
     <section>
-        <h2>Conditions préalables pour l\'exploitation</h2>
+        <h2>Conditions préalables pour l’exploitation</h2>
         <!-- Supprimer ce paragraphe -->
         <p><em>[Description des conditions requises pour exploiter la vulnérabilité]</em></p>
         <!-- FIN Supprimer ce paragraphe -->
         <ul class="list">
-            <li><strong>[Condition 1](Ex : Aucune validation de l\'extension<br />
-                OU<br />
-                Validation basée uniquement sur l\'extension)</strong><br />
-                [Brève description de la condition]
-            </li>
-            <li><strong>[Condition 2](Ex : Répertoire avec permissions d\'exécution)</strong><br />
-                [Brève description de la condition]
-            </li>
+            <li>[Condition 1](Ex : Le fichier mis en ligne n’est pas vérifié suffisamment.)</li>
+            <li>[Condition 2](Ex : Le répertoire de mise en ligne est exécutable.)</li>
         </ul>
     </section>
     <section>
-        <h2>Méthodes d\'exploitation</h2>
+        <h2>Méthodes d’exploitation</h2>
         <!-- Supprimer ce paragraphe -->
-        <p><em>[Description des méthodes qui permettent à un attaquant d\'exploiter la vulnérabilité]</em></p>
+        <p><em>[Description des méthodes qui permettent à un attaquant d’exploiter la vulnérabilité]</em></p>
         <!-- FIN Supprimer ce paragraphe -->
         <ul class="list">
-            <li><strong>[Méthode 1](Ex : Télécharger des fichiers malveillants)</strong><br />
-                [Brève description de la méthode]
-            </li>
-            <li><strong>[Méthode 2](Ex : Contourner la validation par extension de fichier)</strong><br />
-                [Brève description de la méthode]
-            </li>
+            <li>[Méthode 1](Ex : Mettre en ligne un fichier exécutable sans vérification.)</li>
+            <li>[Méthode 2](Ex : Mettre en ligne un fichier avec la dissimulation de son extension.)</li>
+            <li>[Méthode 3](Ex : Mettre en ligne un fichier avec la dissimulation de son type.)</li>
+            <li>[Méthode 4](Ex : Mettre en ligne d’un fichier en injectant un code malicieux dans l’en-tête.)</li>
         </ul>
     </section>
     <section>
-        <h2>Exécution de l\'attaque</h2>
+        <h2>Exécution de l’attaque</h2>
         <!-- Supprimer ce paragraphe -->
-        <p><em>[Description des étapes qui permettent à un attaquant d\'exécuter l\'attaque]</em></p>
+        <p><em>[Description des étapes qui permettent à un attaquant d’exécuter l’attaque]</em></p>
         <!-- FIN Supprimer ce paragraphe -->
         <ul class="list">
-            <li><strong>[Étape 1](Ex : Sélectionner le fichier malveillant)</strong><br />
-                [Brève description du contexte]
-            </li>
-            <li><strong>[Étape 2](Ex : Télécharger le fichier malveillant)</strong><br />
-                [Brève description du contexte]
-            </li>
-            <li><strong>[Étape 3](Ex : Activer le script)</strong><br />
-                [Brève description du contexte]
-            </li>
+            <li>[Étape 1](Ex : Mettre en ligne un fichier malveillant.)</li>
+            <li>[Étape 2](Ex : Trouver l’emplacement du fichier sur le serveur.)</li>
+            <li>[Étape 3](Ex : Exécuter le fichier.)</li>
         </ul>
     </section>
     <section>
-        <h2>Analyse du code vulnérable</h2>
+        <h2>Analyse d’un code vulnérable</h2>
         <p>[Description du code]</p>
         <pre class="line-numbers" data-line="2"><code class="language-php">function addition($a, $b) {
     $result = $a + $b; // Pas de vérification des valeurs
@@ -177,32 +163,11 @@ $fix = '<div>
     <section>
         <h2>Mesures de protection</h2>
         <ul class="list">
-            <li><strong>[Nom de la mesure 1](Ex : Validation stricte des entrées)</strong><br />
-                [Brève description de la mesure]
-            </li>
-            <li><strong>[Nom de la mesure 2](Ex : Restriction des permissions de fichier)</strong><br />
-                [Brève description de la mesure]
-            </li>
-            <li><strong>[Nom de la mesure 3](Ex : Isolation des fichiers téléchargés)</strong><br />
-                [Brève description de la mesure]
-            </li>
-        </ul>
-    </section>
-    <section>
-        <h2>Outils de détection</h2>
-        <!-- Supprimer ce paragraphe -->
-        <p><em>[Description des outils de détection]</em></p>
-        <!-- FIN Supprimer ce paragraphe -->
-        <ul class="list">
-            <li><strong>[Outil 1](Ex : Nikto)</strong><br />
-                [Brève description de la mesure]
-            </li>
-            <li><strong>[Outil 2](Ex : ZAP)</strong><br />
-                [Brève description de la mesure]
-            </li>
-            <li><strong>[Outil 3](Ex : Skipfish)</strong><br />
-                [Brève description de la mesure]
-            </li>
+            <li>[Nom de la mesure 1](Ex : Stocker les fichiers mis en ligne en dehors du serveur web principal.)</li>
+            <li>[Nom de la mesure 1](Ex : Rendre le répertoire de mise en ligne non exécutable.)</li>
+            <li>[Nom de la mesure 1](Ex : Bloquer l’affichage de l’arborescence des répertoires.)</li>
+            <li>[Nom de la mesure 1](Ex : Modifier le nom des fichiers mis en ligne.)</li>
+            <li>[Nom de la mesure 1](Ex : Analyser les fichiers mis en ligne avec un outil antivirus.)</li>
         </ul>
     </section>
     <section>
