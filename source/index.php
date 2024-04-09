@@ -1,41 +1,79 @@
 <?php
 /*****************************************************
+ * index.php                                         *
+ *                                                   *
+ * Project : Session project                         *
+ * Course : GLO-7009 - Software security             *
+ * Team : Team 2                                     *
+ * Session : Winter 2024                             *
+ * University : Laval University                     *
+ * Version : 1.0                                     *
+ *****************************************************/
+
+/*****************************************************
  *                     BOOTSTRAP                     *
  *****************************************************/
 require("includes/bootstrap.php");
-?>
 
-<!DOCTYPE html>
-<html lang="fr">
-    <head>
-        <meta charset="utf-8" />
-        <title>GLO-7009</title>
-    </head>
-    <body>
-        <h1>GLO-7009</h1>
-        <section>
-            <h2>Corentin Chabeau</h2>
-            <p>Vulnérabilités d'exécution de code arbitraire</p>
-            <ul>
-                <li><a href="corentinc/upload.php">Exécution par mise en ligne</a></li>
-                <li><a href="corentinc/include.php">Exécution par inclusion</a></li>
+/*****************************************************
+ *                      CONTENT                      *
+ *****************************************************/
+$content = '<article class="welcome">
+    <h1>Projet de session</h1>
+    <section>
+        <p>Bienvenue sur notre plateforme dédiée à l\'étude et à la correction de vulnérabilités courantes dans les
+        applications web.</p>
+        <p>Vous serez guidé à travers un parcours structuré afin de comprendre et mettre en place des solutions
+        efficaces.</p>
+        <p>Ce projet a été réalisé dans le cadre du cours de <strong>Sécurité des logiciels (GLO-7009)</strong> à l\'<a
+        href="https://www.ulaval.ca/" title="Université Laval" target="_blank">Université Laval</a>.</p>
+    </section>
+    <section>
+        <h2>Objectif</h2>
+        <p>Notre plateforme vise à offrir une expérience interactive centrée sur la compréhension, l\'identification et
+        la correction de vulnérabilités.</p>
+        <p>Des failles exploitables ont été consciemment intégrées afin de servir des objectifs pédagogiques.</p>
+    </section>
+    <section>
+        <h2>Structure</h2>
+        <p>Les vulnérabilités sont traitées en suivant une structure en quatre étapes :</p>
+        <div class="vulnerability">
+            <ul class="navigation">
+                <li>
+                    <a>
+                        <p><strong>Présentation</strong></p>
+                        <p>Introduction de la vulnérabilité, son impact potentiel et ses objectifs.</p>
+                    </a>
+                </li>
+                <li>
+                    <a>
+                        <p><strong>Démonstration</strong></p>
+                        <p>Illustration de la vulnérabilité, tant dans un cadre légitime qu\'abusif.</p>
+                    </a>
+                </li>
+                <li>
+                    <a>
+                        <p><strong>Exploitation</strong></p>
+                        <p>Explication des détails techniques de la vulnérabilité avec un code.</p>
+                    </a>
+                </li>
+                <li>
+                    <a>
+                        <p><strong>Correction</strong></p>
+                        <p>Révision du code et conseils pour se protéger de la vulnérabilité.</p>
+                    </a>
+                </li>
             </ul>
-        </section>
-        <section>
-            <h2>Corentin Labelle</h2>
-            <p>Vulnérabilités d'injection de code</p>
-            <ul>
-                <li><a href="corentinl/sql.php">Injection SQL</a></li>
-                <li><a href="corentinl/xss.php">Injection XSS</a></li>
-            </ul>
-        </section>
-        <section>
-            <h2>William Malenfant</h2>
-            <p>Vulnérabilités dans les mécanismes d'authentification</p>
-            <ul>
-                <li><a href="william/session.php">Authentification par session</a></li>
-                <li><a href="william/cookies.php">Authentification par cookies</a></li>
-            </ul>
-        </section>
-    </body>
-</html>
+        </div>
+    </section>
+    <section>
+        <h2>Vulnérabilités</h2>
+        <p>Nous avons chacun sélectionné et traité les vulnérabilités qui nous semblaient les plus pertinentes :</p>
+        '.render_vulnerabilities().'
+    </section>
+</article>';
+
+/*****************************************************
+ *                    RENDER PAGE                    *
+ *****************************************************/
+echo render_page("Sécurité des logiciels", $content);
