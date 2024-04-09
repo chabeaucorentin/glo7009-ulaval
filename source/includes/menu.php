@@ -66,6 +66,10 @@ $menu = array(
             array(
                 "name" => "cookies.php",
                 "title" => "Authentification par cookies"
+            ),
+            array(
+                "name" => "phishing.php",
+                "title" => "Authentification par phishing"
             )
         )
     )

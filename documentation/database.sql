@@ -38,7 +38,7 @@ INSERT INTO `users` (`user_firstname`, `user_lastname`, `user_email`, `user_pass
 
 CREATE TABLE IF NOT EXISTS `tokens` (
     `token_code` VARCHAR(50) NOT NULL,
-    `token_user_id` INT UNSIGNED NOT NULL
+    `token_user_id` INT UNSIGNED NOT NULL,
     PRIMARY KEY (`token_code`),
     FOREIGN KEY (`token_user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

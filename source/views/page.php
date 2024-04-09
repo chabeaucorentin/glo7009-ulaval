@@ -21,6 +21,8 @@ require($config["site_path"]."/views/menu.php");
 function render_page($title, $content) {
     global $config;
 
+    $site_link = $config["site_link"];
+
     return '<!--
     '.basename($_SERVER['SCRIPT_NAME']).'
 
@@ -38,27 +40,39 @@ function render_page($title, $content) {
         <!-- META DATA -->
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0" />
+        <meta name="author" content="Équipe 2" />
+        <meta name="description" content="Projet de session (Équipe 2)"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-title" content="GLO-7009 - Projet de session" />
+        <meta name="application-name" content="GLO-7009" />
+        <meta name="theme-color" content="#F4F4F4" />
 
         <!-- TITLE -->
-        <title>'.$title.'</title>
+        <title>'.$title.' | GLO-7009</title>
+
+        <!-- FAVICON -->
+        <link rel="apple-touch-icon" href="'.$site_link.'/assets/images/favicon/apple-touch-icon.png" sizes="180x180" />
+        <link rel="shortcut icon" href="'.$site_link.'/assets/images/favicon/favicon.ico" sizes="32x32" />
+        <link rel="icon" href="'.$site_link.'/assets/images/favicon/favicon.svg" sizes="any" type="image/svg+xml" />
+        <link rel="manifest" href="'.$site_link.'/assets/images/favicon/manifest.json" />
 
         <!-- PRISM CSS -->
-        <link rel="stylesheet" href="'.$config["site_link"].'/assets/vendor/prismjs/prism.min.css" />
+        <link rel="stylesheet" href="'.$site_link.'/assets/vendor/prismjs/prism.min.css" />
 
         <!-- DROPIFY CSS -->
-        <link rel="stylesheet" href="'.$config["site_link"].'/assets/vendor/dropify/css/dropify.min.css" />
+        <link rel="stylesheet" href="'.$site_link.'/assets/vendor/dropify/css/dropify.min.css" />
 
         <!-- STYLE CSS -->
-        <link rel="stylesheet" href="'.$config["site_link"].'/assets/css/reset.css" />
-        <link rel="stylesheet" href="'.$config["site_link"].'/assets/css/fonts.css" />
-        <link rel="stylesheet" href="'.$config["site_link"].'/assets/css/style.css" />
+        <link rel="stylesheet" href="'.$site_link.'/assets/css/reset.css" />
+        <link rel="stylesheet" href="'.$site_link.'/assets/css/fonts.css" />
+        <link rel="stylesheet" href="'.$site_link.'/assets/css/style.css" />
     </head>
     <body>
         <!-- HEADER -->
         <header class="topbar">
-            <a class="left" href="'.$config["site_link"].'/">
-                <img class="logo" src="'.$config["site_link"].'/assets/images/logo.svg" alt="Université Laval" />
+            <a class="left" href="'.$site_link.'/">
+                <img class="logo" src="'.$site_link.'/assets/images/logo.svg" alt="Université Laval" />
                 <div class="separator"></div>
                 <span class="course">GLO-7009</span>
             </a>
@@ -89,16 +103,16 @@ function render_page($title, $content) {
         <!-- END FOOTER -->
 
         <!-- PRISM JS -->
-        <script src="'.$config["site_link"].'/assets/vendor/prismjs/prism.min.js"></script>
+        <script src="'.$site_link.'/assets/vendor/prismjs/prism.min.js"></script>
 
         <!-- JQUERY JS -->
-        <script src="'.$config["site_link"].'/assets/vendor/jquery/jquery.min.js"></script>
+        <script src="'.$site_link.'/assets/vendor/jquery/jquery.min.js"></script>
 
         <!-- DROPIFY JS -->
-        <script src="'.$config["site_link"].'/assets/vendor/dropify/js/dropify.min.js"></script>
+        <script src="'.$site_link.'/assets/vendor/dropify/js/dropify.min.js"></script>
 
         <!-- SCRIPT JS -->
-        <script src="'.$config["site_link"].'/assets/js/script.js"></script>
+        <script src="'.$site_link.'/assets/js/script.js"></script>
     </body>
 </html>';
 }
