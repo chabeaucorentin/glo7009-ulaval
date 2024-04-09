@@ -39,10 +39,10 @@ function render_page($title, $content) {
     <head>
         <!-- META DATA -->
         <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0" />
         <meta name="author" content="Équipe 2" />
         <meta name="description" content="Projet de session (Équipe 2)"/>
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-title" content="GLO-7009 - Projet de session" />
         <meta name="application-name" content="GLO-7009" />

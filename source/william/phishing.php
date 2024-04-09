@@ -272,38 +272,20 @@ $demonstration = '<div class="split">
     <form id="formVulnTransmit" method="POST" action="'.$menu[2]["files"][0]["name"]."?view=demonstration".'" hidden>
         <div>
             <div class="form-group">
-                <input id="email" class="form-control" name="email" type="email" />
+                <input id="email" class="form-control" name="email" type="email"'.((isset($email)) ? ' value="'.$email.'"' : '').' />
             </div>
             <div class="form-group">
-                <input id="password" class="form-control" name="password" type="password" />
+                <input id="password" class="form-control" name="password" type="password"'.((isset($password)) ? ' value="'.$password.'"' : '').' />
             </div>
             <div class="form-group">
-                <input id="persistent" class="form-check" name="persistent" type="checkbox" />
+                <input id="persistent" class="form-check" name="persistent" type="checkbox"'.((isset($persistent) && $persistent) ? ' checked' : '').' />
             </div>
         </div>
         <div>
             <button name="connect" type="submit">Connexion</button>
         </div>
     </form>
-</div>
-'.((isset($add_code)) ? $add_code : '').'
-<script>
-    let emailReceptFormSend=document.getElementsByName("mailSendVuln")[0];
-    let emailRecept=document.getElementsByName("emailVict")[0];
-
-    if (emailRecept) {
-        emailRecept.addEventListener("change", function () {
-            if (emailReceptFormSend.value) {
-                emailReceptFormSend.value = emailRecept.value;
-            }
-        }, false);
-        emailReceptFormSend.addEventListener("change", function() {
-            if (emailRecept.value) {
-                emailRecept.value = emailReceptFormSend.value;
-            }
-        }, false);
-    }
-</script>';
+</div>'.((isset($add_code)) ? $add_code : '');
 
 $exploit = '<div>
     <section>
