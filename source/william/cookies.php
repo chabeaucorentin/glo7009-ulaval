@@ -109,7 +109,8 @@ $presentation = '<div class="table">
                 Cette entreprise n’utilisait que des témoins qui n’avaient qu’une courte longueur (4 caractères
                 hexadécimaux pour Windows ou 8 pour le système Linux).
             </li>
-            <li><a href="https://www.cve.news/cve-2023-5723/" target="_blank">Firefox Vulnerability (CVE-2023-5723)</a><br />
+            <li><a href="https://www.cve.news/cve-2023-5723/" target="_blank">Firefox Vulnerability (CVE-2023-5723)</a>
+            <br />
                 Une attaque par vol de cookies est possible sur les versions 119 et antérieures de Firefox. L’appel à la
                 fonction JavaScript ‘document.cookie’ peut permettre à l’attaquant d’avoir temporairement accès aux
                 témoins stockés dans le navigateur en exécutant un script provenant d’un site.
@@ -234,7 +235,7 @@ $exploit = '<div>
 
 $fix = '<div>
     <section>
-        <h2>Conditions préalables pour l’exploitation</h2>
+        <h2>Mesures de prévention</h2>
         <p>Il n’existe pas de mesure toute faite pour corriger cette vulnérabilité, cependant nous pouvons tout de même
         atténuer les risques. Voici quelques pistes de correction :</p>
         <ul class="list">
