@@ -79,6 +79,10 @@ button:focus {
     background-color: #C7C7C7;
 }
 
+.d-none {
+    display: none;
+}
+
 .text-right {
     text-align: right !important;
 }
@@ -306,7 +310,6 @@ button:focus {
     top: 75px;
     left: 270px;
     height: calc(100dvh - 140px);
-    width: calc(100vw - 270px);
     padding: 20px;
     display: -webkit-box;
     display: flex;
@@ -610,6 +613,10 @@ button:focus {
     padding-top: 10px;
     padding-bottom: 10px;
     resize: none;
+}
+
+.container .vulnerability article form .form-group textarea.small {
+    height: 100px;
 }
 
 .container .vulnerability article form .form-group .form-check {
