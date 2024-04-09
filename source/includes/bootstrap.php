@@ -16,7 +16,7 @@
 require("config.php");
 require($config["site_path"]."/views/page.php");
 
-error_reporting(1);
+error_reporting(0);
 
 /*****************************************************
  *                      DATABASE                     *
