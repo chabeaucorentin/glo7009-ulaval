@@ -89,12 +89,12 @@ $demonstration = '<div class="split">
     <form method="POST" onsubmit="return playGame()">
         <div>
             <h2>Scénario</h2>
-            <div id="display">
-                <label for="cpu_score">ORDINATEUR:</label> <span id="cpu_score">0</span> - 
-                <span id="cpu_choice"></span><br>
-                <label for="usr_score">UTILISATEUR:</label> <span id="usr_score">0</span> - 
-                <span id="usr_choice"></span><br>
-                <span id="winner"></span><br>
+            <div class="form-group">
+                <div id="winner" class="alert d-none"></div>
+            </div>
+            <div class="form-group">
+                <p>UTILISATEUR : <span id="usr_score">0</span> - <span id="usr_choice">Aucune sélection</span></p>
+                <p>ORDINATEUR : <span id="cpu_score">0</span> - <span id="cpu_choice">Aucune sélection</span></p>
             </div>
             <div class="form-group">
                 <label for="choice">Sélection</label>
@@ -134,24 +134,19 @@ $demonstration = '<div class="split">
 <script>
     let wins_cpu = 0;
     let wins_usr = 0;
-    let computerChoice = "";
-    let userChoice = "";
+    let computer_choice = "";
+    let user_choice = "";
 
     function playGame() {
-        userChoice = document.getElementById("choice").value;
+        user_choice = document.getElementById("choice").value;
         const choices = ["roche", "papier", "ciseau"];
-        computerChoice = choices[Math.floor(Math.random() * choices.length)];
-        let resultMessage;
+        computer_choice = choices[Math.floor(Math.random() * choices.length)];
 
-        if (userChoice === computerChoice) {
-            resultMessage = "Egalite!";
-        } else if ((userChoice === "roche" && computerChoice === "ciseau") ||
-            (userChoice === "papier" && computerChoice === "roche") ||
-            (userChoice === "ciseau" && computerChoice === "papier")) {
-            resultMessage = "Bravo, tu as gagne!";
+        if ((user_choice === "roche" && computer_choice === "ciseau") ||
+            (user_choice === "papier" && computer_choice === "roche") ||
+            (user_choice === "ciseau" && computer_choice === "papier")) {
             wins_usr++;
         } else {
-            resultMessage = "Ooops, tu as perdu...";
             wins_cpu++;
         }
 
@@ -163,24 +158,31 @@ $demonstration = '<div class="split">
 
     function isGameOver() {
         if (wins_usr >= 3) {
-            document.getElementById("winner").innerHTML = "<br>YOU WON, CONGRATULATION!<br>";
+            document.getElementById("winner").innerHTML = "Vous avez gagné.";
+            document.getElementById("winner").classList.add("alert-success");
+            document.getElementById("winner").classList.remove("d-none");
             wins_usr = 0;
             wins_cpu = 0;
         } else if (wins_cpu >= 3) {
-            document.getElementById("winner").innerHTML = "<br>YOU LOST!<br>";
+            document.getElementById("winner").innerHTML = "Vous avez perdu.";
+            document.getElementById("winner").classList.add("alert-danger");
+            document.getElementById("winner").classList.remove("d-none");
             wins_usr = 0;
             wins_cpu = 0;
         }
         else{
             document.getElementById("winner").innerHTML = "";
+            document.getElementById("winner").classList.add("d-none");
+            document.getElementById("winner").classList.remove("alert-success");
+            document.getElementById("winner").classList.remove("alert-danger");
         }
     }
 
     function loadScore() {
         document.getElementById("usr_score").innerHTML = wins_usr;
         document.getElementById("cpu_score").innerHTML = wins_cpu; 
-        document.getElementById("cpu_choice").innerHTML = computerChoice;
-        document.getElementById("usr_choice").innerHTML = userChoice;
+        document.getElementById("cpu_choice").innerHTML = computer_choice;
+        document.getElementById("usr_choice").innerHTML = user_choice;
     }
 
     function inject() {
