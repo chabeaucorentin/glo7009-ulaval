@@ -18,7 +18,7 @@ require("model.php");
 /*****************************************************
  *                   XSS INJECTION                   *
  *****************************************************/
-$injection = "&lt;img src=&quot;rpc.jpg&quot; onerror=&quot;(()=&gt;{wins_usr = 3;loadScore()})()&quot;/&gt;";
+$injection = "&lt;img src=&quot;rpc.jpg&quot; onerror=&quot;(()=&gt;{wins_usr = 3;loadScore()})()&quot; /&gt;";
 
 /*****************************************************
  *                      CONTENT                      *

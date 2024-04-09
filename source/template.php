@@ -81,24 +81,24 @@ $demonstration = '<div class="split">
             <h2>Scénario</h2>
             <div class="form-group">
                 <label for="fullname">Nom complet :</label>
-                '.((isset($error)) ? '<div class="alert">'.$error.'</div>' : '').'
+                '.((isset($error)) ? '<div class="alert alert-danger">'.$error.'</div>' : '').'
                 <input id="fullname" class="form-control'.((isset($error)) ? ' invalid' : '').'" name="fullname"
                 placeholder="Ex : John Doe" type="text" />
             </div>
             <div class="form-group">
                 <label for="email">Adresse email :</label>
-                '.((isset($error)) ? '<div class="alert">'.$error.'</div>' : '').'
+                '.((isset($error)) ? '<div class="alert alert-danger">'.$error.'</div>' : '').'
                 <input id="email" class="form-control'.((isset($error)) ? ' invalid' : '').'" name="email"
                 placeholder="Ex : test@mail.com" type="email" />
             </div>
             <div class="form-group">
                 <label for="message">Message :</label>
-                '.((isset($error)) ? '<div class="alert">'.$error.'</div>' : '').'
+                '.((isset($error)) ? '<div class="alert alert-danger">'.$error.'</div>' : '').'
                 <textarea id="message" class="form-control'.((isset($error)) ? ' invalid' : '').'" name="message" rows="6"></textarea>
             </div>
             <div class="form-group">
                 <label for="file">Document :</label>
-                '.((isset($error)) ? '<div class="alert">'.$error.'</div>' : '').'
+                '.((isset($error)) ? '<div class="alert alert-danger">'.$error.'</div>' : '').'
                 <input id="file" class="dropify'.((isset($error)) ? ' invalid' : '').'" name="file" type="file" />
             </div>
         </div>

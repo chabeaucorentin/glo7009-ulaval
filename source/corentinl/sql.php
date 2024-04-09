@@ -20,10 +20,14 @@ require("model.php");
  *****************************************************/
 $results = "Aucun résultat";
 
-if (isset($_POST["firstname"])) {
-    $firstname = $_POST["firstname"];
-    $sql_result = query($firstname);
-    $results = get_html_result($sql_result);
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (!empty($_POST["firstname"])) {
+        $firstname = $_POST["firstname"];
+        $sql_result = query($firstname);
+        $results = get_html_result($sql_result);
+    } else {
+        $error["firstname"] = "Veuillez entrer un prénom valide.";
+    }
 }
 
 /*****************************************************
@@ -85,10 +89,17 @@ $demonstration = '<div class="split">
     <form method="POST">
         <div>
             <h2>Scénario</h2>
+            '.((isset($sql_result)) ?
+            '<div class="form-group">
+                <div class="alert alert-success">La recherche a bien été effectuée.</div>
+            </div>
+            ' : '').'
             <div class="form-group">
-                <label for="firstname">Nom</label>
-                <input id="firstname" class="form-control" name="firstname" type="text" placeholder="Ex : Melissa"'.
-                ((isset($firstname)) ? ' value="'.htmlspecialchars($firstname, ENT_QUOTES).'"' : '').' />
+                <label for="firstname">Prénom</label>
+                '.((isset($error["firstname"])) ? '<p class="alert alert-danger">'.$error["firstname"].'</p>' : '').'
+                <input id="firstname" class="form-control'.((isset($error["firstname"])) ? ' invalid' : '').'" name=
+                "firstname" type="text" placeholder="Ex : Melissa"'.((isset($firstname)) ? ' value="'.htmlspecialchars(
+                $firstname, ENT_QUOTES).'"' : '').' />
             </div>
         </div>
         <footer>

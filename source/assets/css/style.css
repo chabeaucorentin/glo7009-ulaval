@@ -310,6 +310,7 @@ button:focus {
     top: 75px;
     left: 270px;
     height: calc(100dvh - 140px);
+    width: calc(100vw - 270px);
     padding: 20px;
     display: -webkit-box;
     display: flex;
@@ -336,7 +337,19 @@ button:focus {
     color: #E30513;
 }
 
-.container article section p:not(:last-child) {
+.container article section table {
+    width: 100%;
+}
+
+.container article section table tr > * {
+    width: 50%;
+    padding: 5px 10px;
+    border: 1px solid #E3E3E3;
+}
+
+.container article section p:not(:last-child),
+.container article section .border:not(:last-child),
+.container article section table:not(:last-child) {
     margin-bottom: 10px;
 }
 
@@ -561,9 +574,29 @@ button:focus {
     margin-bottom: 15px;
 }
 
+.container .vulnerability article form .form-group .alert {
+    padding: 6px 12px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    border-radius: 3px;
+}
+
+.container .vulnerability article form .form-group .alert.alert-success {
+    color: #059C0F;
+    background-color: #D4EDDA;
+}
+
+.container .vulnerability article form .form-group .alert.alert-danger {
+    color: #E30513;
+    background-color: #F8D7DA;
+}
+
 .container .vulnerability article form .form-group label {
-    margin-bottom: 5px;
     display: inline-block;
+}
+
+.container .vulnerability article form .form-group label:not(:last-child) {
+    margin-bottom: 5px;
 }
 
 .container .vulnerability article form .form-group .form-control {
@@ -587,25 +620,12 @@ button:focus {
     color: #959595;
 }
 
-.container .vulnerability article form .form-group .alert {
-    padding: 6px 12px;
-    margin-bottom: 10px;
-    font-weight: bold;
-    border-radius: 3px;
-}
-
-.container .vulnerability article form .form-group .alert.alert-success {
-    color: #059C0F;
-    background-color: #D4EDDA;
-}
-
-.container .vulnerability article form .form-group .alert.alert-danger {
-    color: #E30513;
-    background-color: #F8D7DA;
-}
-
 .container .vulnerability article form .form-group .form-control.invalid {
     border-color: #E30513;
+}
+
+.container .vulnerability article form .form-group .form-check {
+    margin: 0 3px 0 0;
 }
 
 .container .vulnerability article form .form-group textarea.form-control {
@@ -617,23 +637,6 @@ button:focus {
 
 .container .vulnerability article form .form-group textarea.small {
     height: 100px;
-}
-
-.container .vulnerability article form .form-group .form-check {
-    position: absolute;
-    left: -5px;
-    height: 18px;
-    display: block;
-    font-size: 16px;
-    outline: none;
-    border-radius: 3px;
-    border: 2px solid #E3E3E3;
-}
-
-.container .vulnerability article form .form-group .form-check + label {
-    position: relative;
-    left: 20px;
-    margin-bottom: 0;
 }
 
 .container .vulnerability article form footer {
@@ -734,6 +737,10 @@ button:focus {
 
     .container:not(:has(> .vulnerability)) {
         overflow: visible;
+    }
+
+    .container article section table tr > * {
+        border-color: #000;
     }
 
     .container article :not(pre) > code[class*="language-"],

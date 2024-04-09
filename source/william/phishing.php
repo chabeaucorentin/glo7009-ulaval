@@ -185,7 +185,7 @@ $demonstration = '<div class="split">
                 '.((isset($error["token"])) ? '<div class="alert alert-danger">'.$error["token"] . '</div>' : '').'
             </div>
             <div class="form-group">
-                <label for="emailv">Adresse email</label>
+                <label for="emailv">Adresse courriel</label>
                 '.((isset($error["email"])) ? '<div class="alert alert-danger">'.$error["email"].'</div>' : '').'
                 <input id="emailv" class="form-control'.((isset($error["email"])) ? ' invalid' : '').'" name="emailv"
                 type="email"'.((isset($error["email"])) ? ' value="'.$_POST["email"].'"' : '').' />
@@ -208,7 +208,11 @@ $demonstration = '<div class="split">
     <form method="POST">
         <div>
             <h2>Courriel</h2>
-            '.((isset($success)) ? '<div class="alert alert-success">Le courriel a bien été envoyé.</div>' : '').'
+            '.((isset($success)) ?
+            '<div class="form-group">
+                <div class="alert alert-success">Le courriel a bien été envoyé.</div>
+            </div>
+            ' : '').'
             <div class="form-group">
                 <label for="emailAttackName">Nom affiché</label>
                 '.((isset($error["emailAttackName"])) ? '<div class="alert alert-danger">'.$error["emailAttackName"].
@@ -252,7 +256,7 @@ $demonstration = '<div class="split">
     <body>
         <p>
             Bonjour cher utilisateur,<br />
-            Nous avons constaté que vous n\'avez pas utilisé votre compte depuis les dernières 24 heures.<br />
+            Nous avons constaté que vous n’avez pas utilisé votre compte depuis les dernières 24 heures.<br />
             Si vous ne cliquer pas <a href="'.$config["site_link"]."/".$menu[2]["folder"]."/".
             $menu[2]["files"][1]["name"]."?view=demonstration".'">sur ce lien</a> avant les prochaines 24 heures, '.
             'votre compte sera supprimé.
@@ -310,14 +314,14 @@ $exploit = '<div>
         </ul>
     </section>
     <section>
-        <h2>Méthodes d\'exploitation</h2>
+        <h2>Méthodes d’exploitation</h2>
         <ul class="list">
             <li>Envoyer un lien malicieux par courriel.</li>
             <li>Envoyer un lien malicieux par SMS.</li>
         </ul>
     </section>
     <section>
-        <h2>Exécution de l\'attaque</h2>
+        <h2>Exécution de l’attaque</h2>
         <ul class="list">
             <li>Concevoir un site malicieux imitant le site cible.</li>
             <li>Transmettre le lien aux victimes.</li>

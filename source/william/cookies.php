@@ -16,7 +16,7 @@
 require("model.php");
 
 /*****************************************************
- *               COOKIES AUTHENTICATION              *
+ *              COOKIES AUTHENTICATION               *
  *****************************************************/
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["update"]) && isset($_POST["cookie"])) {
@@ -130,7 +130,7 @@ $demonstration = '<div class="split">
                 '.((isset($error["token"])) ? '<div class="alert alert-danger">'.$error["token"].'</div>' : '').'
             </div>
             <div class="form-group">
-                <label for="email">Adresse email</label>
+                <label for="email">Adresse courriel</label>
                 '.((isset($error["email"])) ? '<div class="alert alert-danger">'.$error["email"].'</div>' : '').'
                 <input id="email" class="form-control'.((isset($error["email"])) ? ' invalid' : '').'" name="email"
                 type="email"'.((isset($error["email"])) ? ' value="'.$_POST["email"].'"' : '').' />
@@ -208,11 +208,11 @@ $exploit = '<div>
         <table>
             <tbody>
                 <tr>
-                    <th>Adresse courriel</th>
+                    <td>Adresse courriel</td>
                     <td>melissaingram@test.ulaval.ca</td>
                 </tr>
                 <tr>
-                    <th>Mot de passe</th>
+                    <td>Mot de passe</td>
                     <td>ahfoo5Iuj</td>
                 </tr>
             </tbody>
