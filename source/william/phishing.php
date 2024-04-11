@@ -145,7 +145,7 @@ $presentation = '<div class="table">
         <h2>Description</h2>
         <p>L’authentification par phishing consiste à se faire passer pour une autorité dans le but de récupérer des
         informations sensibles. L’attaque peut prendre différentes formes, telles que les adresses courriels, les SMS,
-        les publicités, etc. L’attaquant va tenter de créer un sentiment d’urgence chez la victime enfin de la pousser à
+        les publicités, etc. L’attaquant va tenter de créer un sentiment d’urgence chez la victime afin de la pousser à
         agir.</p>
     </section>
     <section class="row">
@@ -323,7 +323,7 @@ $exploit = '<div>
         <p>Premièrement, l’attaquant commence par récupérer la page de connexion d’un site cible et modifier la
         structure pour s’envoyer un courriel détenant les informations de connexion.</p>
         <p>Deuxièmement, l’attaquant va créer un courriel qui imite l’autorité afin de viser un groupe de victimes avec
-        des adresses courriels qu’il aurait récupérés précédemment. Lorsqu’il a terminé de rédiger son courriel,
+        des adresses courriels qu’il aurait récupérées précédemment. Lorsqu’il a terminé de rédiger son courriel,
         l’attaquant va le transmettre au groupe et attendre une action de leur part. Les utilisateurs qui ne se méfient
         pas seront piégés, car ils fourniront leurs informations d’identifications.</p>
         <p>Enfin, l’attaque se termine lorsque l’attaquant utilise les informations des utilisateurs à leur insu.</p>

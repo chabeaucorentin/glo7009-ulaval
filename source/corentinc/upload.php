@@ -98,7 +98,7 @@ $presentation = '<div class="table">
             </li>
             <li><a href="https://blog.wpsec.com/contact-form-7-vulnerability/" target="_blank">Contact Form 7
             (CVE-2020-35489)</a><br />
-                Cette vulnérabilité étaient présente dans le module Contact Form 7 de WordPress. Il était installé sur
+                Cette vulnérabilité était présente dans le module Contact Form 7 de WordPress. Il était installé sur
                 plus de 5 millions de sites web au moment de la découverte. N’importe quel fichier pouvait être
                 téléchargé et exécuté sans aucune restriction en exploitant les caractères spéciaux dans les noms de
                 fichiers.

@@ -48,7 +48,7 @@ $presentation = '<div class="table">
         <h2>Description</h2>
         <p>En vue d’une meilleure organisation du code, il nous arrive souvent de structurer nos projets en les
         découpant en plusieurs fichiers. L’objectif principal étant de faciliter la réutilisation de parties communes ou
-        d’importer du code dépendamment de certaines conditions. Une telle organisation du code pourrait introduire une
+        d’importer du code dépendant de certaines conditions. Une telle organisation du code pourrait introduire une
         vulnérabilité par inclusion de fichiers (File Inclusion Vulnerability). La raison étant souvent causée par une
         vérification insuffisante des entrées utilisateurs.</p>
         <p>Cette attaque pourrait être exploitée lorsque l’<a href="'.$config["site_link"]."/".$menu[0]["folder"]."/".
@@ -56,7 +56,7 @@ $presentation = '<div class="table">
         sur le serveur. Deux types d’inclusions sont possibles :</p>
         <ul class="list">
             <li><strong>Inclusion d’un fichier local (LFI)</strong><br />
-                Le fichier est déjà présent sur le serveur distant pouvant permettant à l’attaquant d’accéder à des
+                Le fichier est déjà présent sur le serveur distant pouvant permettre à l’attaquant d’accéder à des
                 fichiers locaux. Des données sensibles du système pourraient être accessibles tels que l’accès au
                 fichier ‘/etc/passwd’ qui contient la liste de tous les utilisateurs. Bien qu’il ne contienne pas les
                 mots de passe, un attaquant peut tenter une attaque par brute force.
