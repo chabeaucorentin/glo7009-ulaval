@@ -26,12 +26,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else if (isset($_POST["connect"])) {
         $error = array();
 
-        if (isset($_POST["email"])) {
-            if (!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
-               $error["email"] = "Veuillez entrer une adresse courriel valide.";
-            }
-        } else {
-            $error["email"] = "Veuillez entrer une adresse courriel.";
+        if (!empty($_POST["password"]) || !filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
+           $error["email"] = "Veuillez entrer une adresse courriel valide.";
         }
 
         if (empty($_POST["password"])) {
@@ -56,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         logout($_COOKIE["userToken"]);
         setcookie("userToken", "", time() - 3600);
         $_COOKIE["userToken"] = "";
-    }
+    } 
 }
 
 /*****************************************************

@@ -55,7 +55,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     </body>
 </html>';
     $pattern_link = "/<a\s+[^>]*href=\"([^\"]*)\"[^>]*>/";
-
     if (isset($_POST["sendMail"])) {
         $error = array();
 
@@ -107,7 +106,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
             $error["password"] = "Veuillez entrer un mot de passe valide.";
         }
 
-        if (!isset($error["email"]) && !isset($error["password"])) {
+        if (!isset($error["email"]) && !isset($error["passwordv"])) {
             if (sendmail("Phishing Result","Result", $config["site_mail"], "Résultat de l'attaque", $message_vul,
                 "html", $fail_redirect)) {
                 $email = $_POST["emailv"];
@@ -115,7 +114,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                 $persistent = isset($_POST["persistentv"]);
                 $add_code = '<script>
     window.addEventListener("DOMContentLoaded", () => {
-        document.getElementById("formVulnTransmit").submit();
+        document.getElementById("formVulnTransmit")["email"].value="'.$email.'";
+        document.getElementById("formVulnTransmit")["password"].value="'.$password.'";
+        document.getElementById("formVulnTransmit")["persistent"].value="'.$persistent.'";
+        if (("'.$email.'").toString() !== "" && ("'.$password.'").toString() !== "") {
+            document.getElementById("formVulnTransmit").submit();
+        }
     });
 </script>';
             }
@@ -252,7 +256,7 @@ $demonstration = '<div class="split">
                 '.((isset($error["emailMessage"]))?'<div class="alert alert-danger">'.$error["emailMessage"].'</div>' :
                 '').'
                 <textarea id="emailMessage" class="form-control'.((isset($error["emailMessage"])) ? ' invalid' : '').'"
-                name="emailMessage"><html>
+                name="emailMessage" contenteditable="false"><html>
     <body>
         <p>
             Bonjour cher utilisateur,<br />
@@ -269,7 +273,8 @@ $demonstration = '<div class="split">
             <button name="sendMail" type="submit">Envoyer</button>
         </footer>
     </form>
-    <form id="formVulnTransmit" method="POST" action="'.$menu[2]["files"][0]["name"]."?view=demonstration".'" hidden>
+    <form id="formVulnTransmit" method="POST" action="'.$config["site_link"]."/".$menu[2]["folder"]."/".
+    $menu[2]["files"][0]["name"].'?view=demonstration" hidden>
         <div>
             <div class="form-group">
                 <input id="email" class="form-control" name="email" type="email"'.((isset($email)) ? ' value="'.$email.'"' : '').' />
@@ -280,9 +285,9 @@ $demonstration = '<div class="split">
             <div class="form-group">
                 <input id="persistent" class="form-check" name="persistent" type="checkbox"'.((isset($persistent) && $persistent) ? ' checked' : '').' />
             </div>
-        </div>
-        <div>
-            <button name="connect" type="submit">Connexion</button>
+            <div class="form-group">
+                <input name="connect" type="text" />
+            </div>
         </div>
     </form>
 </div>'.((isset($add_code)) ? $add_code : '');

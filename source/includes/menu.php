@@ -20,16 +20,16 @@ $menu = array(
     array(
         "name" => "Corentin C.",
         "full_name" => "Corentin Chabeau",
-        "category" => "Vulnérabilités d'exécution de code arbitraire",
+        "category" => "Vulnérabilités de manipulation de fichiers",
         "folder" => "corentinc",
         "files" => array(
             array(
                 "name" => "upload.php",
-                "title" => "Exécution par mise en ligne"
+                "title" => "Mise en ligne de fichiers"
             ),
             array(
                 "name" => "include.php",
-                "title" => "Exécution par inclusion"
+                "title" => "Inclusion de fichiers"
             )
         )
     ),

@@ -50,7 +50,7 @@ $presentation = '<div class="table">
     <div class="row split">
         <section>
             <h2>Catégorie</h2>
-            <p>Vulnérabilités d’exécution de code arbitraire</p>
+            <p>Vulnérabilités de manipulation de fichiers</p>
         </section>
         <section>
             <h2>Impact potentiel</h2>
