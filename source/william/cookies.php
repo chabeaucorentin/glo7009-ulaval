@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else if (isset($_POST["connect"])) {
         $error = array();
 
-        if (!empty($_POST["password"]) || !filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
+        if (!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
            $error["email"] = "Veuillez entrer une adresse courriel valide.";
         }
 

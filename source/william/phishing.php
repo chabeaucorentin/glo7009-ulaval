@@ -62,11 +62,11 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
             $error["emailAttackName"] = "Veuillez entrer un nom valide.";
         }
 
-        if (!isset($_POST["emailAttack"]) || !filter_var($_POST["emailAttack"], FILTER_VALIDATE_EMAIL)) {
+        if (!filter_var($_POST["emailAttack"], FILTER_VALIDATE_EMAIL)) {
             $error["emailAttack"] = "Veuillez entrer une adresse courriel valide.";
         }
 
-        if (!isset($_POST["emailVict"]) || !filter_var($_POST["emailVict"], FILTER_VALIDATE_EMAIL)) {
+        if (!filter_var($_POST["emailVict"], FILTER_VALIDATE_EMAIL)) {
             $error["emailVict"] = "Veuillez entrer une adresse courriel de transmission valide.";
         }
 
@@ -98,7 +98,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     } else if (isset($_POST["connectVuln"])) {
         $error = array();
 
-        if (!isset($_POST["emailv"]) || !filter_var($_POST["emailv"], FILTER_VALIDATE_EMAIL)) {
+        if (!filter_var($_POST["emailv"], FILTER_VALIDATE_EMAIL)) {
             $error["email"] = "Veuillez entrer une adresse courriel valide.";
         }
 

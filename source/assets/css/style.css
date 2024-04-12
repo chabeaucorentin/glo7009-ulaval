@@ -354,6 +354,10 @@ screen and (max-width: 1049px) {
     color: #E30513;
 }
 
+.container .success {
+    color: #059C0F;
+}
+
 .container .error {
     color: #E30513;
 }
