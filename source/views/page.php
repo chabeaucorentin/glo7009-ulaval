@@ -96,6 +96,15 @@ function render_page($title, $content) {
         </main>
         <!-- END MAIN CONTAINER -->
 
+        <!-- SMALL DEVICE -->
+        <main class="container small-device">
+            <article class="error">
+                <p>Merci de consulter cette plateforme depuis un appareil avec une résolution supérieure à <strong>
+                1050x550</strong> pixels.</p>
+            </article>
+        </main>
+        <!-- END SMALL DEVICE -->
+
         <!-- FOOTER -->
         <footer>
             <p>GLO-7009 - Projet de session (Équipe 2)</p>

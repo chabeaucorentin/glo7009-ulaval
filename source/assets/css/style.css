@@ -23,6 +23,7 @@ body {
     font-size: 16px;
     line-height: 1.5;
     overflow-x: hidden;
+    overflow-y: hidden;
     color: #000;
     background-color: #F4F4F4;
 }
@@ -209,6 +210,17 @@ button:focus {
     align-items: center;
 }
 
+@media screen and (max-height: 549px),
+screen and (max-width: 1049px) {
+    .topbar .left {
+        border-color: transparent;
+    }
+
+    .topbar .right {
+        display: none;
+    }
+}
+
 @media print {
     .topbar {
         position: relative;
@@ -297,6 +309,13 @@ button:focus {
 .sidebar .navigation .item a.active {
     font-weight: bold;
     background-color: #D9D9D9;
+}
+
+@media screen and (max-height: 549px),
+screen and (max-width: 1049px) {
+    .sidebar {
+        display: none !important;
+    }
 }
 
 @media print {
@@ -726,6 +745,13 @@ button:focus {
     border: 1px solid #E3E3E3;
 }
 
+@media screen and (max-height: 549px),
+screen and (max-width: 1049px) {
+    .container {
+        display: none;
+    }
+}
+
 @media print {
     .container {
         position: relative;
@@ -861,6 +887,19 @@ button:focus {
     }
 }
 
+.small-device {
+    display: none;
+}
+
+@media screen and (max-height: 549px),
+screen and (max-width: 1049px) {
+    .small-device {
+        left: 0;
+        width: 100vw;
+        display: flex;
+    }
+}
+
 footer {
     position: fixed;
     right: 0;
@@ -869,6 +908,15 @@ footer {
     padding: 20px;
     border-top: 1px solid #E3E3E3;
     background-color: #FFF;
+}
+
+@media screen and (max-height: 549px),
+screen and (max-width: 1049px) {
+    footer {
+        right: 0;
+        width: 100vw;
+        display: block;
+    }
 }
 
 @media print {
