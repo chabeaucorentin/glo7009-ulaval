@@ -252,4 +252,4 @@ $fix = '<div>
 /*****************************************************
  *                    RENDER PAGE                    *
  *****************************************************/
-echo render_malicious("Exécution par mise en ligne", $presentation, $demonstration, $exploit, $fix);
+echo render_malicious("Mise en ligne de fichiers", $presentation, $demonstration, $exploit, $fix);

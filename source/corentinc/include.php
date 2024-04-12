@@ -238,4 +238,4 @@ include($lang.".php");</code></pre>
 /*****************************************************
  *                    RENDER PAGE                    *
  *****************************************************/
-echo render_malicious("Exécution par inclusion", $presentation, $demonstration, $exploit, $fix);
+echo render_malicious("Inclusion de fichiers", $presentation, $demonstration, $exploit, $fix);
