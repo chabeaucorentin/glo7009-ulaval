@@ -31,10 +31,6 @@ __[:film_projector: Présentation du projet](presentation.pdf)__
 
   Images présentent dans cette documentation.
 
-* __[:loudspeaker: presentation/](presentation/)__
-
-  Dossier contenant la présentation orale du projet.
-
 * __[:rocket: source/](source/)__
 
   Dossier principal contenant le code source du projet.
