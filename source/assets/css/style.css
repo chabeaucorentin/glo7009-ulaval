@@ -146,6 +146,8 @@ button:focus {
 
 .topbar {
     position: fixed;
+    top: 0;
+    left: 0;
     height: 75px;
     width: 100vw;
     padding-top: 8px;
@@ -913,7 +915,6 @@ footer {
 @media screen and (max-height: 549px),
 screen and (max-width: 1049px) {
     footer {
-        right: 0;
         width: 100vw;
         display: block;
     }

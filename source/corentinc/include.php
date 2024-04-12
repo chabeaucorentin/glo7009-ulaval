@@ -24,11 +24,11 @@ if (isset($_POST["lang"])) {
     $lang = "fr.php";
 }
 
-include($lang);
+$include = include($lang);
 
 $load = htmlspecialchars(file_get_contents($lang), ENT_QUOTES);
-$success = (isset($_POST["include"]) && $load);
-$error = (isset($_POST["include"]) && !$load);
+$success = (isset($_POST["include"]) && ($include || $load));
+$error = (isset($_POST["include"]) && !$success);
 
 /*****************************************************
  *                      CONTENT                      *
@@ -145,7 +145,8 @@ $demonstration = '<div class="split">
         <section class="row">
             <h2>Résultat</h2>
             '.(($load) ? '<pre class="line-numbers"><code class="language-php">'.$load.'</code></pre>' :
-            '<p class="error">Erreur lors du chargement du fichier "'.$lang.'"</p>').'
+            (($include) ? '<p class="error">Erreur lors de l’affichage du fichier "'.$lang.'"</p>' : '<p class="error">
+            Erreur lors du chargement du fichier "'.$lang.'"</p>')).'
         </section>
     </div>
 </div>';
