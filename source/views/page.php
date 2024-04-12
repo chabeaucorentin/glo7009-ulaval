@@ -99,8 +99,7 @@ function render_page($title, $content) {
         <!-- SMALL DEVICE -->
         <main class="container small-device">
             <article class="error">
-                <p>Merci de consulter cette plateforme depuis un appareil avec une résolution supérieure à <strong>
-                1050x550</strong> pixels.</p>
+                <p>Une résolution d’au moins <strong>1050x550 pixels</strong> est requise pour consulter la plateforme.</p>
             </article>
         </main>
         <!-- END SMALL DEVICE -->
