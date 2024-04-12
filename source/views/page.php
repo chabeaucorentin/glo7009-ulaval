@@ -44,8 +44,8 @@ function render_page($title, $content) {
         <meta name="author" content="Équipe 2" />
         <meta name="description" content="Projet de session (Équipe 2)"/>
         <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-title" content="GLO-7009 - Projet de session" />
-        <meta name="application-name" content="GLO-7009" />
+        <meta name="apple-mobile-web-app-title" content="GLO-7009" />
+        <meta name="application-name" content="GLO-7009 - Projet de session" />
         <meta name="theme-color" content="#F4F4F4" />
 
         <!-- TITLE -->
