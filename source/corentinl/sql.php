@@ -89,8 +89,8 @@ $demonstration = '<div class="split">
     <form method="POST">
         <div>
             <h2>Scénario</h2>
-            '.((isset($sql_result)) ?
-            '<div class="form-group">
+            '.((isset($sql_result)) ? '
+            <div class="form-group">
                 <div class="alert alert-success">La recherche a bien été effectuée.</div>
             </div>
             ' : '').'

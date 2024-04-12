@@ -111,13 +111,13 @@ $demonstration = '<div class="split">
     <form enctype="multipart/form-data" method="POST">
         <div>
             <h2>Scénario</h2>
-            '.((isset($success)) ?
-            '<div class="form-group">
+            '.((isset($success)) ? '
+            <div class="form-group">
                 <div class="alert alert-success">'.$success.'</div>
             </div>
             ' : '').
-            ((isset($error["upload"])) ?
-            '<div class="form-group">
+            ((isset($error["upload"])) ? '
+            <div class="form-group">
                 <div class="alert alert-danger">'.$error["upload"].'</div>
             </div>
             ' : '').'

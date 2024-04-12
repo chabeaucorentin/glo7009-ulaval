@@ -107,8 +107,8 @@ $demonstration = '<div class="split">
     <form method="POST">
         <div>
             <h2>Scénario</h2>
-            '.((isset($_POST["save"])) ?
-            '<div class="form-group">
+            '.((isset($_POST["save"])) ? '
+            <div class="form-group">
                 <div class="alert alert-success">La langue a bien été modifiée.</div>
             </div>
             ' : '').'
@@ -127,8 +127,8 @@ $demonstration = '<div class="split">
     <div class="table">
         <form class="row" method="POST">
             <h2>Inclusion</h2>
-            '.(($success) ?
-            '<div class="form-group">
+            '.(($success) ? '
+            <div class="form-group">
                 <div class="alert alert-success">Le fichier a bien été importé.</div>
             </div>
             ' : '').'

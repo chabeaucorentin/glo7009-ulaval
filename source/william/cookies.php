@@ -121,15 +121,17 @@ $demonstration = '<div class="split">
             <h2>Scénario</h2>
             '.((isset($_COOKIE["userToken"]) && is_logged_in($_COOKIE["userToken"])) ? '
             <p class="success">L’usager est connecté en tant que <strong>'.
-            get_logged_in_user_fullname($_COOKIE["userToken"]).'</strong>.</p>' : '
+            get_logged_in_user_fullname($_COOKIE["userToken"]).'</strong>.</p>' :
+            ((isset($error["token"])) ? '
             <div class="form-group">
-                '.((isset($error["token"])) ? '<div class="alert alert-danger">'.$error["token"].'</div>' : '').'
+                <div class="alert alert-danger">'.$error["token"].'</div>
             </div>
+            ' : '').'
             <div class="form-group">
                 <label for="email">Adresse courriel</label>
                 '.((isset($error["email"])) ? '<div class="alert alert-danger">'.$error["email"].'</div>' : '').'
                 <input id="email" class="form-control'.((isset($error["email"])) ? ' invalid' : '').'" name="email"
-                type="email"'.((isset($error["email"])) ? ' value="'.$_POST["email"].'"' : '').' />
+                type="email"'.((isset($_POST["email"])) ? ' value="'.$_POST["email"].'"' : '').' />
             </div>
             <div class="form-group">
                 <label for="password">Mot de passe</label>
@@ -138,7 +140,8 @@ $demonstration = '<div class="split">
                 "password" type="password" />
             </div>
             <div class="form-group">
-                <input id="persistent" class="form-check" name="persistent" type="checkbox" />
+                <input id="persistent" class="form-check" name="persistent" type="checkbox"'.
+                ((isset($_POST["persistent"]) && $_POST["persistent"]) ? ' checked' : '').' />
                 <label for="persistent">Se souvenir de moi</label>
             </div>
             ').'

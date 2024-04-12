@@ -185,14 +185,16 @@ $demonstration = '<div class="split">
     <form id="formVuln" method="POST">
         <div>
             <h2>Scénario</h2>
+            '.((isset($error["token"])) ? '
             <div class="form-group">
-                '.((isset($error["token"])) ? '<div class="alert alert-danger">'.$error["token"] . '</div>' : '').'
+                <div class="alert alert-danger">'.$error["token"] . '</div>
             </div>
+            ' : '').'
             <div class="form-group">
                 <label for="emailv">Adresse courriel</label>
                 '.((isset($error["email"])) ? '<div class="alert alert-danger">'.$error["email"].'</div>' : '').'
                 <input id="emailv" class="form-control'.((isset($error["email"])) ? ' invalid' : '').'" name="emailv"
-                type="email"'.((isset($error["email"])) ? ' value="'.$_POST["email"].'"' : '').' />
+                type="email"'.((isset($_POST["emailv"])) ? ' value="'.$_POST["emailv"].'"' : '').' />
             </div>
             <div class="form-group">
                 <label for="passwordv">Mot de passe</label>
@@ -201,7 +203,8 @@ $demonstration = '<div class="split">
                 name="passwordv" type="password" />
             </div>
             <div class="form-group">
-                <input id="persistentv" class="form-check" name="persistentv" type="checkbox" />
+                <input id="persistentv" class="form-check" name="persistentv" type="checkbox"'.
+                ((isset($_POST["persistentv"]) && $_POST["persistentv"]) ? ' checked' : '').' />
                 <label for="persistentv">Se souvenir de moi</label>
             </div>
         </div>
@@ -212,8 +215,8 @@ $demonstration = '<div class="split">
     <form method="POST">
         <div>
             <h2>Courriel</h2>
-            '.((isset($success)) ?
-            '<div class="form-group">
+            '.((isset($success)) ? '
+            <div class="form-group">
                 <div class="alert alert-success">Le courriel a bien été envoyé.</div>
             </div>
             ' : '').'
@@ -222,26 +225,29 @@ $demonstration = '<div class="split">
                 '.((isset($error["emailAttackName"])) ? '<div class="alert alert-danger">'.$error["emailAttackName"].
                 '</div>' : '').'
                 <input id="emailAttackName" class="form-control'.((isset($error["emailAttackName"])) ? ' invalid' : '').
-                '" name="emailAttackName" type="text" />
+                '" name="emailAttackName" type="text"'.((isset($_POST["emailAttackName"])) ? ' value="'.
+                $_POST["emailAttackName"].'"' : '').' />
             </div>
             <div class="form-group">
                 <label for="emailAttack">Adresse courriel affichée</label>
                 '.((isset($error["emailAttack"])) ? '<div class="alert alert-danger">'.$error["emailAttack"].'</div>' :
                 '').'
                 <input id="emailAttack" class="form-control'.((isset($error["emailAttack"])) ? ' invalid' : '').'" name=
-                "emailAttack" type="email" />
+                "emailAttack" type="email"'.((isset($_POST["emailAttack"])) ? ' value="'.$_POST["emailAttack"].'"' : '').
+                ' />
             </div>
             <div class="form-group">
                 <label for="emailVict">Adresse courriel du destinataire</label>
                 '.((isset($error["emailVict"]))?'<div class="alert alert-danger">'.$error["emailVict"].'</div>' : '').'
                 <input id="emailVict" class="form-control'.((isset($error["emailVict"])) ? ' invalid' : '').'" name=
-                "emailVict" type="email" />
+                "emailVict" type="email"'.((isset($_POST["emailVict"])) ? ' value="'.$_POST["emailVict"].'"' : '').' />
             </div>
             <div class="form-group">
                 <label for="emailMessageType">Type du message</label>
                     <select id="emailMessageType" class="form-control" name="emailMessageType">
                         <option value="html">HTML</option>
-                        <option value="raw">Texte</option>
+                        <option value="raw"'.((isset($_POST["emailMessageType"]) && $_POST["emailMessageType"] == "raw")
+                        ? ' selected' : '').'>Texte</option>
                     </select>
             </div>
             <div class="form-group">
@@ -249,14 +255,16 @@ $demonstration = '<div class="split">
                 '.((isset($error["emailSubject"]))?'<div class="alert alert-danger">'.$error["emailSubject"].'</div>' :
                 '').'
                 <input id="emailSubject" class="form-control'.((isset($error["emailSubject"])) ? ' invalid' : '').'"
-                name="emailSubject" type="text" value="Ne perdez-pas votre accès !" />
+                name="emailSubject" type="text" value="'.((isset($_POST["emailSubject"])) ? $_POST["emailSubject"] :
+                'Ne perdez pas votre accès !').'" />
             </div>
             <div class="form-group">
                 <label for="emailMessage">Message</label>
                 '.((isset($error["emailMessage"]))?'<div class="alert alert-danger">'.$error["emailMessage"].'</div>' :
                 '').'
                 <textarea id="emailMessage" class="form-control'.((isset($error["emailMessage"])) ? ' invalid' : '').'"
-                name="emailMessage" contenteditable="false"><html>
+                name="emailMessage" contenteditable="false">'.((isset($_POST["emailMessage"])) ?
+                htmlspecialchars_decode($_POST["emailMessage"], ENT_QUOTES) : '<html>
     <body>
         <p>
             Bonjour cher utilisateur,<br />
@@ -266,7 +274,7 @@ $demonstration = '<div class="split">
             'votre compte sera supprimé.
         </p>
     </body>
-</html></textarea>
+</html>').'</textarea>
             </div>
         </div>
         <footer>
