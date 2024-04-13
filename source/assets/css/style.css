@@ -22,8 +22,7 @@ body {
     font-family: Roboto, sans-serif;
     font-size: 16px;
     line-height: 1.5;
-    overflow-x: hidden;
-    overflow-y: hidden;
+    overflow: hidden;
     color: #000;
 }
 
@@ -248,7 +247,6 @@ screen and (max-width: 1049px) {
     display: flex;
     flex-direction: column;
     overflow-x: hidden;
-    overflow-y: auto;
     white-space: nowrap;
     border-right: 1px solid #E3E3E3;
     background-color: #FFF;
@@ -336,7 +334,6 @@ screen and (max-width: 1049px) {
 
 .container:not(:has(> .vulnerability)) {
     overflow-x: hidden;
-    overflow-y: auto;
 }
 
 .container a {
@@ -547,7 +544,6 @@ screen and (max-width: 1049px) {
 .container .vulnerability article:not(:has(> .split)),
 .container .vulnerability article > .split > * {
     overflow-x: hidden;
-    overflow-y: auto;
 }
 
 .container .vulnerability article > .split > form:has(> footer) {
@@ -582,7 +578,6 @@ screen and (max-width: 1049px) {
 .container .vulnerability article form:has(> footer) > div {
     height: calc(100% - 61px);
     overflow-x: hidden;
-    overflow-y: auto;
 }
 
 .container .vulnerability article form:has(> footer) > div:not(.table) {
