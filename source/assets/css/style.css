@@ -25,13 +25,6 @@ body {
     overflow-x: hidden;
     overflow-y: hidden;
     color: #000;
-    background-color: #F4F4F4;
-}
-
-@media print {
-    body {
-        background-color: #FFF;
-    }
 }
 
 h1, h2, h3 {
@@ -338,6 +331,7 @@ screen and (max-width: 1049px) {
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
     flex-direction: column;
+    background-color: #F4F4F4;
 }
 
 .container:not(:has(> .vulnerability)) {
@@ -765,6 +759,7 @@ screen and (max-width: 1049px) {
         left: 0;
         height: auto;
         width: auto;
+        background-color: #FFF;
     }
 
     .container:not(:has(> .vulnerability)) {
