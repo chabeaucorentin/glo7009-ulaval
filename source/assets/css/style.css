@@ -56,20 +56,24 @@ hr {
 }
 
 button {
-    padding: 6px 12px;
+    padding: 8px 12px;
     cursor: pointer;
     font-size: 16px;
+    font-weight: normal;
     border-radius: 3px;
     border: none;
-    background-color: #D9D9D9;
+    transition-duration: 0.3s;
+    transition-timing-function: ease;
+    color: #FFF;
+    background-color: #096EDF;
 }
 
 button:hover {
-    background-color: #E3E3E3;
+    background-color: #0099FF;
 }
 
 button:focus {
-    background-color: #C7C7C7;
+    background-color: #1854BE;
 }
 
 .d-none {
@@ -95,6 +99,8 @@ button:focus {
 
     button {
         border: 1px solid #000;
+        color: #000;
+        background-color: #FFF;
     }
 }
 
@@ -130,9 +136,21 @@ button:focus {
     font-size: 16px;
 }
 
+.dropify-wrapper.touch-fallback .dropify-clear {
+    bottom: 33px;
+    font-weight: normal;
+    border-color: #096EDF;
+    color: #096EDF;
+}
+
 @media print {
     .dropify-wrapper {
         border: 1px solid #000;
+    }
+
+    .dropify-wrapper.touch-fallback .dropify-clear {
+        border: 1px solid #000;
+        color: #000;
     }
 }
 
@@ -622,6 +640,7 @@ screen and (max-width: 1049px) {
     outline: none;
     border-radius: 3px;
     border: 2px solid #E3E3E3;
+    color: #000;
 }
 
 .container .vulnerability article form .form-group .form-control::placeholder {
