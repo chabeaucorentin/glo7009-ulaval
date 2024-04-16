@@ -146,6 +146,7 @@ $demonstration = '<div class="split">
             (user_choice === "papier" && computer_choice === "roche") ||
             (user_choice === "ciseau" && computer_choice === "papier")) {
             wins_usr++;
+        } else if (user_choice === computer_choice) {
         } else {
             wins_cpu++;
         }

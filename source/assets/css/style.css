@@ -929,7 +929,6 @@ footer {
 screen and (max-width: 1049px) {
     footer {
         width: 100vw;
-        display: block;
     }
 }
 
