@@ -1,4 +1,4 @@
-# GLO-7009 - Projet de session (Équipe 2)
+# GLO-7009 - Projet de session
 
 ![Université Laval](images/logo.svg)
 
@@ -6,20 +6,11 @@ __Bienvenue dans la documentation du projet !__
 
 Ce projet a été réalisé dans le cadre du cours de **Sécurité des logiciels (GLO-7009)** à l'Université Laval.
 
-Cette plateforme vise à offrir une expérience interactive centrée sur la compréhension, l’identification et la
-correction de vulnérabilités.
+Cette plateforme vise à offrir une expérience interactive centrée sur la compréhension, l’identification et la correction de vulnérabilités.
 
 Des failles exploitables ont été consciemment intégrées afin de servir des objectifs pédagogiques.
 
 ![Présentation](images/screenshot.png)
-
-## Rapport du projet
-
-__[:briefcase: Rapport du projet](rapport.pdf)__
-
-## Présentation du projet
-
-__[:film_projector: Présentation du projet](presentation.pdf)__
 
 ## Organisation du projet
 
@@ -34,11 +25,6 @@ __[:film_projector: Présentation du projet](presentation.pdf)__
 * __[:rocket: source/](source/)__
 
   Dossier principal contenant le code source du projet.
-
-## Démonstration du projet
-
-Une version en ligne du projet est accessible depuis
-[https://glo7009.laval.university/](https://glo7009.laval.university/).
 
 ## Installation du projet
 
