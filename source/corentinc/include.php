@@ -212,7 +212,7 @@ $fix = '<div>
         <p>La prévention contre cette attaque consiste à vérifier les entrées utilisateur avant de les utiliser. Une
         vérification de la langue est donc nécessaire pour s’assurer qu’elle se trouve bien dans la liste des langues
         autorisées.</p>
-        <pre class="line-numbers" data-line="1-3"><code class="language-php">$allowed_langs = ["fr", "en"];
+        <pre class="line-numbers" data-line="1-3"><code class="language-php">$allowed_langs = array("fr", "en");
 
 if (isset($_GET["lang"]) && in_array($_GET["lang"], $allowed_langs)) {
     $lang = $_GET["lang"];

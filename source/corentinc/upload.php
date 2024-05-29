@@ -231,7 +231,7 @@ $fix = '<div>
         qu’il se trouve bien dans la liste des types autorisés avec la fonction <strong>in_array()</strong>.</p>
         <pre class="line-numbers" data-line="1,2,6,7">
 <code class="language-php">    $image_type = mime_content_type($image["tmp_name"]);
-    $allowed_types = ["image/jpg", "image/jpeg", "image/png"];
+    $allowed_types = array("image/jpg", "image/jpeg", "image/png");
 
     if ($image["error"] == UPLOAD_ERR_NO_FILE) {
         ...
