@@ -41,7 +41,7 @@ if ($image) {
 }
 
 date_default_timezone_set("America/Toronto");
-setlocale(LC_TIME, "fr_CA", "fr_CA.UTF-8");
+setlocale(LC_TIME, "fr_CA.utf8", "fr_CA.UTF-8");
 
 /*****************************************************
  *                      CONTENT                      *
